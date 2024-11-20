@@ -1,0 +1,39 @@
+.NormalTile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #a5a570;
+  border-radius: 10px;
+  font-size: 60px;
+  font-weight: 600;
+}
+
+
+/* Small Ipad and Above */
+@media (min-width: 640px) {
+  
+}
+
+/* Big Ipad and Above */
+@media (min-width: 768px) {
+  
+}
+
+
+/* Laptop Screen and Above*/
+@media (min-width: 1024px) {
+  
+}
+
+
+/* Small Desktop Screen and Above */
+@media (min-width: 1280px) {
+  
+}
+
+/* Big Desktop Screen and Above */
+@media (min-width: 1780px) {
+  
+}
+
+

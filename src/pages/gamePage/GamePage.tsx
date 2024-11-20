@@ -1,11 +1,13 @@
+import { Deck } from "../../components/deck/Deck";
+import { PlayingField } from "../../components/playingField/PlayingField";
 
 
 
 export function GamePage() {
   return (
-    <div>
-      <h1>tijd om te kassen!!!</h1>
-      
+    <div className='flex justify-center w-screen h-screen bg-gray-800'>
+      <PlayingField />
+      <Deck />
     </div>
   )
 }

@@ -1,0 +1,40 @@
+
+
+.PlayingField {
+  display: grid;
+  grid-template-columns: repeat(10, 90px);
+  grid-template-rows: repeat(10, 120px);
+  border-radius: 10px 10px 0 0;
+  margin-top: auto;
+  width: 95%;
+  height: 95%;
+  background: linear-gradient(280deg, rgba(14,0,155,1) 0%, rgba(0,60,255,1) 33%, rgba(0,212,255,1) 100%); 
+}
+
+
+/* Small Ipad and Above */
+@media (min-width: 640px) {
+  
+}
+
+/* Big Ipad and Above */
+@media (min-width: 768px) {
+  
+}
+
+
+/* Laptop Screen and Above*/
+@media (min-width: 1024px) {
+  
+}
+
+
+/* Small Desktop Screen and Above */
+@media (min-width: 1280px) {
+  
+}
+
+/* Big Desktop Screen and Above */
+@media (min-width: 1780px) {
+  
+}
