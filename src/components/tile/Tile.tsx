@@ -1,18 +1,34 @@
+import { useDrag } from "react-dnd";
 import "./Tile.css"
+import { DragTypes } from "../../models/DragTypes";
+
 
 interface TileProps {
+  id: number;
   tileNumber: number;
-  numberColor: string;
+  tileColor: string;
   column: number;
   row: number;
 }
 
-export function Tile({ tileNumber, numberColor, column, row }: TileProps) {
+export function Tile({ id, tileNumber, tileColor, column, row }: TileProps) {
+  const [{ opacity }, dragRef] = useDrag(
+    () => ({
+      type: DragTypes.TILE,
+      item: { id },
+      collect: (monitor) => ({
+        opacity: monitor.isDragging() ? 0.5 : 1
+      })
+    }),
+    []
+  )
+
   return (
-    <div
+    <div ref={dragRef}
       className='NormalTile'
       style={{
-        color: numberColor,
+        opacity: opacity,
+        color: tileColor,
         gridColumn: column,
         gridRow: row,
       }}>
