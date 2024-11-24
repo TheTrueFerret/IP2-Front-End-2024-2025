@@ -2,7 +2,6 @@
 .EmptyTile {
   border-radius: 15px;
   border-color: white;
-  transition: all 0.05s ease-out;
 }
 
 .EmptyTile:hover {

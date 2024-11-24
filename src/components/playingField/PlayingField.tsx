@@ -1,4 +1,5 @@
-import { useTiles } from "../../hooks/useTiles";
+import { useDeckTiles } from "../../hooks/useDeckTiles";
+import { useFieldTiles } from "../../hooks/useFieldTiles";
 import { EmptyTile } from "../emptyTile/EmptyTile";
 import { Tile } from "../tile/Tile"
 import "./PlayingField.css"
@@ -6,20 +7,41 @@ import "./PlayingField.css"
 
 
 export function PlayingField() {
-  const { tiles, updateTile } = useTiles()
+  const { fieldTiles, updateFieldTile, addFieldTile } = useFieldTiles()
+  const { deckTiles, removeDeckTile } = useDeckTiles()
 
-  const handleDrop = (id: number, column: number, row: number) => {
-    console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
-    updateTile({id, column, row})
-  };
 
-  if (!tiles) {
+  if (!fieldTiles || !deckTiles) {
     return (
-      <div>TILES NOT FOUND</div>
+      <div>tiles not found</div>
     )
   }
 
-  var count: number = 1;
+  const handleDrop = (id: number, column: number, row: number) => {
+    console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
+
+    const tileInField = fieldTiles.find((tile) => tile.id === id);
+
+    console.log(tileInField)
+
+    if (!tileInField) {
+      const tileInDeck = deckTiles.find((tile) => tile.id === id);
+      console.log(tileInDeck)
+
+      if (tileInDeck) {
+        removeDeckTile(tileInDeck)
+        
+        const newTile = { ...tileInDeck, gridColumn: column, gridRow: row };
+        
+        addFieldTile(newTile)
+      }
+    } else {
+      updateFieldTile({ id, column, row })
+    }
+  };
+
+
+  let count: number = 1;
 
   return (
     <section className='PlayingField'>
@@ -33,7 +55,7 @@ export function PlayingField() {
         ))
       )}
 
-      {tiles.map(tile =>
+      {fieldTiles.map(tile =>
         <Tile
           key={tile.id}
           id={tile.id}
