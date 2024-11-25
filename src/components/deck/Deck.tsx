@@ -6,8 +6,8 @@ import './Deck.css'
 
 
 export function Deck() {
-  const { deckTiles, updateDeckTile, addDeckTile } = useDeckTiles()
-  const { fieldTiles, removeFieldTile } = useFieldTiles()
+  const { deckTiles, updateDeckTile, addDeckTile, isTileInDeck } = useDeckTiles()
+  const { fieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
 
 
   if (!deckTiles || !fieldTiles) {
@@ -16,24 +16,30 @@ export function Deck() {
     )
   }
 
-  const handleDrop = (id: number, column: number, row: number) => {
+  const handleDrop = async (id: number, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
-    const tileInDeck = deckTiles.find((tile) => tile.id === id);
+    try {
+      const tileInDeck = await isTileInDeck(id);
 
-    if (!tileInDeck) {
-      const tileInField = fieldTiles.find((tile) => tile.id === id);
-      console.log(tileInField)
+      console.log(tileInDeck)
 
-      if (tileInField) {
-        removeFieldTile(tileInField)
-        tileInField.gridColumn = column;
-        tileInField.gridRow = row;
-        addDeckTile(tileInField)
+      if (!tileInDeck) {
+      const tileInField = await isTileInField(id);
+        console.log(tileInField)
+
+        if (tileInField) {
+          removeFieldTile(tileInField)
+          const newTile = { ...tileInField, gridColumn: column, gridRow: row };
+          addDeckTile(newTile)
+        }
+      } else {
+        updateDeckTile({ id, column, row })
       }
-    } else {
-      updateDeckTile({ id, column, row })
+    } catch (error) {
+
     }
+
   };
 
 

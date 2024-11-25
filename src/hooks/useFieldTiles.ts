@@ -1,18 +1,29 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
-import { getFieldTiles } from "../services/dataService";
 import { setFieldTiles } from "../services/tileService";
+import { useEffect, useState } from "react";
+import { getFieldTiles } from "../services/dataService";
 
 
 export function useFieldTiles() {
   const queryClient = useQueryClient();
 
-  const { isLoading, isError, data: fieldTiles } = useQuery(
+  const [localFieldTiles, setLocalFieldTiles] = useState<Tile[] | undefined>(undefined);
+
+  const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['fieldTiles'],
       queryFn: () => getFieldTiles(),
+      initialData: [] as Tile[],
     }
   )
+
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setLocalFieldTiles(data); // Set the fetched data to local state
+    }
+  }, [data]);
 
 
   const {
@@ -20,9 +31,14 @@ export function useFieldTiles() {
     isPending: isSettingFieldTiles,
     isError: isErrorSettingFieldTiles,
   } = useMutation({
-    mutationFn: async (fieldTiles: Tile[]) => { return await setFieldTiles(fieldTiles) },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['fieldTiles'] }),
-  })
+    mutationFn: async (tiles: Tile[]) => {
+      return await setFieldTiles(tiles);  // Call your API to set deck tiles
+    },
+    onSuccess: (updatedDeckTiles) => {
+      queryClient.setQueryData(['deckTiles'], updatedDeckTiles);  // Update cache with new data
+      setLocalFieldTiles(updatedDeckTiles);  // Also update local state
+    },
+  });
 
 
   const {
@@ -31,12 +47,12 @@ export function useFieldTiles() {
     isError: isErrorUpdatingFieldTile,
   } = useMutation({
     mutationFn: async ({ id, column, row }: { id: number, column: number, row: number }) => {
-      if (!fieldTiles) {
+      if (!localFieldTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
       // Update the specific tile in the tiles array
-      const updatedFieldTiles = fieldTiles.map((tile) => {
+      const updatedFieldTiles = localFieldTiles.map((tile) => {
         if (tile.id === id) {
           tile.gridColumn = column;
           tile.gridRow = row;
@@ -49,8 +65,10 @@ export function useFieldTiles() {
     },
     onSuccess: (updatedFieldTiles) => {
       queryClient.setQueryData(['fieldTiles'], updatedFieldTiles);
+      setLocalFieldTiles(updatedFieldTiles);
     },
   })
+
 
 
   const {
@@ -59,24 +77,25 @@ export function useFieldTiles() {
     isError: isErrorAddingFieldTile,
   } = useMutation({
     mutationFn: async (tile: Tile) => {
-      if (!fieldTiles) {
+      if (!localFieldTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
       // Check if the tile is already in the field
-      const isTileAlreadyInField = fieldTiles.some((t) => t.id === tile.id);
+      const isTileAlreadyInField = localFieldTiles.some((t) => t.id === tile.id);
 
       if (!isTileAlreadyInField) {
-        const updatedFieldTiles = [...fieldTiles, tile];
+        const updatedFieldTiles = [...localFieldTiles, tile];
+        setLocalFieldTiles(updatedFieldTiles);
         return updatedFieldTiles;
-      } else {
-        return fieldTiles;
       }
+      return localFieldTiles;
     },
     onSuccess: (updatedFieldTiles) => {
       queryClient.setQueryData(['fieldTiles'], updatedFieldTiles);
     },
   })
+
 
 
   const {
@@ -85,12 +104,12 @@ export function useFieldTiles() {
     isError: isErrorRemovingFieldTile,
   } = useMutation({
     mutationFn: async (tile: Tile) => {
-      if (!fieldTiles) {
+      if (!localFieldTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
-      const updatedFieldTiles = fieldTiles.filter((fieldTile) => fieldTile.id !== tile.id);
-
+      const updatedFieldTiles = localFieldTiles.filter((fieldTile) => fieldTile.id !== tile.id);
+      setLocalFieldTiles(updatedFieldTiles);
       return updatedFieldTiles;
     },
     onSuccess: (updatedFieldTiles) => {
@@ -99,12 +118,32 @@ export function useFieldTiles() {
   })
 
 
+    const {
+    mutateAsync: mutateIsTileInField,
+    isPending: isCheckingTileInField,
+    isError: isErrorCheckingTileInField,
+  } = useMutation({
+    mutationFn: async (id: number) => {
+      if (!localFieldTiles) {
+        throw new Error("Tiles data is unavailable");
+      }
+
+      const isTileInField = localFieldTiles.find((tile) => tile.id === id);
+      return isTileInField;
+    },
+  })
+
+
+
+  useEffect(() => {
+    console.log('Updated fieldTiles:', localFieldTiles);
+  }, [localFieldTiles]);
 
 
   return {
     isLoading,
     isError,
-    fieldTiles,
+    fieldTiles: localFieldTiles,
     setFieldTiles: mutateSetFieldTiles,
     isSettingFieldTiles,
     isErrorSettingFieldTiles,
@@ -117,5 +156,8 @@ export function useFieldTiles() {
     removeFieldTile: mutateRemoveFieldTile,
     isRemovingFieldTile,
     isErrorRemovingFieldTile,
+    isTileInField: mutateIsTileInField,
+    isCheckingTileInField,
+    isErrorCheckingTileInField,
   }
 }
