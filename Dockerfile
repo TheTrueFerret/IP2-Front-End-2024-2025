@@ -13,6 +13,9 @@ COPY tsconfig.json /react-app/
 COPY tsconfig.app.json /react-app/
 COPY tsconfig.node.json /react-app/
 
+COPY postcss.config.cjs /react-app/
+COPY tailwind.config.js /react-app/
+
 COPY vite.config.ts /react-app/
 
 # Copy the Index

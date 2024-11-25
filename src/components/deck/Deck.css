@@ -1,0 +1,20 @@
+
+.deck {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(10, 90px);
+  grid-template-rows: repeat(2, 120px);
+  gap: 10px;
+  padding: 10px;
+  background-color: black;
+  height: 270px;
+  width: 1010px;
+  
+  left: 50%;
+  transform: translateX(-50%);
+
+  bottom: 0px;
+
+  border-radius: 10px 10px 0px 0px;
+}
+
