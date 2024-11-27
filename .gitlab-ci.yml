@@ -3,15 +3,16 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
-  image: $CI_REGISTRY/team12/Frontend/Dockerfile
+
+build-job:       # Job for building the Docker image
+  image: docker:latest    # Use Docker image to run Docker commands
   services:
-    - name: $CI_REGISTRY/team12/Frontend/Dockerfile
-      alias: docker
+    - docker:dind         # Docker-in-Docker service to enable building images
   stage: build
   script:
-    - docker build -t ip2-front-end .
-    - docker run ip2-front-end /script/to/run/tests
+    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t $CI_REGISTRY/team12/front-end:latest .
+    - docker push $CI_REGISTRY/team12/front-end:latest
 
 
 unit-test-job:   # This job runs in the test stage.
