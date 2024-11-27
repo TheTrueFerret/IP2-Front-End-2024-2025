@@ -11,8 +11,8 @@ build-job:       # Job for building the Docker image
   stage: build
   script:
     - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-    - docker build -t $CI_REGISTRY/team12/front-end:latest .
-    - docker push $CI_REGISTRY/team12/front-end:latest
+    - docker build -t $CI_REGISTRY/kdg-ti/integratieproject-2/2024-2025/team12/front-end:latest .
+    - docker push $CI_REGISTRY/kdg-ti/integratieproject-2/2024-2025/team12/front-end:latest
 
 
 unit-test-job:   # This job runs in the test stage.
