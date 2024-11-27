@@ -4,9 +4,9 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
-  image: $CI_REGISTRY/team12/Frontend/docker:20.10.16
+  image: $CI_REGISTRY/team12/Frontend/Dockerfile
   services:
-    - name: $CI_REGISTRY/team12/Frontend/docker:20.10.16-dind
+    - name: $CI_REGISTRY/team12/Frontend/Dockerfile
       alias: docker
   stage: build
   script:
