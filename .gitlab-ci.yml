@@ -9,6 +9,8 @@ build-job:       # Job for building the Docker image
   services:
     - docker:dind         # Docker-in-Docker service to enable building images
   stage: build
+  only:
+    - main
   script:
     - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
     - docker build -t $CI_REGISTRY/kdg-ti/integratieproject-2/2024-2025/team12/front-end:latest .
