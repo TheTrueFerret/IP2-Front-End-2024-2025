@@ -1,0 +1,26 @@
+import axios from 'axios'
+
+export function addAccessTokenToAuthHeader(token: string | undefined) {
+    if (token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    else {
+        removeAccessTokenFromAuthHeader()
+    }
+}
+
+export function removeAccessTokenFromAuthHeader() {
+    delete axios.defaults.headers.common['Authorization']
+}
+
+export async function postingUser(id: string, username: string) {
+    try {
+        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/gameuser/user', {
+            id: id,
+            username: username
+        });
+        console.log(response);
+    } catch (error) {
+        console.error('Failed to post user:', error);
+        return []
+    }
+}
+

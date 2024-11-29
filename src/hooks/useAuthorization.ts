@@ -1,5 +1,5 @@
 import {useState} from "react";
-import axios from "axios";
+import { postingUser } from "../services/authService";
 
 interface UseAuthorizationReturn {
     postUser: (id: string, username: string) => void
@@ -14,13 +14,9 @@ export function useAuthorization(): UseAuthorizationReturn {
     const postUser = async (id: string, username: string) => {
         setIsLoading(true);
         setIsError(false);
-        console.log('postUser');
         try {
-            const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/gameuser/user', {
-                id: id,
-                username: username
-            });
-            console.log(response);
+            console.log('Posting user');
+            await postingUser(id, username);
         } catch (error) {
             console.error('Failed to post user:', error);
             setIsError(true);
