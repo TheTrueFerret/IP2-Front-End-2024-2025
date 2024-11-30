@@ -14,7 +14,7 @@ export function setDeckTiles(tiles: Tile[]): Tile[] {
 
 export async function getDeckTiles(playerId: string): Promise<Tile[]> {
   try {
-    const response = await axios.get(import.meta.env.VITE_BACKEND_URL + `/api/game/tiles/player/${playerId}`)
+    const response = await axios.get<Tile[]>(`/api/game/tiles/player/${playerId}`)
     console.log(response)
     return response.data
   } catch (error) {

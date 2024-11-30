@@ -6,12 +6,14 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import SecurityContextProvider from "./context/SecurityContextProvider.tsx";
 import Authorization from "./components/Authorization.tsx";
+import axios from 'axios'
 
 
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
 const queryClient = new QueryClient();
 
-function App() {
 
+function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <SecurityContextProvider>

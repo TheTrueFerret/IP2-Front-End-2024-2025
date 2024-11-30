@@ -13,7 +13,7 @@ export function removeAccessTokenFromAuthHeader() {
 
 export async function postingUser(id: string, username: string) {
     try {
-        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/gameuser/user', {
+        const response = await axios.post('/api/gameuser/user', {
             id: id,
             username: username
         });
