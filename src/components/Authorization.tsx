@@ -1,33 +1,17 @@
 import SecurityContext from "../context/SecurityContext.ts";
-import {useContext} from "react";
+import { useContext } from "react";
 
 const Authorization = () => {
-    const {loggedInUser, logout, login, isAuthenticated} = useContext(SecurityContext);
+    const { loggedInUser, logout, login, isAuthenticated } = useContext(SecurityContext);
 
     if (isAuthenticated()) {
         return (
             <div>
-                <div style={{
-                    position: 'fixed',
-                    display: 'flex',
-                    gap: '10px',
-                    top: '10px',
-                    right: '10px',
-                    background: 'white',
-                    padding: '10px',
-                    borderRadius: '4px',
-                }}>
+                <div className="fixed flex gap-2 top-2 right-2 bg-white p-2 rounded-md shadow-md">
                     <p>User: {loggedInUser}</p>
                     <button
                         onClick={logout}
-                        style={{
-                            background: 'red',
-                            color: 'white',
-                            padding: '5px 10px',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                        }}
+                        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-all"
                     >
                         Logout
                     </button>
@@ -39,12 +23,7 @@ const Authorization = () => {
             <div>
                 <button
                     onClick={login}
-                    className="mt-12 px-1 py-1 text-2xl font-semibold rounded-lg shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 gradient-button"
-                    style={{
-                        position: 'fixed',
-                        top: '10px',
-                        right: '10px',
-                    }}
+                    className="fixed top-2 right-2 mt-12 px-4 py-2 text-xl font-semibold rounded-lg shadow-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:scale-105 active:scale-95 transition-transform"
                 >
                     Login
                 </button>

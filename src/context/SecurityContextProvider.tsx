@@ -1,6 +1,6 @@
 import {ReactNode, useEffect, useRef, useState} from 'react'
 import SecurityContext from './SecurityContext'
-import {addAccessTokenToAuthHeader, removeAccessTokenFromAuthHeader} from '../services/auth'
+import {addAccessTokenToAuthHeader, removeAccessTokenFromAuthHeader} from '../services/authService.ts'
 import {isExpired} from 'react-jwt'
 import Keycloak from 'keycloak-js'
 import useAuthorization from "../hooks/useAuthorization.ts";

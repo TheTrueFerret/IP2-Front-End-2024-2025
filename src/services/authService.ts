@@ -10,3 +10,17 @@ export function addAccessTokenToAuthHeader(token: string | undefined) {
 export function removeAccessTokenFromAuthHeader() {
     delete axios.defaults.headers.common['Authorization']
 }
+
+export async function postingUser(id: string, username: string) {
+    try {
+        const response = await axios.post('/api/gameuser/user', {
+            id: id,
+            username: username
+        });
+        console.log(response);
+    } catch (error) {
+        console.error('Failed to post user:', error);
+        return []
+    }
+}
+

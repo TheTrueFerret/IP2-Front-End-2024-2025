@@ -14,7 +14,7 @@ export function getFieldTiles(): Tile[] {
 
 
 
-export function getDeckTiles(): Tile[] {
+export function getDeckTilesLocaly(): Tile[] {
   return [
     { id:7, tileNumber: 3, tileColor: "red", gridColumn: 1, gridRow: 1 },
     { id:8, tileNumber: 3, tileColor: "black", gridColumn: 2, gridRow: 1 },
@@ -24,3 +24,6 @@ export function getDeckTiles(): Tile[] {
     { id:12, tileNumber: 10, tileColor: "green", gridColumn: 5, gridRow: 2 }
   ];
 }
+
+
+
