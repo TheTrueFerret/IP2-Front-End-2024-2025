@@ -1,4 +1,3 @@
-import React from 'react';
 import './NotificationPopup.css';
 import {PopupNotification, NotificationType} from "../../models/PopupNotification.ts"; // Style this as you like
 
@@ -7,7 +6,7 @@ interface NotificationPopupProps {
     onClose: () => void;
 }
 
-const NotificationPopup: React.FC<NotificationPopupProps> = ({ notification, onClose }) => {
+export function NotificationPopup({ notification, onClose }: NotificationPopupProps)  {
     const getClassName = (type: NotificationType) => {
         switch (type) {
             case NotificationType.Success:
@@ -35,5 +34,3 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({ notification, onC
         </div>
     );
 };
-
-export default NotificationPopup;

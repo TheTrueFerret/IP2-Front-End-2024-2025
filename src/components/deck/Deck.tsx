@@ -1,6 +1,8 @@
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
+import { NotificationType, PopupNotification } from "../../models/PopupNotification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
+import { NotificationPopup } from "../notification/NotificationPopup";
 import { Tile } from "../tile/Tile";
 import './Deck.css'
 
@@ -12,7 +14,15 @@ export function Deck() {
 
   if (!deckTiles || !fieldTiles) {
     return (
-      <div>tiles not found</div>
+      <NotificationPopup notification={
+        {
+          title: "FieldTiles / DeckTiles are Zero",
+          description: "description",
+          type: NotificationType.Error,
+        }
+      } onClose={function (): void {
+        throw new Error("Function not implemented.");
+      }} />
     )
   }
 
@@ -25,7 +35,7 @@ export function Deck() {
       console.log(tileInDeck)
 
       if (!tileInDeck) {
-      const tileInField = await isTileInField(id);
+        const tileInField = await isTileInField(id);
         console.log(tileInField)
 
         if (tileInField) {
