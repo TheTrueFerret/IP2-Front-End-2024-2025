@@ -23,7 +23,7 @@ const Authorization = () => {
             <div>
                 <button
                     onClick={login}
-                    className="fixed top-2 right-2 mt-12 px-4 py-2 text-xl font-semibold rounded-lg shadow-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:scale-105 active:scale-95 transition-transform"
+                    className="fixed top-0 right-0 mt-12 px-4 py-2 text-xl font-semibold rounded-lg shadow-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:scale-105 active:scale-95 transition-transform"
                 >
                     Login
                 </button>
