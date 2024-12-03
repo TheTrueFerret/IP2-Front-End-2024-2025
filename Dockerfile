@@ -2,6 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /react-app/
 
+# Create the generate-env.sh script
+COPY generate-env.sh /react-app/generate-env.sh
+RUN chmod +x /react-app/generate-env.sh
+
 # Copy the necessary files
 COPY public/ /react-app/public
 COPY src/ /react-app/src
@@ -20,6 +24,9 @@ COPY vite.config.ts /react-app/
 
 # Copy the Index
 COPY index.html /react-app/
+
+# Generate .env.production before installing dependencies
+RUN /react-app/generate-env.sh
 
 # Install dependencies
 RUN npm install
