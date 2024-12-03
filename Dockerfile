@@ -2,15 +2,15 @@ FROM node:18-alpine
 
 WORKDIR /react-app/
 
-# Create the generate-env.sh script
+# Creating the generate-env.sh script
 COPY generate-env.sh /react-app/generate-env.sh
 RUN chmod +x /react-app/generate-env.sh
 
-# Copy the necessary files
+# Copying the necessary files
 COPY public/ /react-app/public
 COPY src/ /react-app/src
 
-# Copy the Configs
+# Copying the Configs
 COPY package.json /react-app/
 
 COPY tsconfig.json /react-app/
@@ -22,23 +22,23 @@ COPY tailwind.config.js /react-app/
 
 COPY vite.config.ts /react-app/
 
-# Copy the Index
+# Copying the Index
 COPY index.html /react-app/
 
-# Generate .env.production before installing dependencies
-RUN /react-app/generate-env.sh
+# Generating .env.production before installing dependencies
+RUN /react-app/generate-env.sh || true
 
-# Install dependencies
+# Installing dependencies
 RUN npm install
 
-# Build the application
+# Building the application
 RUN npm run build
 
-# Expose the port your app runs on
+# Exposing the port your app runs on
 EXPOSE 3000
 
-# Use a lightweight HTTP server to serve the built files
+# Using a lightweight HTTP server to serve the built files
 RUN npm install -g serve
 
-# Start the server to serve the build folder and keep the container running
+# Starting the server to serve the build folder and keep the container running
 CMD ["serve", "-s", "dist", "-l", "3000"]
