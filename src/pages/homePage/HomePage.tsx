@@ -1,60 +1,29 @@
-import { Link } from "react-router-dom";
+import { LoginButton } from "../../components/LoginButton";
 import { Background } from "../../components/background/Background";
-import Authorization from "../../components/Authorization";
+import { MenuList } from "../../components/menuList/MenuList";
 
 
 export function HomePage() {
     return (
         <div className="bg-neutral-900 text-white h-screen w-screen flex flex-col">
-            <Authorization />
-            <Background color="blue" />
-            <main className="flex-grow flex justify-center items-center p-12 gap-x-12 z-10">
-                <div className="flex flex-col space-y-10 relative">
-                    <div className="relative group flex items-center space-x-4 ">
-                        <img
-                            src="../../../public/rummikub-icon.svg"
-                            alt="Rummikub"
-                            className="w-10 h-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        />
-                        <Link
-                            to="/Game"
-                            className="text-4xl font-semibold hover:underline"
-                        >
-                            Start Game
-                        </Link>
+            <div className='z-20 absolute top-2 right-2'>
+                <LoginButton />
+            </div>
+            <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-12">
 
-                    </div>
-
-                    <div className="relative group flex items-center space-x-4">
-                        <img
-                            src="../../../public/rummikub-icon.svg"
-                            alt="Rummikub"
-                            className="w-10 h-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        />
-                        <Link
-                            to="/achievements"
-                            className="text-4xl font-semibold hover:underline"
-                        >
-                            Achievements
-                        </Link>
-                    </div>
-
-
-                    <div className="relative group flex items-center space-x-4">
-                        <img
-                            src="../../../public/rummikub-icon.svg"
-                            alt="Rummikub"
-                            className="w-10 h-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        />
-                        <Link
-                            to="/settings"
-                            className="text-4xl font-semibold hover:underline"
-                        >
-                            Settings
-                        </Link>
-                    </div>
-
-                </div>
+                <MenuList menuItems={[{
+                    menuItemName: "Start Game",
+                    menuItemLink: "/Game",
+                },
+                {
+                    menuItemName: "Achievements",
+                    menuItemLink: "/achievements",
+                },
+                {
+                    menuItemName: "Settings",
+                    menuItemLink: "/settings",
+                }]}
+                />
 
                 <div className="flex flex-col space-y-8">
                     <div className="bg-gradient-to-br from-gray-800 to-gray-700 text-white p-6 rounded-lg shadow-md">
@@ -70,6 +39,7 @@ export function HomePage() {
                     </div>
                 </div>
             </main>
+            <Background color="crimson" />
         </div>
     )
 }

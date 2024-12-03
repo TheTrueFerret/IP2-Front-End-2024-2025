@@ -6,7 +6,7 @@ interface BackgroundProps {
 
 
 export function Background({ color }: BackgroundProps) {
-  const repeatingBg1: string = "7 3 11 5 1 9 12\n13 4 6 2 8 10 5"
+  const repeatingBg1: string = "7 3 11 5 1 9 12\n13 4 6 2 8 10 5 "
   const repeatingBg2: string = "2 9 12 8 3 6 11 \n 4 Rummikub"
   const max: number = 200
 
@@ -17,7 +17,7 @@ export function Background({ color }: BackgroundProps) {
     return (
       <div
         key={index}
-        className="BackgroundItem"
+        className="BackgroundItemu"
       >{backgroundPattern}
       </div>
     );
@@ -27,7 +27,8 @@ export function Background({ color }: BackgroundProps) {
     <div className='TextBackgroundContainer'>
       <div className='TextBackground'
         style={{
-          color: color
+          color: color,
+          opacity: 0.7
         }}
       >
         {backgroundDivs}
