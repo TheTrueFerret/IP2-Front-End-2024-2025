@@ -22,7 +22,6 @@ function App() {
                 <BrowserRouter>
                     <ReactQueryDevtools initialIsOpen={false}/>
                     <div>
-                        <Authorization/>
                         <Routes>
                             <Route path='/' element={<HomePage/>}/>
                             <Route path='/Game' element={<GamePage/>}/>

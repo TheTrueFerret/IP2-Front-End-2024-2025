@@ -1,10 +1,14 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Background } from "../../components/background/Background";
+import Authorization from "../../components/Authorization";
 
 
 export function HomePage() {
     return (
         <div className="bg-neutral-900 text-white h-screen w-screen flex flex-col">
-            <main className="flex-grow flex justify-center items-center p-12 gap-x-12">
+            <Authorization />
+            <Background color="blue" />
+            <main className="flex-grow flex justify-center items-center p-12 gap-x-12 z-10">
                 <div className="flex flex-col space-y-10 relative">
                     <div className="relative group flex items-center space-x-4 ">
                         <img
@@ -67,7 +71,6 @@ export function HomePage() {
                 </div>
             </main>
         </div>
-
     )
 }
 
