@@ -1,27 +1,14 @@
-FROM node:18-alpine
+FROM node:hydrogen-alpine as build-env
 
-WORKDIR /react-app/
+WORKDIR /react-app
 
-# Copying the necessary files
-COPY public/ /react-app/public
-COPY src/ /react-app/src
 
-COPY .env.production /react-app/
+# Copy all configuration and project files
+COPY package.json tsconfig*.json postcss.config.cjs tailwind.config.js vite.config.ts index.html ./
+COPY .env.production ./
+COPY public/* public/
+COPY src/ src/
 
-# Copying the Configs
-COPY package.json /react-app/
-
-COPY tsconfig.json /react-app/
-COPY tsconfig.app.json /react-app/
-COPY tsconfig.node.json /react-app/
-
-COPY postcss.config.cjs /react-app/
-COPY tailwind.config.js /react-app/
-
-COPY vite.config.ts /react-app/
-
-# Copying the Index
-COPY index.html /react-app/
 
 # Installing dependencies
 RUN npm install
@@ -29,11 +16,27 @@ RUN npm install
 # Building the application
 RUN npm run build
 
-# Exposing the port your app runs on
+
+FROM nginx:mainline-alpine3.18-perl
+
+# Expose port 3000
 EXPOSE 3000
 
-# Using a lightweight HTTP server to serve the built files
-RUN npm install -g serve
 
-# Starting the server to serve the build folder and keep the container running
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Copy Nginx configuration
+COPY .nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Clean up default Nginx content and copy built app
+RUN rm -rf /usr/share/nginx/html/* 
+
+# Correct the path for copying dist files
+COPY --from=build-env /react-app/dist /usr/share/nginx/html/web-app
+COPY --from=build-env /react-app/dist/* /tmpl/dist/web-app/
+
+
+# Handeling environment script
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN dos2unix /docker-entrypoint.d/env.sh && \
+    chmod +x /docker-entrypoint.d/env.sh
+
+CMD ["nginx", "-g", "daemon off;"]
