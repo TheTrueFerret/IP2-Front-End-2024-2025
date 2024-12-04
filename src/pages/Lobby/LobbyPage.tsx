@@ -1,7 +1,9 @@
 import {useState} from 'react';
 import PlayerList from "../../components/Player/PlayerList.tsx";
+import {useLobby} from "../../hooks/useLobby.ts";
 
 export function LobbyPage() {
+    const {createGame} = useLobby();
     const [players, setPlayers] = useState(["Player 1", "Player 2"]);
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
@@ -14,18 +16,20 @@ export function LobbyPage() {
         console.log(settings);
     };
 
-    const handleStartGame = () => {
+    const handleStartGame = async () => {
         if (players.length >= 2) {
-            alert("Game Started!");
-            // Add your logic to start the game
+            await createGame("a1e4c8d3-9f3b-4c8e-85ba-7fcf1eb8d006", settings.timeBetweenTurns, settings.startTileAmount).then(r => {
+
+                }
+            );
         } else {
-            alert("At least 2 players are required to start the game.");
+            alert("You need at least 2 players to start the game.");
         }
     };
 
     const handleQuitLobby = () => {
         alert("You have left the lobby.");
-        // Add your logic to quit the lobby
+        //TODO: GO BACK TO LOBBY SELECTION
     };
 
     return (
