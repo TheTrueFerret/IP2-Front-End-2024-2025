@@ -14,6 +14,12 @@ export function HomePage() {
         >
         Start Game
       </Link>
+        <Link
+            to="/Lobby"
+            className="mt-12 px-8 py-4 text-4xl font-semibold rounded-lg shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 gradient-button"
+        >
+            Lobby
+        </Link>
     </section>
   )
 }
