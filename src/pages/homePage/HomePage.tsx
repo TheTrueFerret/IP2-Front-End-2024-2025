@@ -1,6 +1,7 @@
 import { LoginButton } from "../../components/LoginButton";
 import { Background } from "../../components/background/Background";
 import { MenuList } from "../../components/menuList/MenuList";
+import {Link} from "react-router-dom";
 
 
 export function HomePage() {
@@ -13,7 +14,7 @@ export function HomePage() {
 
                 <MenuList menuItems={[{
                     menuItemName: "Start Game",
-                    menuItemLink: "/Game",
+                    menuItemLink: "/GameSelectorPage",
                 },
                 {
                     menuItemName: "Achievements",

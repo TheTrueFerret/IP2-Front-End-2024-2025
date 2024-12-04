@@ -9,6 +9,7 @@ import axios from 'axios'
 import {LobbyPage} from "./pages/Lobby/LobbyPage.tsx";
 import Achievements from "./pages/Achievements.tsx";
 import Settings from "./pages/Settings.tsx";
+import {GameSelectorPage} from "./pages/GameSelectorPage/GameSelectorPage.tsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -28,6 +29,7 @@ function App() {
                             <Route path='/Achievements' element={<Achievements/>}/>
                             <Route path='/Settings' element={<Settings/>}/>
                             <Route path='/Lobby' element={<LobbyPage/>}/>
+                            <Route path='/GameSelectorPage' element={<GameSelectorPage/>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>
