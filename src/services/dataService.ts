@@ -1,7 +1,7 @@
 import { Tile } from "../models/Tile"
 
 
-export function getFieldTiles(): Tile[] {
+export function getFieldTilesLocaly(): Tile[] {
   return [
     { id:1, tileNumber: 1, tileColor: "red", gridColumn: 1, gridRow: 1 },
     { id:2, tileNumber: 2, tileColor: "red", gridColumn: 2, gridRow: 1 },

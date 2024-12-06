@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
-import { setFieldTiles } from "../services/tileService";
+import { getPlayingFieldTiles, setFieldTiles } from "../services/tileService";
 import { useEffect, useState } from "react";
-import { getFieldTiles } from "../services/dataService";
 
 
 export function useFieldTiles() {
@@ -13,7 +12,7 @@ export function useFieldTiles() {
   const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['fieldTiles'],
-      queryFn: () => getFieldTiles(),
+      queryFn: () => getPlayingFieldTiles("00000000-0000-0000-0000-000000000011"),
       initialData: [] as Tile[],
     }
   )

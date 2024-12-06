@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
 import { setDeckTiles } from "../services/tileService";
 import { useEffect, useState } from "react";
-import { getDeckTiles } from "../services/tileService";
+import { getDeckTilesLocaly } from "../services/dataService";
 
 
 export function useDeckTiles() {
@@ -13,7 +13,7 @@ export function useDeckTiles() {
   const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['deckTiles'],
-      queryFn: () => getDeckTiles("00000000-0000-0000-0000-000000000015"),
+      queryFn: () => getDeckTilesLocaly(),
       initialData: [] as Tile[],
     }
   )
@@ -140,7 +140,7 @@ export function useDeckTiles() {
     console.log('Updated deckTiles:', localDeckTiles);
   }, [localDeckTiles]);
 
-  
+
 
   return {
     isLoading,
