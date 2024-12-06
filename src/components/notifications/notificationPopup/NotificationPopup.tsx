@@ -1,5 +1,5 @@
 import './NotificationPopup.css';
-import {PopupNotification, NotificationType} from "../../models/PopupNotification.ts"; // Style this as you like
+import {PopupNotification, NotificationType} from "../../../models/PopupNotification.ts"; // Style this as you like
 
 interface NotificationPopupProps {
     notification: PopupNotification;

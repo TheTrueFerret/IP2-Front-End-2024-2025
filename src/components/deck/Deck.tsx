@@ -2,7 +2,7 @@ import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
 import { NotificationType, PopupNotification } from "../../models/PopupNotification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
-import { NotificationPopup } from "../notification/NotificationPopup";
+import { NotificationPopup } from "../notifications/notificationPopup/NotificationPopup";
 import { Tile } from "../tile/Tile";
 import './Deck.css'
 
