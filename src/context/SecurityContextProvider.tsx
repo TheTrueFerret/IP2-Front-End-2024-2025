@@ -21,6 +21,7 @@ const keycloak: Keycloak = new Keycloak(keycloakConfig)
 
 export default function SecurityContextProvider({children}: IWithChildren) {
     const [loggedInUser, setLoggedInUser] = useState<string | undefined>(undefined)
+    const [loggedUserId, setLoggedUserId] = useState<string | undefined>(undefined)
     const keycloakRef = useRef<Keycloak | null>(null);
     const {postUser, isLoading, isError} = useAuthorization()
 
@@ -31,10 +32,11 @@ export default function SecurityContextProvider({children}: IWithChildren) {
                 if (authenticated) {
                     addAccessTokenToAuthHeader(keycloak.token);
                     setLoggedInUser(keycloak.idTokenParsed?.preferred_username);
+                    setLoggedUserId(keycloak.idTokenParsed?.sub);
                 }
             });
         }
-    }, []);
+    }, [keycloak]);
 
 
     keycloak.onAuthSuccess = () => {
@@ -89,6 +91,7 @@ export default function SecurityContextProvider({children}: IWithChildren) {
             value={{
                 isAuthenticated,
                 loggedInUser,
+                loggedUserId,
                 login,
                 logout,
             }}

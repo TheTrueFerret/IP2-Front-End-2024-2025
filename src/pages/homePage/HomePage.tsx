@@ -1,4 +1,4 @@
-import { LoginButton } from "../../components/LoginButton";
+import { LoginButton } from "../../components/Authorization/LoginButton.tsx";
 import { Background } from "../../components/background/Background";
 import { MenuList } from "../../components/menuList/MenuList";
 import {Link} from "react-router-dom";
@@ -15,14 +15,20 @@ export function HomePage() {
                 <MenuList menuItems={[{
                     menuItemName: "Start Game",
                     menuItemLink: "/GameSelectorPage",
+                    onClick: () => {
+                    }
                 },
                 {
                     menuItemName: "Achievements",
                     menuItemLink: "/achievements",
+                    onClick: () => {
+                    }
                 },
                 {
                     menuItemName: "Settings",
                     menuItemLink: "/settings",
+                    onClick: () => {
+                    }
                 }]}
                 />
                 <Link

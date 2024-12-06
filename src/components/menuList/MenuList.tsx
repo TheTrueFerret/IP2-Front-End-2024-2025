@@ -14,6 +14,7 @@ export function MenuList({ menuItems }: MenuListProps) {
         <Link
           to={menuItem.menuItemLink}
           className="relative group flex items-center space-x-10 hover:scale-105"
+          onClick={menuItem.onClick}
         >
           <img
             src="../../../public/rummikub-icon.svg"

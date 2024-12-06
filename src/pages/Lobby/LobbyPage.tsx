@@ -1,16 +1,25 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import PlayerList from "../../components/Player/PlayerList.tsx";
 import {useLobby} from "../../hooks/useLobby.ts";
 import {Background} from "../../components/background/Background.tsx";
 
 export function LobbyPage() {
-    const {createGame} = useLobby();
+    const {createGame, createLobby} = useLobby();
     const [players, setPlayers] = useState(["Player 1", "Player 2"]);
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
-        jokersEnabled: false,
-        startTileAmount: 7,
+        //jokersEnabled: false,
+        startTileAmount: 7
     });
+
+    useEffect(() => {
+        createLobby().then(r => {
+            console.log(r);
+            //if (r !== "") {
+            //    setLobbyId(r);
+            //}
+        });
+    }, []);
 
     const handleSettingChange = (key: string, value: number | boolean) => {
         setSettings((prev) => ({...prev, [key]: value}));
@@ -19,18 +28,15 @@ export function LobbyPage() {
 
     const handleStartGame = async () => {
         if (players.length >= 2) {
-            await createGame("a1e4c8d3-9f3b-4c8e-85ba-7fcf1eb8d006", settings.timeBetweenTurns, settings.startTileAmount).then(r => {
-
-                }
-            );
+            //TODO: Get lobbyId from user?
+            // await createGame(lobbyId,settings.timeBetweenTurns, settings.startTileAmount)
         } else {
             alert("You need at least 2 players to start the game.");
         }
     };
 
     const handleQuitLobby = () => {
-        alert("You have left the lobby.");
-        //TODO: GO BACK TO LOBBY SELECTION
+        window.history.back();
     };
 
     return (<>
@@ -79,7 +85,7 @@ export function LobbyPage() {
                                 />
                             </div>
 
-                            {/* Jokers Enabled Switch */}
+                            {/* Jokers Enabled Switch
                             <div className="flex justify-between items-center mb-4">
                                 <label className="text-gray-300">Jokers Enabled:</label>
                                 <label className="inline-flex items-center cursor-pointer">
@@ -92,12 +98,11 @@ export function LobbyPage() {
                                     <span
                                         className={`w-12 h-6 rounded-full relative transition-colors duration-300 ${settings.jokersEnabled ? 'bg-gray-500' : 'bg-blue-500'}`}
                                     >
-            <span
-                className={`w-6 h-6 bg-white rounded-full absolute top-0 left-0 transition-transform duration-300 ${settings.jokersEnabled ? '' : 'translate-x-6'}`}
-            ></span>
-        </span>
+                                        <span
+                                            className={`w-6 h-6 bg-white rounded-full absolute top-0 left-0 transition-transform duration-300 ${settings.jokersEnabled ? '' : 'translate-x-6'}`}></span>
+                                    </span>
                                 </label>
-                            </div>
+                            </div>*/}
 
 
                             {/* Starting Tile Amount */}
@@ -116,7 +121,8 @@ export function LobbyPage() {
 
 
                         {/* Game Preview Section */}
-                        <div className="flex-grow bg-white rounded-lg shadow-md p-4 flex items-center justify-center z-10">
+                        <div
+                            className="flex-grow bg-white rounded-lg shadow-md p-4 flex items-center justify-center z-10">
                             <p className="text-gray-500 text-lg">Game Preview</p>
                         </div>
                     </div>

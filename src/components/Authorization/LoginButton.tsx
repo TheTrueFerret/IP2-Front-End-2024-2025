@@ -1,4 +1,4 @@
-import SecurityContext from "../context/SecurityContext.ts";
+import SecurityContext from "../../context/SecurityContext.ts";
 import { useContext } from "react";
 
 export function LoginButton() {
