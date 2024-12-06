@@ -13,8 +13,8 @@ export function MenuList({ menuItems }: MenuListProps) {
       {menuItems.map(menuItem =>
         <Link
           to={menuItem.menuItemLink}
+          key={menuItem.menuItemName}
           className="relative group flex items-center space-x-10 hover:scale-105"
-          onClick={menuItem.onClick}
         >
           <img
             src="../../../public/rummikub-icon.svg"

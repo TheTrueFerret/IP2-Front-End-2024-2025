@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import PlayerList from "../../components/Player/PlayerList.tsx";
 import {useLobby} from "../../hooks/useLobby.ts";
 import {Background} from "../../components/background/Background.tsx";
@@ -6,19 +6,20 @@ import {Background} from "../../components/background/Background.tsx";
 export function LobbyPage() {
     const {createGame, createLobby} = useLobby();
     const [players, setPlayers] = useState(["Player 1", "Player 2"]);
+    const [lobbyId, setLobbyId] = useState("");
+    const isLobbyCreated = useRef(false);
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
         //jokersEnabled: false,
         startTileAmount: 7
     });
 
+
     useEffect(() => {
-        createLobby().then(r => {
-            console.log(r);
-            //if (r !== "") {
-            //    setLobbyId(r);
-            //}
-        });
+        if (!isLobbyCreated.current) {
+            loadLobby();
+            isLobbyCreated.current = true;
+        }
     }, []);
 
     const handleSettingChange = (key: string, value: number | boolean) => {
@@ -29,7 +30,7 @@ export function LobbyPage() {
     const handleStartGame = async () => {
         if (players.length >= 2) {
             //TODO: Get lobbyId from user?
-            // await createGame(lobbyId,settings.timeBetweenTurns, settings.startTileAmount)
+            await createGame(lobbyId, settings.timeBetweenTurns, settings.startTileAmount)
         } else {
             alert("You need at least 2 players to start the game.");
         }
@@ -38,6 +39,14 @@ export function LobbyPage() {
     const handleQuitLobby = () => {
         window.history.back();
     };
+
+    const loadLobby = async () => {
+        if (!isLobbyCreated.current) {
+            createLobby().then((r) => {
+                console.log(r);
+            });
+        }
+    }
 
     return (<>
             <Background color={"crimson"}/>

@@ -1,7 +1,6 @@
 import { LoginButton } from "../../components/Authorization/LoginButton.tsx";
 import { Background } from "../../components/background/Background";
 import { MenuList } from "../../components/menuList/MenuList";
-import {Link} from "react-router-dom";
 
 
 export function HomePage() {
@@ -14,29 +13,17 @@ export function HomePage() {
 
                 <MenuList menuItems={[{
                     menuItemName: "Start Game",
-                    menuItemLink: "/GameSelectorPage",
-                    onClick: () => {
-                    }
+                    menuItemLink: "/GameSelectorPage"
                 },
                 {
                     menuItemName: "Achievements",
-                    menuItemLink: "/achievements",
-                    onClick: () => {
-                    }
+                    menuItemLink: "/achievements"
                 },
                 {
                     menuItemName: "Settings",
-                    menuItemLink: "/settings",
-                    onClick: () => {
-                    }
+                    menuItemLink: "/settings"
                 }]}
                 />
-                <Link
-                    to="/Lobby"
-                    className="mt-12 px-8 py-4 text-4xl font-semibold rounded-lg shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 gradient-button"
-                >
-                    Lobby
-                </Link>
                 <div className="flex flex-col space-y-8">
                     <div className="bg-gradient-to-br from-gray-800 to-gray-700 text-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-2">Active Event!</h2>
