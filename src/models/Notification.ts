@@ -1,4 +1,4 @@
-export interface PopupNotification {
+export interface Notification {
     title: string;
     description: string;
     type: NotificationType;

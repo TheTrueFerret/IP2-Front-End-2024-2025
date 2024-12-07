@@ -1,31 +1,16 @@
 import './NotificationPopup.css';
-import {PopupNotification, NotificationType} from "../../../models/PopupNotification.ts"; // Style this as you like
+import {Notification} from "../../../models/Notification.ts"; // Style this as you like
 
 interface NotificationPopupProps {
-    notification: PopupNotification;
+    notification: Notification;
     onClose: () => void;
 }
 
 export function NotificationPopup({ notification, onClose }: NotificationPopupProps)  {
-    const getClassName = (type: NotificationType) => {
-        switch (type) {
-            case NotificationType.Success:
-                return 'notification-success';
-            case NotificationType.Error:
-                return 'notification-error';
-            case NotificationType.Info:
-                return 'notification-info';
-            case NotificationType.Warning:
-                return 'notification-warning';
-            default:
-                return '';
-        }
-    };
-
     return (
-        <div className={`notification-popup ${getClassName(notification.type)}`}>
+        <div className={`notification-popup ${notification.type.toString}`}>
             <div className="notification-header">
-                <h4>{notification.title}</h4>
+                <h4>{`${notification.type.toString} ${notification.title}`}</h4>
                 <button onClick={onClose} className="close-button">
                     ×
                 </button>

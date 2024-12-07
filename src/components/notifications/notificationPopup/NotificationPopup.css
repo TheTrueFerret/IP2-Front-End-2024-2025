@@ -32,19 +32,19 @@
     cursor: pointer;
 }
 
-.notification-success {
+.success {
     background-color: #4caf50;
 }
 
-.notification-error {
+.error {
     background-color: #f44336;
 }
 
-.notification-info {
+.info {
     background-color: #2196f3;
 }
 
-.notification-warning {
+.warning {
     background-color: #ff9800;
 }
 

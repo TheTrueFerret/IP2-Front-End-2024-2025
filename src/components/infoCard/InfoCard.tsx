@@ -7,9 +7,8 @@ interface InfoCardProps {
 
 export function InfoCard({loading}: InfoCardProps) {
   return (
-    
-    <div>
-      UH OH ERROR!!!!
+    <div className='InfoCard'>
+      {loading}
     </div>
   )
 }

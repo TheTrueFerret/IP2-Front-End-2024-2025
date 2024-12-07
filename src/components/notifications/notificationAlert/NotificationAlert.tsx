@@ -2,15 +2,16 @@ import "./NotificationAlert.css"
 
 
 interface NotificationAlertProps {
+  notification: Notification
   buttons: boolean
 }
 
 
 
-export function NotificationAlert() {
+export function NotificationAlert({notification, buttons}: NotificationAlertProps) {
   return (
     <div>
-      ALERT!!!
+      Big Floating Notification 
     </div>
   )
 }
