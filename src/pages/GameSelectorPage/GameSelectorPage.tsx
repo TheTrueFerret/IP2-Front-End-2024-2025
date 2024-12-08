@@ -22,7 +22,6 @@ export function GameSelectorPage() {
                     menuItemLink: "/Lobby",
                 }]}
                 />
-
                 <SideElements
                     upperElement={
                         <>

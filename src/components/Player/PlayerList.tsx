@@ -7,7 +7,7 @@ interface PlayerListProps {
 const PlayerList: React.FC<PlayerListProps> = ({ players }) => {
     return (
         <div
-            className="bg-gray-600/20 backdrop-blur rounded-lg shadow-md p-4 mx-auto"
+            className="bg-neutral-900/60 backdrop-blur rounded-3xl shadow-md p-4 mx-auto"
             style={{height: "75%", width: "90%", display: "flex", flexDirection: "column"}}
         >
             <div className="flex flex-col gap-4 overflow-y-auto">
