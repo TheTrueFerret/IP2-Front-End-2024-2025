@@ -1,6 +1,5 @@
 import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
 import { SideElements } from "../../components/sideElements/SideElements.tsx";
-import { Background } from "../../components/background/Background.tsx";
 import { MenuList } from "../../components/menuList/MenuList.tsx";
 
 export function GameSelectorPage() {

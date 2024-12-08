@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
-import { getPlayingFieldTiles, setFieldTiles } from "../services/tileService";
+import { setFieldTiles } from "../services/tileService";
 import { useEffect, useState } from "react";
 import { getFieldTilesLocaly } from "../services/dataService";
 
