@@ -55,16 +55,16 @@ export function LobbyPage() {
                 <div className="flex flex-col justify-between pb-32">
                     <PlayerList players={players} />
 
-                    <div className="flex gap-4 justify-center">
+                    <div className="flex gap-10 justify-center text-white font-bold text-3xl">
                         <button
                             onClick={handleQuitLobby}
-                            className="w-1/2 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-900 transition z-10"
+                            className="w-2/6 py-20 bg-red-600 rounded-xl hover:bg-red-900 transition z-10"
                         >
                             Quit Lobby
                         </button>
                         <button
                             onClick={handleStartGame}
-                            className={`w-1/2 px-4 py-3 bg-green-500 text-white rounded-lg transition z-10 ${players.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
+                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${players.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
                                 }`}
                             disabled={players.length < 2}
                         >

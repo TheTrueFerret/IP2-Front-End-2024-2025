@@ -11,7 +11,7 @@ export function GameSelectorPage() {
 
                 <MenuList menuItems={[{
                     menuItemName: "Find Game",
-                    menuItemLink: "/Games",
+                    menuItemLink: "/Game",
                 },
                 {
                     menuItemName: "Join Friends",
