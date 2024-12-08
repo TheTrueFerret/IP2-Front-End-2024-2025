@@ -8,7 +8,7 @@ interface SideElementsProps {
 
 export function SideElements({ upperElement, bottemElement }: SideElementsProps) {
   return (
-    <div className='flex flex-col gap-20 min-h-screen pr-32'>
+    <div className='flex flex-col gap-20 min-h-screen pr-48'>
       <div className='flex-grow flex-col text-white bg-neutral-900/60 backdrop-blur p-20 rounded-3xl shadow-md'>
         {upperElement}
       </div>

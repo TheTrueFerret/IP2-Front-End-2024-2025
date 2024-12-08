@@ -1,6 +1,5 @@
-import { LoginButton } from "../../components/Authorization/LoginButton.tsx";
+import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
 import { SideElements } from "../../components/sideElements/SideElements.tsx";
-import { Background } from "../../components/background/Background";
 import { MenuList } from "../../components/menuList/MenuList";
 
 
@@ -41,7 +40,6 @@ export function HomePage() {
                         </>
                     } />
             </main>
-            <Background color="crimson" />
         </div>
     )
 }

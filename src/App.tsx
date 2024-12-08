@@ -10,6 +10,7 @@ import {LobbyPage} from "./pages/Lobby/LobbyPage.tsx";
 import Achievements from "./pages/Achievements.tsx";
 import Settings from "./pages/Settings.tsx";
 import {GameSelectorPage} from "./pages/GameSelectorPage/GameSelectorPage.tsx";
+import { Background } from './components/background/Background.tsx'
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -23,6 +24,7 @@ function App() {
                 <BrowserRouter>
                     <ReactQueryDevtools initialIsOpen={false}/>
                     <div>
+                        <Background color='crimson' />
                         <Routes>
                             <Route path='/' element={<HomePage/>}/>
                             <Route path='/Game' element={<GamePage/>}/>

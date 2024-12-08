@@ -50,7 +50,6 @@ export function LobbyPage() {
     }
 
     return (<>
-        <Background color={"crimson"} />
         <div className="bg-gradient-to-br bg-neutral-900 w-screen h-screen text-black flex flex-col p-6">
             <div className="grid grid-cols-2 gap-6 flex-grow">
                 <div className="flex flex-col justify-between pb-32">

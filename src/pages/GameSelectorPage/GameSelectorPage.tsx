@@ -1,4 +1,4 @@
-import { LoginButton } from "../../components/Authorization/LoginButton.tsx";
+import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
 import { SideElements } from "../../components/sideElements/SideElements.tsx";
 import { Background } from "../../components/background/Background.tsx";
 import { MenuList } from "../../components/menuList/MenuList.tsx";
@@ -20,7 +20,12 @@ export function GameSelectorPage() {
                 {
                     menuItemName: "Create Game",
                     menuItemLink: "/Lobby",
-                }]}
+                },
+                {
+                    menuItemName: "Go Back",
+                    menuItemLink: "/",
+                },
+                ]}
                 />
                 <SideElements
                     upperElement={
@@ -39,7 +44,6 @@ export function GameSelectorPage() {
                         </>
                     } />
             </main>
-            <Background color="crimson" />
         </div>
     );
 }
