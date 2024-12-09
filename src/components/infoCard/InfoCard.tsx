@@ -11,7 +11,7 @@ export function InfoCard({ loading, notification }: InfoCardProps) {
   if (!loading && notification) {
     return (
      <div className="fixed inset-0 flex items-center justify-center bg-black/20">
-        <div className="bg-neutral-900 rounded-lg shadow-lg max-w-2xl mx-4 p-8">
+        <div className={`${notification.type.toString} rounded-xl shadow-lg max-w-2xl mx-4 p-8`}>
           <div className="flex flex-col items-center justify-center">
             <h3 className="text-2xl font-bold text-white">{notification.title}</h3>
             <p className="text-white text-lg mt-4">{notification.description}</p>
@@ -38,7 +38,7 @@ export function InfoCard({ loading, notification }: InfoCardProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
+    <div className="rounded-lg p-4">
       {/* Default content when not loading and no error */}
       <p className="text-gray-600">No data to display</p>
     </div>
