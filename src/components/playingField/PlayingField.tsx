@@ -1,20 +1,37 @@
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
+import { NotificationType } from "../../models/Notification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
+import { InfoCard } from "../infoCard/InfoCard";
 import { Tile } from "../tile/Tile"
 import "./PlayingField.css"
 
 
 
 export function PlayingField() {
-  const { fieldTiles, updateFieldTile, addFieldTile, isTileInField } = useFieldTiles()
-  const { deckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTiles, updateFieldTile, addFieldTile, isTileInField } = useFieldTiles()
+  const { isErrorDeckTiles, isLoadingDeckTiles, deckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
 
+  const hasError = isErrorDeckTiles || isErrorFieldTiles || !deckTiles || !fieldTiles;
+  const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
-  if (!fieldTiles || !deckTiles) {
+  if (hasError || isLoading) {
     return (
-      <div>tiles not found</div>
-    )
+      <section className="PlayingField flex items-center justify-center">
+        <InfoCard
+          loading={isLoading}
+          notification={
+            hasError
+              ? {
+                title: 'FieldTiles / DeckTiles are Zero',
+                description: 'description',
+                type: NotificationType.Error,
+              }
+              : undefined
+          }
+        />
+      </section>
+    );
   }
 
   const handleDrop = async (id: number, column: number, row: number) => {

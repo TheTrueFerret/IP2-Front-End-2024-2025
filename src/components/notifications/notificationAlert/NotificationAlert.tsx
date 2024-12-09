@@ -1,17 +1,37 @@
+import { Notification } from "../../../models/Notification";
 import "./NotificationAlert.css"
 
 
 interface NotificationAlertProps {
-  notification: Notification
-  buttons: boolean
+  notification: Notification;
+  buttons: boolean;
+  onClose?: () => void;
+  onExecute?: () => void;
+  closeButtonText?: string;
+  executeButtonText?: string;
 }
 
-
-
-export function NotificationAlert({notification, buttons}: NotificationAlertProps) {
+export function NotificationAlert({ notification, buttons, onClose, onExecute, closeButtonText, executeButtonText }: NotificationAlertProps) {
   return (
-    <div>
-      Big Floating Notification 
+    <div className="notification-alert-container">
+      <div className="notification-alert">
+        <div className="notification-alert-content">
+          <h3 className="notification-alert-title">{notification.title}</h3>
+          <p className="notification-alert-description">{notification.description}</p>
+        </div>
+        <div className="notification-alert-buttons">
+          {buttons && (
+            <>
+              <button className="notification-alert-button" onClick={onClose}>
+                {closeButtonText}
+              </button>
+              <button className="notification-alert-button" onClick={onExecute}>
+                {executeButtonText}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
     </div>
-  )
+  );
 }

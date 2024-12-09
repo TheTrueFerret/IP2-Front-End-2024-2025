@@ -143,8 +143,8 @@ export function useDeckTiles() {
 
 
   return {
-    isLoading,
-    isError,
+    isLoadingDeckTiles: isLoading,
+    isErrorDeckTiles: isError,
     deckTiles: localDeckTiles,
     setDeckTiles: mutateSetDeckTiles,
     isSettingDeckTiles,

@@ -1,28 +1,32 @@
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
-import { NotificationType, PopupNotification } from "../../models/PopupNotification";
+import { NotificationType } from "../../models/Notification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
-import { NotificationPopup } from "../notifications/notificationPopup/NotificationPopup";
+import { InfoCard } from "../infoCard/InfoCard";
 import { Tile } from "../tile/Tile";
 import './Deck.css'
 
 
 export function Deck() {
-  const { deckTiles, updateDeckTile, addDeckTile, isTileInDeck } = useDeckTiles()
-  const { fieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
+  const { isErrorDeckTiles, isLoadingDeckTiles, deckTiles, updateDeckTile, addDeckTile, isTileInDeck } = useDeckTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
 
+  const hasError = isErrorDeckTiles || isErrorFieldTiles || !deckTiles || !fieldTiles;
+  const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
-  if (!deckTiles || !fieldTiles) {
+  if (hasError || isLoading) {
     return (
-      <NotificationPopup notification={
-        {
-          title: "FieldTiles / DeckTiles are Zero",
-          description: "description",
-          type: NotificationType.Error,
-        }
-      } onClose={function (): void {
-        throw new Error("Function not implemented.");
-      }} />
+      <div className='deck'>
+        <InfoCard loading={isLoading} notification={
+          hasError
+              ? {
+                title: 'FieldTiles / DeckTiles are Zero',
+                description: 'description',
+                type: NotificationType.Error,
+              }
+              : undefined
+        } />
+      </div>
     )
   }
 

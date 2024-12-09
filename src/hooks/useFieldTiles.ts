@@ -140,8 +140,8 @@ export function useFieldTiles() {
 
 
   return {
-    isLoading,
-    isError,
+    isLoadingFieldTiles: isLoading,
+    isErrorFieldTiles: isError,
     fieldTiles: localFieldTiles,
     setFieldTiles: mutateSetFieldTiles,
     isSettingFieldTiles,

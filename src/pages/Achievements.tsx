@@ -1,8 +1,10 @@
+import { InfoCard } from "../components/infoCard/InfoCard"
 
 export function Achievements() {
     return (
-        <div>
+        <div className=''>
             <h1>Achievements</h1>
+            <InfoCard loading={true} />
         </div>
     )
 }
