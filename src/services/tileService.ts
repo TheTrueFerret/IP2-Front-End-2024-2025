@@ -13,6 +13,7 @@ export function setDeckTiles(tiles: Tile[]): Tile[] {
   return tiles
 }
 
+
 export async function getDeckTiles(playerId: string): Promise<Tile[]> {
   try {
     const response = await axios.get<Tile[]>(`/api/game/tiles/player/${playerId}`)

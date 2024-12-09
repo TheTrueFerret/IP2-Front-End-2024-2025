@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import PlayerList from "../../components/Player/PlayerList.tsx";
-import { useLobby } from "../../hooks/useLobby.ts";
+import { PlayerList } from "../../components/Player/PlayerList.tsx";
 import { SideElements } from '../../components/sideElements/SideElements.tsx';
+import { useCreateLobby } from '../../hooks/useCreateLobby.ts';
+import { useCreateGame } from '../../hooks/useCreateGame.ts';
 
 export function LobbyPage() {
-    const { createGame, createLobby } = useLobby();
-    const [players, /*setPlayers*/] = useState(["Player 1", "Player 2"]);
-    const [lobbyId, /*setLobbyId*/] = useState("");
+    const { createLobby } = useCreateLobby();
+    const { createGame } = useCreateGame();
+    const [ players, /*setPlayers*/ ] = useState(["Player 1", "Player 2"]);
+    const [ lobbyId, /*setLobbyId*/ ] = useState("");
     const isLobbyCreated = useRef(false);
-    const [settings, setSettings] = useState({
+    const [ settings, setSettings ] = useState({
         timeBetweenTurns: 30,
         //jokersEnabled: false,
         startTileAmount: 7

@@ -1,21 +1,23 @@
 import axios from "axios";
 
 
-export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number): Promise<string> {
-    try {
-        const response = await axios.post<string>(`/api/game/start/${lobbyId}`, {
-            roundTime: roundTime,
-            startTileAmount: startTileAmount,
-            //jokersEnabled:jokersEnabled,
-        })
-        console.log(response)
-        return response.data
-    } catch (error) {
-        console.log('Failed to create a game because of: ' + error)
-        return ''
+
+export function getLobbyLocally(lobbyId: string) {
+    return {
+        lobbyId: lobbyId,
+        status: "active",
+        host: { userName: "player1", profileImage: "imageLink" },
+        players: [
+            { userName: "player1", profileImage: "imageLink" },
+            { userName: "player2", profileImage: "imageLink" }
+        ],
+        minimumPlayers: 2,
+        maximumPlayers: 4,
     }
 }
 
+
+// Returns LobbyId?
 export async function postCreateLobby(joinCode: string, userId: string): Promise<string> {
     try {
         console.log('Creating lobby with joinCode: ' + joinCode + ' and userId: ' + userId)
