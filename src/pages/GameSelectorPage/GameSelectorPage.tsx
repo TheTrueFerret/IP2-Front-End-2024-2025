@@ -1,8 +1,24 @@
 import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
 import { SideElements } from "../../components/sideElements/SideElements.tsx";
 import { MenuList } from "../../components/menuList/MenuList.tsx";
+import { useCreateLobby } from "../../hooks/useCreateLobby.ts";
+import { useNavigate } from "react-router-dom";
 
 export function GameSelectorPage() {
+    const navigate = useNavigate();
+    const { createLobby } = useCreateLobby();
+
+    const handleCreateGame = async () => {
+        try {
+            const response = await createLobby();
+            console.log("Lobby created:", response);
+            navigate("/Lobby");
+        } catch (error) {
+            console.error("Failed to create a lobby:", error);
+        }
+    };
+
+
     return (
         <div className="flex flex-col">
             <LoginButton />
@@ -18,7 +34,8 @@ export function GameSelectorPage() {
                 },
                 {
                     menuItemName: "Create Game",
-                    menuItemLink: "/Lobby",
+                    menuItemLink: "#",
+                    menuItemAction: handleCreateGame,
                 },
                 {
                     menuItemName: "Go Back",

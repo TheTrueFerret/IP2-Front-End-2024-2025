@@ -1,62 +1,57 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { PlayerList } from "../../components/Player/PlayerList.tsx";
 import { SideElements } from '../../components/sideElements/SideElements.tsx';
-import { useCreateLobby } from '../../hooks/useCreateLobby.ts';
 import { useCreateGame } from '../../hooks/useCreateGame.ts';
 import { LoginButton } from '../../components/loginButton/LoginButton.tsx';
+import { useLobby } from '../../hooks/useLobby.ts';
+import { useNavigate } from 'react-router-dom';
 
 export function LobbyPage() {
-    const { createLobby } = useCreateLobby();
+    const navigate = useNavigate();
     const { createGame } = useCreateGame();
-    const [ players, /*setPlayers*/ ] = useState(["Player 1", "Player 2"]);
-    const [ lobbyId, /*setLobbyId*/ ] = useState("");
-    const isLobbyCreated = useRef(false);
-    const [ settings, setSettings ] = useState({
+    const { lobby, isErrorLobby } = useLobby();
+    const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
         //jokersEnabled: false,
         startTileAmount: 7
     });
 
 
-    useEffect(() => {
-        if (!isLobbyCreated.current) {
-            loadLobby();
-            isLobbyCreated.current = true;
-        }
-    }, []);
+    if (isErrorLobby || !lobby) {
+        return (
+            // Replace this with the new NotificationCard
+            <div>Error:</div>
+        )
+    }
+
 
     const handleSettingChange = (key: string, value: number | boolean) => {
         setSettings((prev) => ({ ...prev, [key]: value }));
         console.log(settings);
     };
 
+
     const handleStartGame = async () => {
-        if (players.length >= 2) {
+        if (lobby.players.length >= 2) {
             //TODO: Get lobbyId from user?
-            await createGame(lobbyId, settings.timeBetweenTurns, settings.startTileAmount)
+            await createGame(lobby.lobbyId, settings.timeBetweenTurns, settings.startTileAmount)
         } else {
             alert("You need at least 2 players to start the game.");
         }
     };
 
+
     const handleQuitLobby = () => {
-        window.history.back();
+        navigate("/gameSelectorPage")
     };
 
-    const loadLobby = async () => {
-        if (!isLobbyCreated.current) {
-            createLobby().then((r) => {
-                console.log(r);
-            });
-        }
-    }
 
-    return (<>
+    return (
         <div className="bg-gradient-to-br text-black flex flex-col p-6">
             <LoginButton />
             <div className="grid grid-cols-2 gap-6 flex-grow">
                 <div className="flex flex-col justify-between pb-32">
-                    <PlayerList players={players} />
+                    <PlayerList players={lobby.players} />
 
                     <div className="flex gap-10 justify-center text-white font-bold text-3xl">
                         <button
@@ -67,15 +62,15 @@ export function LobbyPage() {
                         </button>
                         <button
                             onClick={handleStartGame}
-                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${players.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
+                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${lobby.players.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
                                 }`}
-                            disabled={players.length < 2}
+                            disabled={lobby.players.length < 2}
                         >
                             Start Game
                         </button>
                     </div>
                 </div>
-                
+
                 <SideElements upperElement={
                     <>
                         <h3 className="text-3xl font-semibold text-white mb-4">Settings</h3>
@@ -127,6 +122,5 @@ export function LobbyPage() {
                 } bottemElement={<p className="text-black text-lg">Game Preview</p>} />
             </div>
         </div>
-    </>
     );
 }

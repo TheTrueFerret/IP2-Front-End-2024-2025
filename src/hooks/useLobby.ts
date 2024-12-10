@@ -17,11 +17,11 @@ export function useLobby() {
     isPending: isGettingLobby,
     isError: isErrorGettingLobby,
   } = useMutation({
-    mutationFn: async (playerId: string) => {
-      return await getLobbyLocally(playerId);
+    mutationFn: async (lobbyId: string) => {
+      return await getLobbyLocally(lobbyId);
     },
-    onSuccess: (newGame) => {
-      queryClient.setQueryData(['game'], newGame);
+    onSuccess: (newLobby) => {
+      queryClient.setQueryData(['lobby'], newLobby);
     },
   });
 
