@@ -11,13 +11,13 @@ export function InfoCard({ loading, notification }: InfoCardProps) {
   if (!loading && notification) {
     return (
      <div className="fixed inset-0 flex items-center justify-center bg-black/20">
-        <div className={`${notification.type.toString} rounded-xl shadow-lg max-w-2xl mx-4 p-8`}>
+        <div className={`${notification.type} rounded-xl shadow-lg max-w-2xl mx-8 p-20`}>
           <div className="flex flex-col items-center justify-center">
-            <h3 className="text-2xl font-bold text-white">{notification.title}</h3>
+            <h3 className="text-2xl font-bold text-white">{notification.type}: {notification.title}</h3>
             <p className="text-white text-lg mt-4">{notification.description}</p>
           </div>
         </div>
-      </div> 
+      </div>
     );
   }
 

@@ -5,8 +5,8 @@ export interface Notification {
 }
 
 export enum NotificationType {
-    Success,
-    Error,
-    Info,
-    Warning
+    Success = 'Success',
+    Error = 'Error',
+    Info = 'Info',
+    Warning = 'Warning'
 }

@@ -33,19 +33,19 @@
 }
 
 /*Notification Colors*/
-.success {
+.Success {
     background-color: #4caf50;
 }
 
-.error {
+.Error {
     background-color: #f44336;
 }
 
-.info {
+.Info {
     background-color: #2196f3;
 }
 
-.warning {
+.Warning {
     background-color: #ff9800;
 }
 
