@@ -25,7 +25,7 @@ export function useGame() {
     },
   });
 
-
+  
   return {
     isLoadingGame: isLoading,
     isErrorGame: isError,

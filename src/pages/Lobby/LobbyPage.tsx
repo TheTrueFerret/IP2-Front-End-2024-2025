@@ -3,6 +3,7 @@ import { PlayerList } from "../../components/Player/PlayerList.tsx";
 import { SideElements } from '../../components/sideElements/SideElements.tsx';
 import { useCreateLobby } from '../../hooks/useCreateLobby.ts';
 import { useCreateGame } from '../../hooks/useCreateGame.ts';
+import { LoginButton } from '../../components/loginButton/LoginButton.tsx';
 
 export function LobbyPage() {
     const { createLobby } = useCreateLobby();
@@ -51,7 +52,8 @@ export function LobbyPage() {
     }
 
     return (<>
-        <div className="bg-gradient-to-br bg-neutral-900 w-screen h-screen text-black flex flex-col p-6">
+        <div className="bg-gradient-to-br text-black flex flex-col p-6">
+            <LoginButton />
             <div className="grid grid-cols-2 gap-6 flex-grow">
                 <div className="flex flex-col justify-between pb-32">
                     <PlayerList players={players} />

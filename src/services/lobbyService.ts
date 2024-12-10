@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Lobby } from "../models/Lobby";
 
 
 
@@ -13,6 +14,16 @@ export function getLobbyLocally(lobbyId: string) {
         ],
         minimumPlayers: 2,
         maximumPlayers: 4,
+    }
+}
+
+export async function getLobby(lobbyId: string): Promise<Lobby | null> {
+    try {
+        const response = await axios.post<Lobby>(`/api/lobby/${lobbyId}`);
+        return response.data
+    } catch (error) {
+        console.log('Failed to get the lobby because of: ' + error);
+        return null;
     }
 }
 

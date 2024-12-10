@@ -4,7 +4,7 @@ import { MenuList } from "../../components/menuList/MenuList.tsx";
 
 export function GameSelectorPage() {
     return (
-        <div className="bg-neutral-900 h-screen w-screen flex flex-col">
+        <div className="flex flex-col">
             <LoginButton />
             <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
 

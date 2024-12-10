@@ -11,6 +11,7 @@ import Achievements from "./pages/Achievements.tsx";
 import Settings from "./pages/Settings.tsx";
 import {GameSelectorPage} from "./pages/GameSelectorPage/GameSelectorPage.tsx";
 import { Background } from './components/background/Background.tsx'
+import { RouteGuard } from './components/RouteGuard.tsx'
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -23,15 +24,15 @@ function App() {
             <SecurityContextProvider>
                 <BrowserRouter>
                     <ReactQueryDevtools initialIsOpen={false}/>
-                    <div>
+                    <div className='bg-neutral-900 w-screen h-screen'>
                         <Background color='crimson' />
                         <Routes>
                             <Route path='/' element={<HomePage/>}/>
-                            <Route path='/Game' element={<GamePage/>}/>
-                            <Route path='/Achievements' element={<Achievements/>}/>
-                            <Route path='/Settings' element={<Settings/>}/>
-                            <Route path='/Lobby' element={<LobbyPage/>}/>
-                            <Route path='/GameSelectorPage' element={<GameSelectorPage/>}/>
+                            <Route path='/Game' element={<RouteGuard><GamePage/></RouteGuard>}/>
+                            <Route path='/Achievements' element={<RouteGuard><Achievements/></RouteGuard>}/>
+                            <Route path='/Settings' element={<RouteGuard><Settings/></RouteGuard>}/>
+                            <Route path='/Lobby' element={<RouteGuard><LobbyPage/></RouteGuard>}/>
+                            <Route path='/GameSelectorPage' element={<RouteGuard><GameSelectorPage/></RouteGuard>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>
