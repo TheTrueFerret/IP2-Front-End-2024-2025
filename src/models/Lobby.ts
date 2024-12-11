@@ -3,10 +3,11 @@ import { Player } from "./Player";
 
 // IMPORTANT Player in here IS NOT REALLY A PLAYER but... A USER!!!
 export interface Lobby {
-  lobbyId: string;
+  id: string;
   status: string;
-  host: Player;
-  players: Player[];
+  hostUser: Player;
+  // BELANGRIJK DEZE SHIT MOET AANGEPAST WORDEN NOOIT USER ID TERUG GEVEN!!!
+  users: Player[];
   minimumPlayers: number;
   maximumPlayers: number;
 }

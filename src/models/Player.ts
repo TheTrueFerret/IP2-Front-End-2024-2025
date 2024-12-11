@@ -2,8 +2,8 @@
 
 // THIS IS THE GAME PLAYER!!!
 export interface Player {
-  playerId?: string;
-  userName: string;
+  id?: string;
+  username: string;
   profileImage: string;
 }
 

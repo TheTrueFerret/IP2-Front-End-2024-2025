@@ -29,10 +29,10 @@ export async function getLobby(lobbyId: string): Promise<Lobby | null> {
 
 
 // Returns LobbyId?
-export async function postCreateLobby(joinCode: string, userId: string): Promise<string> {
+export async function postCreateLobby(joinCode: string, userId: string): Promise<Lobby | null> {
     try {
         console.log('Creating lobby with joinCode: ' + joinCode + ' and userId: ' + userId)
-        const response = await axios.post<string>(`/api/lobby/create?userId=${userId}`, {
+        const response = await axios.post<Lobby>(`/api/lobby/create?userId=${userId}`, {
             joinCode: joinCode,
             minimumPlayers: 2,
             maximumPlayers: 4
@@ -41,6 +41,6 @@ export async function postCreateLobby(joinCode: string, userId: string): Promise
         return response.data
     } catch (error) {
         console.log('Failed to create a lobby because of: ' + error)
-        return ''
+        return null
     }
 }

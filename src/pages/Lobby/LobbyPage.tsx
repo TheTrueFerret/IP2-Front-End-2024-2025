@@ -30,11 +30,10 @@ export function LobbyPage() {
         console.log(settings);
     };
 
-
     const handleStartGame = async () => {
-        if (lobby.players.length >= 2) {
+        if (lobby.users.length >= 2) {
             //TODO: Get lobbyId from user?
-            await createGame(lobby.lobbyId, settings.timeBetweenTurns, settings.startTileAmount)
+            await createGame(lobby.id, settings.timeBetweenTurns, settings.startTileAmount)
         } else {
             alert("You need at least 2 players to start the game.");
         }
@@ -51,7 +50,7 @@ export function LobbyPage() {
             <LoginButton />
             <div className="grid grid-cols-2 gap-6 flex-grow">
                 <div className="flex flex-col justify-between pb-32">
-                    <PlayerList players={lobby.players} />
+                    <PlayerList host={lobby.hostUser} players={lobby.users} />
 
                     <div className="flex gap-10 justify-center text-white font-bold text-3xl">
                         <button
@@ -62,9 +61,9 @@ export function LobbyPage() {
                         </button>
                         <button
                             onClick={handleStartGame}
-                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${lobby.players.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
+                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${lobby.users.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
                                 }`}
-                            disabled={lobby.players.length < 2}
+                            disabled={lobby.users.length < 2}
                         >
                             Start Game
                         </button>

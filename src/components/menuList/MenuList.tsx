@@ -9,7 +9,7 @@ interface MenuListProps {
 // MenuList this is for the list of things you can click on the main menu
 export function MenuList({ menuItems }: MenuListProps) {
   return (
-    <div className="flex flex-col space-y-20 relative text-white bg-neutral-900/60 backdrop-blur p-20 rounded-3xl shadow-md w-2/5">
+    <div className="flex flex-col space-y-20 min-w-fit relative text-white bg-neutral-900/60 backdrop-blur p-20 rounded-3xl shadow-md w-2/5">
       {menuItems.map(menuItem =>
         // If there's a custom action, handle it, otherwise use the Link component
         menuItem.menuItemAction ? (
@@ -23,7 +23,7 @@ export function MenuList({ menuItems }: MenuListProps) {
               alt="Rummikub"
               className="w-14 h-14 opacity-0 group-hover:opacity-100 transition-all duration-100 scale-95"
             />
-            <div className='text-7xl font-bold'>
+            <div className='text-6xl font-bold'>
               {menuItem.menuItemName}
             </div>
           </button>
@@ -38,7 +38,7 @@ export function MenuList({ menuItems }: MenuListProps) {
               alt="Rummikub"
               className="w-14 h-14 opacity-0 group-hover:opacity-100 transition-all duration-100 scale-95"
             />
-            <div className='text-7xl font-bold'>
+            <div className='text-6xl font-bold'>
               {menuItem.menuItemName}
             </div>
           </Link>

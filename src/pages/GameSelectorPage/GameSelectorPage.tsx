@@ -3,21 +3,27 @@ import { SideElements } from "../../components/sideElements/SideElements.tsx";
 import { MenuList } from "../../components/menuList/MenuList.tsx";
 import { useCreateLobby } from "../../hooks/useCreateLobby.ts";
 import { useNavigate } from "react-router-dom";
+import { useLobby } from "../../hooks/useLobby.ts";
+import { Lobby } from "../../models/Lobby.ts";
 
 export function GameSelectorPage() {
     const navigate = useNavigate();
+    const { setLobby } = useLobby();
     const { createLobby } = useCreateLobby();
 
     const handleCreateGame = async () => {
         try {
-            const response = await createLobby();
+            const response: Lobby | null = await createLobby();
             console.log("Lobby created:", response);
+            if (response) {
+                console.log("setting the lobby id")
+                setLobby(response)
+            }
             navigate("/Lobby");
         } catch (error) {
             console.error("Failed to create a lobby:", error);
         }
     };
-
 
     return (
         <div className="flex flex-col">

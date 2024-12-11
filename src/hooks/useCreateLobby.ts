@@ -1,19 +1,20 @@
-import {useContext, useState} from "react";
-import {postCreateLobby} from "../services/lobbyService.ts";
+import { useContext, useState } from "react";
+import { postCreateLobby } from "../services/lobbyService.ts";
 import SecurityContext from "../context/SecurityContext.ts";
+import { Lobby } from "../models/Lobby.ts";
 
 interface UseCreateLobbyReturn {
     isLoading: boolean;
     isError: boolean;
-    createLobby: () => Promise<string>
+    createLobby: () => Promise<Lobby | null>
 }
 
 export function useCreateLobby(): UseCreateLobbyReturn {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
-    const {loggedUserId} = useContext(SecurityContext);
+    const { loggedUserId } = useContext(SecurityContext);
 
-    const createLobby = async (): Promise<string> => {
+    const createLobby = async (): Promise<Lobby | null> => {
         setIsLoading(true);
         setIsError(false);
         try {
@@ -24,22 +25,25 @@ export function useCreateLobby(): UseCreateLobbyReturn {
                     r => {
                         return r;
                     }).finally(() => {
-                    setIsLoading(false);
-                });
+                        setIsLoading(false);
+                    });
                 console.log(response);
-                return response;
+                if (response) {
+                    return response;
+                }
             } else {
                 console.error('Failed to create a lobby: User is not logged in');
                 setIsError(true);
-                return 'Failed to create a lobby: User is not logged in';
+                return null;
             }
         } catch (error) {
             console.error('Failed to create a lobby:', error);
             setIsError(true);
-            return '';
+            return null;
         } finally {
             setIsLoading(false);
         }
+        return null
     }
 
     function generateLobbyCode() {

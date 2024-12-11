@@ -1,14 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLobbyLocally } from "../services/lobbyService";
+import { getLobby } from "../services/lobbyService";
+import { useState } from "react";
+import { Lobby } from "../models/Lobby";
 
 export function useLobby() {
   const queryClient = useQueryClient();
 
+  const [lobbyId, setLobbyId] = useState<string | null>(null);
+
   const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['lobby'],
-      // here a Game gets called by the LobbyId
-      queryFn: () => getLobbyLocally("d276d5f9-4bca-44ed-b4da-9e3000000011"),
+      queryFn: () => {
+        if (!lobbyId) return Promise.resolve(null); // No lobby ID, return nothing
+        return getLobby(lobbyId); // Fetch lobby by ID
+      },
+      enabled: !!lobbyId, // Only fetch if lobbyId is set
+      refetchInterval: 4000, // Poll every 4 seconds
     }
   )
 
@@ -18,7 +26,21 @@ export function useLobby() {
     isError: isErrorGettingLobby,
   } = useMutation({
     mutationFn: async (lobbyId: string) => {
-      return await getLobbyLocally(lobbyId);
+      return await getLobby(lobbyId);
+    },
+    onSuccess: (newLobby) => {
+      queryClient.setQueryData(['lobby'], newLobby);
+    },
+  });
+
+  const {
+    mutate: mutateSetLobby,
+    isPending: isSettingLobby,
+    isError: isErrorSettingLobby,
+  } = useMutation({
+    mutationFn: async (lobby: Lobby) => {
+      setLobbyId(lobby.id)
+      return lobby;
     },
     onSuccess: (newLobby) => {
       queryClient.setQueryData(['lobby'], newLobby);
@@ -27,12 +49,17 @@ export function useLobby() {
 
 
   return {
+    lobbyId,
+    setLobbyId,
     isLoadingLobby: isLoading,
     isErrorLobby: isError,
     lobby: data,
     getLobby: mutateGetLobby,
     isGettingLobby,
     isErrorGettingLobby,
+    setLobby: mutateSetLobby,
+    isSettingLobby,
+    isErrorSettingLobby,
   }
 }
 
