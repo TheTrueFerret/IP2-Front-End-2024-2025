@@ -1,0 +1,37 @@
+import axios from "axios";
+
+
+
+export function getGameLocally(playerId: String) {
+  return {
+    gameId: "d276d5f9-4bca-44ed-b4da-9e312953826a",
+    turnTime: 70,
+    nextPlayer: {playerId: "d276d5f9-4bca-44ed-b4da-9e3000000011", userName: "player1", profileImage: "imageLink"},
+    players: [
+      {playerId: playerId, userName: "player1", profileImage: "imageLink"},
+      {playerId: "d276d5f9-4bca-44ed-b4da-9e3000000012", userName: "player2", profileImage: "imageLink"}
+    ]
+  }
+}
+
+
+
+
+
+
+// This Should not return anything!!
+// and then we should get the GameId with Long Polling / Websockets
+export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number): Promise<string> {
+    try {
+        const response = await axios.post<string>(`/api/game/start/${lobbyId}`, {
+            roundTime: roundTime,
+            startTileAmount: startTileAmount,
+            //jokersEnabled:jokersEnabled,
+        })
+        console.log(response)
+        return response.data
+    } catch (error) {
+        console.log('Failed to create a game because of: ' + error)
+        return ''
+    }
+}

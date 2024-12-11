@@ -1,45 +1,45 @@
-import { LoginButton } from "../../components/LoginButton";
-import { Background } from "../../components/background/Background";
+import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
+import { SideElements } from "../../components/sideElements/SideElements.tsx";
 import { MenuList } from "../../components/menuList/MenuList";
 
 
 export function HomePage() {
     return (
-        <div className="bg-neutral-900 text-white h-screen w-screen flex flex-col">
-            <div className='z-20 absolute top-2 right-2'>
-                <LoginButton />
-            </div>
-            <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-12">
+        <div className="flex flex-col">
+            <LoginButton />
+            <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
 
                 <MenuList menuItems={[{
                     menuItemName: "Start Game",
-                    menuItemLink: "/Game",
+                    menuItemLink: "/GameSelectorPage"
                 },
                 {
                     menuItemName: "Achievements",
-                    menuItemLink: "/achievements",
+                    menuItemLink: "/achievements"
                 },
                 {
                     menuItemName: "Settings",
-                    menuItemLink: "/settings",
+                    menuItemLink: "/settings"
                 }]}
                 />
-
-                <div className="flex flex-col space-y-8">
-                    <div className="bg-gradient-to-br from-gray-800 to-gray-700 text-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-2xl font-bold mb-2">Active Event!</h2>
-                        <p className="text-lg">
-                            The Fitness Gram Pacer Test is a Test where you run from side to
-                            side in a rapid motion until you can’t anymore...
-                        </p>
-                    </div>
-                    <div className="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-2xl font-bold mb-2">Previously Played Game</h2>
-                        <p className="text-lg">Game Stats or Details...</p>
-                    </div>
-                </div>
+                
+                <SideElements
+                    upperElement={
+                        <>
+                            <h2 className="text-2xl font-bold mb-2">Previously Played Game</h2>
+                            <p className="text-lg">Game Stats or Details...</p>
+                        </>
+                    }
+                    bottemElement={
+                        <>
+                            <h2 className="text-2xl font-bold mb-2">Active Event!</h2>
+                            <p className="text-lg">
+                                The Fitness Gram Pacer Test is a Test where you run from side to
+                                side in a rapid motion until you cant anymore...
+                            </p>
+                        </>
+                    } />
             </main>
-            <Background color="crimson" />
         </div>
     )
 }

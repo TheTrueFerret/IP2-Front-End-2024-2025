@@ -37,7 +37,7 @@ export function Deck() {
         updateDeckTile({ id, column, row })
       }
     } catch (error) {
-
+      console.error("Error checking tile in field or deck:", error);
     }
 
   };
