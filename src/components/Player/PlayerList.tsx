@@ -6,7 +6,8 @@ interface PlayerListProps {
 }
 
 export function PlayerList({ host, players }: PlayerListProps) {
-    console.log("the Host:" + host + " The Player: " + players)
+    const filteredPlayers = players.filter(player => player.id !== host.id);
+
     return (
         <div className="w-[90%] h-3/4 flex flex-col bg-neutral-900/60 backdrop-blur rounded-3xl shadow-md p-4 mx-auto">
             <div className="flex flex-col gap-4 overflow-y-auto">
@@ -21,7 +22,7 @@ export function PlayerList({ host, players }: PlayerListProps) {
                     />
                     <p className="pl-3 text-red-400 font-medium place-self-center">{host.username}</p>
                 </div>
-                {players.map((player) => (
+                {filteredPlayers.map((player) => (
                     <div
                         key={player.id}
                         className="rounded-lg shadow-sm p-3 flex items-start justify-start"

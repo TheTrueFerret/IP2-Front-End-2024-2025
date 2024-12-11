@@ -42,6 +42,7 @@ export function LobbyPage() {
 
     const handleQuitLobby = () => {
         // TODO Quit the Lobby
+        // with notification
         navigate("/gameSelectorPage")
     };
 
@@ -117,6 +118,11 @@ export function LobbyPage() {
                                 }
                                 className="w-20 px-2 py-1 bg-gray-700 text-white rounded-md border border-gray-500 focus:ring focus:ring-blue-200"
                             />
+                        </div>
+
+                        {/* Lobby Code */}
+                        <div className="flex justify-between items-center mb-4">
+                            <p>{lobby.joinCode}</p>
                         </div>
                     </>
                 } bottemElement={<p className="text-black text-lg">Game Preview</p>} />

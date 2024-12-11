@@ -10,6 +10,7 @@ export interface Lobby {
   users: Player[];
   minimumPlayers: number;
   maximumPlayers: number;
+  joinCode: string;
 }
 
 
