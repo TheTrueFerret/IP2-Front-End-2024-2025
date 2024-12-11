@@ -8,6 +8,7 @@ import SecurityContextProvider from "./context/SecurityContextProvider.tsx";
 import axios from 'axios'
 import Achievements from "./pages/Achievements.tsx";
 import Settings from "./pages/Settings.tsx";
+import {Userprofile} from "./pages/userProfile/Userprofile.tsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -26,6 +27,7 @@ function App() {
                             <Route path='/Game' element={<GamePage/>}/>
                             <Route path='/Achievements' element={<Achievements/>}/>
                             <Route path='/Settings' element={<Settings/>}/>
+                            <Route path='/UserProfile/:userId' element={<Userprofile/>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>
