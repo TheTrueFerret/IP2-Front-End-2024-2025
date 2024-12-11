@@ -1,10 +1,10 @@
-import { InfoCard } from "../components/infoCard/InfoCard"
+import { NotificationCard } from "../components/notifications/notificationCard/NotificationCard"
 
 export function Achievements() {
     return (
         <div className=''>
             <h1>Achievements</h1>
-            <InfoCard loading={true} />
+            <NotificationCard loading={true} />
         </div>
     )
 }

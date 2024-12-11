@@ -2,7 +2,7 @@ import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
 import { NotificationType } from "../../models/Notification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
-import { InfoCard } from "../infoCard/InfoCard";
+import { NotificationCard } from "../notifications/notificationCard/NotificationCard";
 import { Tile } from "../tile/Tile";
 import './Deck.css'
 
@@ -17,7 +17,7 @@ export function Deck() {
   if (hasError || isLoading) {
     return (
       <div className='deck'>
-        <InfoCard loading={isLoading} notification={
+        <NotificationCard loading={isLoading} notification={
           hasError
               ? {
                 title: 'FieldTiles / DeckTiles are Zero',

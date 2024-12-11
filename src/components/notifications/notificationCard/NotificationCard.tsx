@@ -1,13 +1,13 @@
-import { Notification } from "../../models/Notification";
+import { Notification } from "../../../models/Notification";
 
 
-interface InfoCardProps {
+interface NotificationCardProps {
   loading: boolean
   notification?: Notification
 }
 
 
-export function InfoCard({ loading, notification }: InfoCardProps) {
+export function NotificationCard({ loading, notification }: NotificationCardProps) {
   if (!loading && notification) {
     return (
      <div className="fixed inset-0 flex items-center justify-center bg-black/20">

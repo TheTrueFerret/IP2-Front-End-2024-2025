@@ -2,7 +2,7 @@ import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
 import { NotificationType } from "../../models/Notification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
-import { InfoCard } from "../infoCard/InfoCard";
+import { NotificationCard } from "../notifications/notificationCard/NotificationCard";
 import { Tile } from "../tile/Tile"
 import "./PlayingField.css"
 
@@ -18,7 +18,7 @@ export function PlayingField() {
   if (hasError || isLoading) {
     return (
       <section className="PlayingField flex items-center justify-center">
-        <InfoCard
+        <NotificationCard
           loading={isLoading}
           notification={
             hasError
