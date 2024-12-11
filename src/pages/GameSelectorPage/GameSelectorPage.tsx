@@ -1,0 +1,71 @@
+import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
+import { SideElements } from "../../components/sideElements/SideElements.tsx";
+import { MenuList } from "../../components/menuList/MenuList.tsx";
+import { useCreateLobby } from "../../hooks/useCreateLobby.ts";
+import { useNavigate } from "react-router-dom";
+import { useLobby } from "../../hooks/useLobby.ts";
+import { Lobby } from "../../models/Lobby.ts";
+
+export function GameSelectorPage() {
+    const navigate = useNavigate();
+    const { setLobby } = useLobby();
+    const { createLobby } = useCreateLobby();
+
+    const handleCreateGame = async () => {
+        try {
+            const response: Lobby | null = await createLobby();
+            console.log("Lobby created:", response);
+            if (response) {
+                console.log("setting the lobby id")
+                setLobby(response)
+            }
+            navigate("/Lobby");
+        } catch (error) {
+            console.error("Failed to create a lobby:", error);
+        }
+    };
+
+    return (
+        <div className="flex flex-col">
+            <LoginButton />
+            <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
+
+                <MenuList menuItems={[{
+                    menuItemName: "Find Game",
+                    menuItemLink: "/Game",
+                },
+                {
+                    menuItemName: "Join Friends",
+                    menuItemLink: "/FriendGames",
+                },
+                {
+                    menuItemName: "Create Game",
+                    menuItemLink: "#",
+                    menuItemAction: handleCreateGame,
+                },
+                {
+                    menuItemName: "Go Back",
+                    menuItemLink: "/",
+                },
+                ]}
+                />
+                <SideElements
+                    upperElement={
+                        <>
+                            <h2 className="text-2xl font-bold mb-2">Previously Played Game</h2>
+                            <p className="text-lg">Game Stats or Details...</p>
+                        </>
+                    }
+                    bottemElement={
+                        <>
+                            <h2 className="text-2xl font-bold mb-2">Active Event!</h2>
+                            <p className="text-lg">
+                                The Fitness Gram Pacer Test is a Test where you run from side to
+                                side in a rapid motion until you cant anymore...
+                            </p>
+                        </>
+                    } />
+            </main>
+        </div>
+    );
+}
