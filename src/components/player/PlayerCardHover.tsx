@@ -2,7 +2,6 @@ import {useParams} from "react-router-dom";
 import {getUserById} from "../../services/userService.ts";
 import {useEffect, useState} from "react";
 import {User, UserAchievement} from "../../models/User.ts";
-import {LoginButton} from "../../components/LoginButton.tsx";
 
 export function UserProfile() {
     const {userId} = useParams<{ userId: string }>();
@@ -41,7 +40,6 @@ export function UserProfile() {
 
 
     return (
-        <LoginButton />
         <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
             <div className="text-center mb-6">
                 <h1 className="text-3xl font-bold text-red-500">Rummikub</h1>
