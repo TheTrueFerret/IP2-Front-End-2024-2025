@@ -41,6 +41,7 @@ export function LobbyPage() {
 
 
     const handleQuitLobby = () => {
+        // TODO Quit the Lobby
         navigate("/gameSelectorPage")
     };
 
