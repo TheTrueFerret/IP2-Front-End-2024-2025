@@ -28,23 +28,19 @@ export default function SecurityContextProvider({children}: IWithChildren) {
     useEffect(() => {
         if (!keycloakRef.current) {
             keycloakRef.current = keycloak;
-            keycloak.init({ onLoad: 'check-sso' }).then(authenticated => {
-                if (authenticated) {
-                    addAccessTokenToAuthHeader(keycloak.token);
-                    setLoggedInUser(keycloak.idTokenParsed?.preferred_username);
-                    setLoggedUserId(keycloak.idTokenParsed?.sub);
-                }
-            });
+            keycloak.init({onLoad: 'check-sso'})
         }
-    }, [keycloak]);
+    }, []);
 
 
     keycloak.onAuthSuccess = () => {
         console.log('onAuthSuccess')
+        console.log('Token:', keycloak.token)
         addAccessTokenToAuthHeader(keycloak.token)
         setLoggedInUser(keycloak.idTokenParsed?.preferred_username)
+        setLoggedUserId(keycloak.idTokenParsed?.sub)
         if (keycloak.idTokenParsed?.preferred_username && keycloak.idTokenParsed.sub)
-            postUser(keycloak.idTokenParsed.sub,keycloak.idTokenParsed?.preferred_username)
+            postUser(keycloak.idTokenParsed.sub, keycloak.idTokenParsed?.preferred_username)
         if (isLoading) {
             console.log("Loading user...")
         }

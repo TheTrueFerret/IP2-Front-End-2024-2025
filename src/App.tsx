@@ -34,7 +34,7 @@ function App() {
                             <Route path='/Settings' element={<RouteGuard><Settings/></RouteGuard>}/>
                             <Route path='/GameSelectorPage' element={<RouteGuard><GameSelectorPage/></RouteGuard>}/>
                             <Route path='/Lobby' element={<RouteGuard><LobbyPage/></RouteGuard>}/>
-                            <Route path='/UserProfile/:userId' element={<UserProfile/>}/>
+                            <Route path='/UserProfile/:userId' element={<RouteGuard><UserProfile/></RouteGuard>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>

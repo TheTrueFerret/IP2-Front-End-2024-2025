@@ -2,6 +2,8 @@ export interface User {
     id: number;
     username: string;
     avatar: string;
+    gamesPlayed: number;
+    gamesWon: number;
     userAchievements: UserAchievement[];
     friends: User[];
     chatHistory: ChatHistory[];
