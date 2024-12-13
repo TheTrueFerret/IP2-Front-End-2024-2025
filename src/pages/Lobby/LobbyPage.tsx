@@ -8,8 +8,8 @@ import { NotificationCard } from '../../components/notifications/notificationCar
 import { NotificationType } from '../../models/Notification.ts';
 import { useGameId } from '../../hooks/useGameId.ts';
 import { NotificationAlert } from '../../components/notifications/notificationAlert/NotificationAlert.tsx';
-import { patchExitLobby } from '../../services/lobbyService.ts';
 import SecurityContext from '../../context/SecurityContext.ts';
+import { postExitLobby } from '../../services/lobbyService.ts';
 
 export function LobbyPage() {
     const navigate = useNavigate();
@@ -69,7 +69,7 @@ export function LobbyPage() {
 
     const handleExecuteExit = () => {
         if (loggedUserId)
-        patchExitLobby(lobby.id, loggedUserId)
+        postExitLobby(lobby.id, loggedUserId)
         navigate('/');
     };
 

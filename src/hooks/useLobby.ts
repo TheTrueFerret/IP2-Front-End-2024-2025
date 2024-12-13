@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLobby, patchExitLobby } from "../services/lobbyService";
+import { getLobby, postExitLobby } from "../services/lobbyService";
 import { Lobby } from "../models/Lobby";
 import { useLobbyId } from "./useLobbyId";
 
@@ -54,7 +54,7 @@ export function useLobby() {
     isError: isErrorExitingLobby,
   } = useMutation({
     mutationFn: async ({ lobbyId, userId }: {lobbyId: string, userId: string}) => {
-      return patchExitLobby(lobbyId, userId);
+      return postExitLobby(lobbyId, userId);
     },
     onSuccess: (newLobby) => {
       queryClient.setQueryData(['lobby'], newLobby);
