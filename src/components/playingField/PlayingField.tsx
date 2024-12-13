@@ -19,18 +19,15 @@ export function PlayingField() {
     return (
       
       <section className="PlayingField flex items-center justify-center">
-        <NotificationCard
-          loading={isLoading}
-          notification={
-            hasError
+        <NotificationCard loading={isLoading} notification={
+          hasError
               ? {
-                title: 'FieldTiles is Zero',
-                description: 'The List FieldTiles is Empty, So no Tiles can be loaded.',
+                title: 'Failed to Load DeckTiles or FieldTiles',
+                description: 'DeckTiles or FieldTiles are Empty',
                 type: NotificationType.Error,
               }
               : undefined
-          }
-        />
+        } />
       </section>
     );
   }

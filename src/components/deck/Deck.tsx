@@ -20,8 +20,8 @@ export function Deck() {
         <NotificationCard loading={isLoading} notification={
           hasError
               ? {
-                title: 'FieldTiles / DeckTiles are Zero',
-                description: 'description',
+                title: 'Failed to Load DeckTiles or FieldTiles',
+                description: 'DeckTiles or FieldTiles are Empty',
                 type: NotificationType.Error,
               }
               : undefined

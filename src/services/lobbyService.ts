@@ -28,10 +28,10 @@ export async function getLobby(lobbyId: string): Promise<Lobby | null> {
 }
 
 
-export async function postExitLobby(lobbyId: string, userId: string): Promise<Lobby | null> {
+export async function patchExitLobby(lobbyId: string, userId: string): Promise<Lobby | null> {
     try {
         console.log('Exiting lobby: ' + lobbyId + ' with userId: ' + userId)
-        const response = await axios.post<Lobby>(`/api/lobby/leave/${lobbyId}?userId=${userId}`)
+        const response = await axios.patch<Lobby>(`/api/lobby/leave/${lobbyId}?userId=${userId}`)
         console.log('Response= ' + response)
         return response.data
     } catch (error) {
@@ -39,7 +39,6 @@ export async function postExitLobby(lobbyId: string, userId: string): Promise<Lo
         return null
     }
 }
-
 
 
 // Returns LobbyId?

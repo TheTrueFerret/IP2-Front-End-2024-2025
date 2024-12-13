@@ -1,13 +1,15 @@
 import { Notification } from "../../../models/Notification";
+import { LoginButton } from "../../loginButton/LoginButton";
 
 
 interface NotificationCardProps {
-  loading: boolean
-  notification?: Notification
+  loading: boolean;
+  isLogin?: boolean;
+  notification?: Notification;
 }
 
 
-export function NotificationCard({ loading, notification }: NotificationCardProps) {
+export function NotificationCard({ loading, isLogin, notification }: NotificationCardProps) {
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -26,11 +28,16 @@ export function NotificationCard({ loading, notification }: NotificationCardProp
 
   if (!loading && notification) {
     return (
-     <div className="fixed inset-0 flex items-center justify-center bg-black/20">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/20">
         <div className={`${notification.type} border-black rounded-xl shadow-lg max-w-2xl mx-8 p-20`}>
           <div className="flex flex-col items-center justify-center">
             <h3 className="text-2xl font-bold text-white">{notification.type}: {notification.title}</h3>
             <p className="text-white text-lg mt-4">{notification.description}</p>
+            {isLogin && (
+              <div className='pt-10'>
+                <LoginButton />
+              </div>
+            )}
           </div>
         </div>
       </div>

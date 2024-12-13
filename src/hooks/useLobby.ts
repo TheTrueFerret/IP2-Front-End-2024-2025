@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLobby, postExitLobby } from "../services/lobbyService";
-import { useState } from "react";
+import { getLobby, patchExitLobby } from "../services/lobbyService";
 import { Lobby } from "../models/Lobby";
+import { useLobbyId } from "./useLobbyId";
 
 export function useLobby() {
   const queryClient = useQueryClient();
-
-  const [lobbyId, setLobbyId] = useState<string | null>(null);
+  
+  const { lobbyId } = useLobbyId();
 
   const { isLoading, isError, data } = useQuery(
     {
@@ -39,7 +39,6 @@ export function useLobby() {
     isError: isErrorSettingLobby,
   } = useMutation({
     mutationFn: async (lobby: Lobby) => {
-      setLobbyId(lobby.id)
       return lobby;
     },
     onSuccess: (newLobby) => {
@@ -55,7 +54,7 @@ export function useLobby() {
     isError: isErrorExitingLobby,
   } = useMutation({
     mutationFn: async ({ lobbyId, userId }: {lobbyId: string, userId: string}) => {
-      return postExitLobby(lobbyId, userId);
+      return patchExitLobby(lobbyId, userId);
     },
     onSuccess: (newLobby) => {
       queryClient.setQueryData(['lobby'], newLobby);
@@ -64,7 +63,6 @@ export function useLobby() {
 
   return {
     lobbyId,
-    setLobbyId,
     isLoadingLobby: isLoading,
     isErrorLobby: isError,
     lobby: data,

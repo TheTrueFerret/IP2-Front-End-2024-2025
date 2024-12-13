@@ -1,29 +1,50 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { PlayerList } from "../../components/Player/PlayerList.tsx";
 import { SideElements } from '../../components/sideElements/SideElements.tsx';
-import { useCreateGame } from '../../hooks/useCreateGame.ts';
 import { LoginButton } from '../../components/loginButton/LoginButton.tsx';
 import { useLobby } from '../../hooks/useLobby.ts';
 import { useNavigate } from 'react-router-dom';
+import { NotificationCard } from '../../components/notifications/notificationCard/NotificationCard.tsx';
+import { NotificationType } from '../../models/Notification.ts';
+import { useGameId } from '../../hooks/useGameId.ts';
+import { NotificationAlert } from '../../components/notifications/notificationAlert/NotificationAlert.tsx';
+import { patchExitLobby } from '../../services/lobbyService.ts';
+import SecurityContext from '../../context/SecurityContext.ts';
 
 export function LobbyPage() {
     const navigate = useNavigate();
-    const { createGame } = useCreateGame();
-    const { lobby, isErrorLobby,  } = useLobby();
+    const { createGame } = useGameId();
+    const { lobby, isErrorLobby, isLoadingLobby } = useLobby();
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
         //jokersEnabled: false,
         startTileAmount: 7
     });
+    const [showNotification, setShowNotification] = useState(false);
+    const { loggedUserId } = useContext(SecurityContext);
 
 
-    if (isErrorLobby || !lobby) {
+    const hasError = isErrorLobby || !lobby;
+    const isLoading = isLoadingLobby;
+
+    if (hasError || isLoading) {
         return (
-            // Replace this with the new NotificationCard
-            <div>Error:</div>
+            <div className="bg-gradient-to-br text-black flex flex-col p-6">
+                <NotificationCard
+                    loading={isLoading}
+                    notification={
+                        hasError
+                            ? {
+                                title: 'Failed to Load The Lobby',
+                                description: 'The Lobby is Empty So no Lobby can be Returned',
+                                type: NotificationType.Error,
+                            }
+                            : undefined
+                    }
+                />
+            </div>
         )
     }
-
 
     const handleSettingChange = (key: string, value: number | boolean) => {
         setSettings((prev) => ({ ...prev, [key]: value }));
@@ -32,24 +53,45 @@ export function LobbyPage() {
 
     const handleStartGame = async () => {
         if (lobby.users.length >= 2) {
-            //TODO: Get lobbyId from user?
-            await createGame(lobby.id, settings.timeBetweenTurns, settings.startTileAmount)
+            await createGame({lobbyId: lobby.id, roundTime: settings.timeBetweenTurns, startTileAmount: settings.startTileAmount})
         } else {
             alert("You need at least 2 players to start the game.");
         }
     };
 
-
     const handleQuitLobby = () => {
-        // TODO Quit the Lobby
-        // with notification
-        navigate("/gameSelectorPage")
+        setShowNotification(true);
     };
 
+    const handleCloseNotification = () => {
+        setShowNotification(false);
+    };
+
+    const handleExecuteExit = () => {
+        if (loggedUserId)
+        patchExitLobby(lobby.id, loggedUserId)
+        navigate('/');
+    };
 
     return (
         <div className="bg-gradient-to-br text-black flex flex-col p-6">
-            <LoginButton />
+            <div className='z-20 absolute top-2 right-2'>
+                <LoginButton />
+            </div>
+            {showNotification && (
+                <NotificationAlert
+                    notification={{
+                        title: 'Are You Quitting?',
+                        description: 'Are you Sure, You want to Quit The Lobby?',
+                        type: NotificationType.Warning,
+                    }}
+                    buttons={true}
+                    onClose={handleCloseNotification}
+                    onExecute={handleExecuteExit}
+                    closeButtonText="No"
+                    executeButtonText="Yes"
+                />
+            )}
             <div className="grid grid-cols-2 gap-6 flex-grow">
                 <div className="flex flex-col justify-between pb-32">
                     <PlayerList host={lobby.hostUser} players={lobby.users} />

@@ -4,7 +4,7 @@ import { PlayingField } from "../../components/playingField/PlayingField";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Notification, NotificationType } from "../../models/Notification";
+import { NotificationType } from "../../models/Notification";
 import { NotificationAlert } from "../../components/notifications/notificationAlert/NotificationAlert";
 
 const dragOptions = {
@@ -27,12 +27,6 @@ export function GamePage() {
     navigate('/');
   };
 
-  const notification: Notification = {
-    title: 'Are You Quitting?',
-    description: 'Are you Sure, You want to Quit The Game?',
-    type: NotificationType.Warning,
-  };
-
 
   return (
     <div className="relative flex justify-center w-screen h-screen bg-neutral-900">
@@ -49,7 +43,11 @@ export function GamePage() {
       </DndProvider>
       {showNotification && (
         <NotificationAlert
-          notification={notification}
+          notification={{
+            title: 'Are You Quitting?',
+            description: 'Are you Sure, You want to Quit The Game?',
+            type: NotificationType.Warning,
+          }}
           buttons={true}
           onClose={handleCloseNotification}
           onExecute={handleExecuteExit}
