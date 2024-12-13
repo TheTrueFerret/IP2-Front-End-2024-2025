@@ -17,14 +17,15 @@ export function PlayingField() {
 
   if (hasError || isLoading) {
     return (
+      
       <section className="PlayingField flex items-center justify-center">
         <NotificationCard
           loading={isLoading}
           notification={
             hasError
               ? {
-                title: 'FieldTiles / DeckTiles are Zero',
-                description: 'description',
+                title: 'FieldTiles is Zero',
+                description: 'The List FieldTiles is Empty, So no Tiles can be loaded.',
                 type: NotificationType.Error,
               }
               : undefined
@@ -38,13 +39,10 @@ export function PlayingField() {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
     try {
-
       const tileInField = await isTileInField(id);
-
       console.log(tileInField)
 
       if (!tileInField) {
-
         const tileInDeck = await isTileInDeck(id);
         console.log(tileInDeck)
 
@@ -56,7 +54,6 @@ export function PlayingField() {
       } else {
         updateFieldTile({ id, column, row })
       }
-
     } catch (error) {
       console.error("Error checking tile in field or deck:", error);
     }

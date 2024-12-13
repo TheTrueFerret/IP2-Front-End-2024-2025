@@ -24,7 +24,7 @@ function App() {
             <SecurityContextProvider>
                 <BrowserRouter>
                     <ReactQueryDevtools initialIsOpen={false} />
-                    <div className='bg-neutral-900 w-screen h-screen'>
+                    <div className='bg-neutral-900  w-screen h-screen'>
                         <Background color='crimson' />
                         <Routes>
                             <Route path='/' element={<HomePage />} />

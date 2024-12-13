@@ -8,30 +8,30 @@ interface NotificationCardProps {
 
 
 export function NotificationCard({ loading, notification }: NotificationCardProps) {
-  if (!loading && notification) {
-    return (
-     <div className="fixed inset-0 flex items-center justify-center bg-black/20">
-        <div className={`${notification.type} rounded-xl shadow-lg max-w-2xl mx-8 p-20`}>
-          <div className="flex flex-col items-center justify-center">
-            <h3 className="text-2xl font-bold text-white">{notification.type}: {notification.title}</h3>
-            <p className="text-white text-lg mt-4">{notification.description}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
-      <div className="rounded-lg p-4 flex items-center justify-center">
+      <div className="fixed inset-0 flex items-center justify-center">
         <div className="flex items-center space-x-3">
           <div className="relative">
             <div className="w-20 h-20 rounded-full border-4 border-blue-100"></div>
             <div className="absolute top-0 left-0 w-20 h-20 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
           </div>
-          <span className="text-gray-600 font-bold text-3xl">
+          <span className="text-white font-bold text-3xl">
             Loading...
           </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loading && notification) {
+    return (
+     <div className="fixed inset-0 flex items-center justify-center bg-black/20">
+        <div className={`${notification.type} border-black rounded-xl shadow-lg max-w-2xl mx-8 p-20`}>
+          <div className="flex flex-col items-center justify-center">
+            <h3 className="text-2xl font-bold text-white">{notification.type}: {notification.title}</h3>
+            <p className="text-white text-lg mt-4">{notification.description}</p>
+          </div>
         </div>
       </div>
     );

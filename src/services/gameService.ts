@@ -19,8 +19,6 @@ export function getGameLocally(playerId: String) {
 
 
 
-// This Should not return anything!!
-// and then we should get the GameId with Long Polling / Websockets
 export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number): Promise<string> {
     try {
         const response = await axios.post<string>(`/api/game/start/${lobbyId}`, {

@@ -12,46 +12,58 @@
 }
 
 .notification-alert {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  background-color: #005EFF;
+  border-radius: 20px;
+  border-width: 2px;
+  border-color: #0090FF;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
 }
 
-.notification-alert-content {
-  margin-bottom: 1.5rem;
-}
 
 .notification-alert-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  background: #0000a9;
+  padding: 10px;
+  border-radius: 20px 20px 0 0;
+  color:white;
+  font-size: 1.8rem;
+  font-weight: 700;
 }
 
+
+.notification-alert-content {
+  padding: 3rem;
+}
+
+
 .notification-alert-description {
-  font-size: 1rem;
-  color: #4a5568;
+  font-size: 1.25rem;
+  color: white;
 }
 
 .notification-alert-buttons {
+  padding-top: 3rem;
   display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .notification-alert-button {
-  background-color: #cbd5e0;
-  color: #4a5568;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  background-color: #0000a9;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 1rem 3rem;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 }
 
 .notification-alert-button:hover {
-  background-color: #a0aec0;
-  color: #2d3748;
+  background-color: #0000F9;
+  color: white;
 }
 

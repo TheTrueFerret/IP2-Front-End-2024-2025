@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 export function LobbyPage() {
     const navigate = useNavigate();
     const { createGame } = useCreateGame();
-    const { lobby, isErrorLobby } = useLobby();
+    const { lobby, isErrorLobby,  } = useLobby();
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
         //jokersEnabled: false,

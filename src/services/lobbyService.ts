@@ -28,6 +28,20 @@ export async function getLobby(lobbyId: string): Promise<Lobby | null> {
 }
 
 
+export async function postExitLobby(lobbyId: string, userId: string): Promise<Lobby | null> {
+    try {
+        console.log('Exiting lobby: ' + lobbyId + ' with userId: ' + userId)
+        const response = await axios.post<Lobby>(`/api/lobby/leave/${lobbyId}?userId=${userId}`)
+        console.log('Response= ' + response)
+        return response.data
+    } catch (error) {
+        console.log('Failed to create a lobby because of: ' + error)
+        return null
+    }
+}
+
+
+
 // Returns LobbyId?
 export async function postCreateLobby(joinCode: string, userId: string): Promise<Lobby | null> {
     try {
