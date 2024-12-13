@@ -2,7 +2,7 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    padding: 20px;
+    padding: 40px;
     border-radius: 8px;
     color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -11,11 +11,13 @@
 
 .notification-popup h4 {
     margin: 0;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .notification-popup p {
     margin: 10px 0 0;
+    font-weight: 500;
 }
 
 .notification-header {
@@ -25,29 +27,17 @@
 }
 
 .close-button {
+    position: absolute;
+    top: 6px;
+    right: 10px;
     background: none;
     border: none;
     color: white;
-    font-size: 16px;
+    font-size: 22px;
     cursor: pointer;
 }
 
-/*Notification Colors*/
-.Success {
-    background-color: #4caf50;
-}
 
-.Error {
-    background-color: #f44336;
-}
-
-.Info {
-    background-color: #2196f3;
-}
-
-.Warning {
-    background-color: #ff9800;
-}
 
 @keyframes slideIn {
     from {

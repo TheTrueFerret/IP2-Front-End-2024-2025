@@ -9,9 +9,9 @@ import './Deck.css'
 
 export function Deck() {
   const { isErrorDeckTiles, isLoadingDeckTiles, deckTiles, updateDeckTile, addDeckTile, isTileInDeck } = useDeckTiles()
-  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
 
-  const hasError = isErrorDeckTiles || isErrorFieldTiles || !deckTiles || !fieldTiles;
+  const hasError = isErrorDeckTiles || isErrorFieldTiles || !deckTiles;
   const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
   if (hasError || isLoading) {

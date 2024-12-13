@@ -24,17 +24,17 @@ export function LobbyPage() {
     const { loggedUserId } = useContext(SecurityContext);
 
 
-    const hasError = isErrorLobby || !lobby;
+    const hasError = isErrorLobby;
     const isLoading = isLoadingLobby;
 
-    if (hasError || isLoading) {
+    if (hasError || isLoading || !lobby) {
         return (
             <div className="bg-gradient-to-br text-black flex flex-col p-6">
                 <NotificationCard
                     loading={isLoading}
                     notification={
-                        hasError
-                            ? {
+                        hasError ?
+                            {
                                 title: 'Failed to Load The Lobby',
                                 description: 'The Lobby is Empty So no Lobby can be Returned',
                                 type: NotificationType.Error,
@@ -52,10 +52,12 @@ export function LobbyPage() {
     };
 
     const handleStartGame = async () => {
-        if (lobby.users.length >= 2) {
-            await createGame({lobbyId: lobby.id, roundTime: settings.timeBetweenTurns, startTileAmount: settings.startTileAmount})
-        } else {
-            alert("You need at least 2 players to start the game.");
+        if (lobby) {
+            if (lobby.users.length >= 2) {
+                await createGame({ lobbyId: lobby.id, roundTime: settings.timeBetweenTurns, startTileAmount: settings.startTileAmount })
+            } else {
+                alert("You need at least 2 players to start the game.");
+            }
         }
     };
 
@@ -68,10 +70,12 @@ export function LobbyPage() {
     };
 
     const handleExecuteExit = () => {
-        if (loggedUserId)
-        postExitLobby(lobby.id, loggedUserId)
+        if (loggedUserId && lobby)
+            postExitLobby(lobby.id, loggedUserId)
         navigate('/');
     };
+
+
 
     return (
         <div className="bg-gradient-to-br text-black flex flex-col p-6">

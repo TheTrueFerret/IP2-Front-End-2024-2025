@@ -14,7 +14,7 @@ export function useFieldTiles() {
     {
       queryKey: ['fieldTiles'],
       queryFn: () => getFieldTilesLocaly(),
-      initialData: [] as Tile[],
+      initialData: null,
     }
   )
 

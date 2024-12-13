@@ -8,9 +8,9 @@ interface NotificationPopupProps {
 
 export function NotificationPopup({ notification, onClose }: NotificationPopupProps)  {
     return (
-        <div className={`notification-popup ${notification.type.toString}`}>
+        <div className={`notification-popup bg-neutral-900/60 backdrop-blur`}>
             <div className="notification-header">
-                <h4>{`${notification.type.toString} ${notification.title}`}</h4>
+                <h4>{`${notification.type}: ${notification.title}`}</h4>
                 <button onClick={onClose} className="close-button">
                     ×
                 </button>

@@ -10,14 +10,13 @@ import "./PlayingField.css"
 
 export function PlayingField() {
   const { isErrorFieldTiles, isLoadingFieldTiles, fieldTiles, updateFieldTile, addFieldTile, isTileInField } = useFieldTiles()
-  const { isErrorDeckTiles, isLoadingDeckTiles, deckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
+  const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
 
-  const hasError = isErrorDeckTiles || isErrorFieldTiles || !deckTiles || !fieldTiles;
+  const hasError = isErrorDeckTiles || isErrorFieldTiles || !fieldTiles;
   const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
   if (hasError || isLoading) {
     return (
-      
       <section className="PlayingField flex items-center justify-center">
         <NotificationCard loading={isLoading} notification={
           hasError
@@ -31,6 +30,7 @@ export function PlayingField() {
       </section>
     );
   }
+
 
   const handleDrop = async (id: number, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
