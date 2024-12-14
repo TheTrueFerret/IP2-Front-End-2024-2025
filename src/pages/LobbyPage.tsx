@@ -1,15 +1,15 @@
 import { useContext, useState } from 'react';
-import { PlayerList } from "../../components/Player/PlayerList.tsx";
-import { SideElements } from '../../components/sideElements/SideElements.tsx';
-import { LoginButton } from '../../components/loginButton/LoginButton.tsx';
-import { useLobby } from '../../hooks/useLobby.ts';
+import { PlayerList } from "../components/Player/PlayerList.tsx";
+import { SideElements } from '../components/sideElements/SideElements.tsx';
+import { LoginButton } from '../components/loginButton/LoginButton.tsx';
+import { useLobby } from '../hooks/useLobby.ts';
 import { useNavigate } from 'react-router-dom';
-import { NotificationCard } from '../../components/notifications/notificationCard/NotificationCard.tsx';
-import { NotificationType } from '../../models/Notification.ts';
-import { useGameId } from '../../hooks/useGameId.ts';
-import { NotificationAlert } from '../../components/notifications/notificationAlert/NotificationAlert.tsx';
-import SecurityContext from '../../context/SecurityContext.ts';
-import { postExitLobby } from '../../services/lobbyService.ts';
+import { NotificationCard } from '../components/notifications/notificationCard/NotificationCard.tsx';
+import { NotificationType } from '../models/Notification.ts';
+import { useGameId } from '../hooks/useGameId.ts';
+import { NotificationAlert } from '../components/notifications/notificationAlert/NotificationAlert.tsx';
+import SecurityContext from '../context/SecurityContext.ts';
+import { postExitLobby } from '../services/lobbyService.ts';
 
 export function LobbyPage() {
     const navigate = useNavigate();

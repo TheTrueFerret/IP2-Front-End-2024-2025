@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { postCreateLobby } from "../services/lobbyService.ts";
+import { patchJoinLobby, postCreateLobby } from "../services/lobbyService.ts";
 import SecurityContext from "../context/SecurityContext.ts";
-import { Lobby } from "../models/Lobby.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
@@ -30,8 +29,8 @@ export function useLobbyId() {
 
     const {
         mutate: createLobby,
-        isPending: isLoading,
-        isError,
+        isPending: isCreatingLobby,
+        isError: isErrorCreatingLobby,
     } = useMutation({
         mutationFn: async () => {
             if (!loggedUserId) {
@@ -45,26 +44,53 @@ export function useLobbyId() {
             const response = await postCreateLobby(joinCode, loggedUserId);
             console.log(response);
 
-            return response;
+            if (response)
+            return response.id;
+
         },
-        onSuccess: (newLobby) => {
-            queryClient.setQueryData(['lobby'], newLobby);
+        onSuccess: (newLobbyId) => {
+            queryClient.setQueryData(['lobbyId'], newLobbyId);
         },
         onError: (error) => {
             console.error('Failed to create a lobby:', error);
         }
     });
 
-    // Helper function to get the cached lobby
-    const getCachedLobby = () => {
-        return queryClient.getQueryData<Lobby>(['lobby']);
-    };
+
+    const {
+        mutate: joinLobbyByCode,
+        isPending: isJoiningLobbyByCode,
+        isError: isErrorJoiningLobbyByCode,
+    } = useMutation({
+        mutationFn: async (joinCode: string) => {
+            if (!loggedUserId) {
+                console.error('Failed to create a lobby: User is not logged in');
+                throw new Error('User not logged in');
+            }
+
+            const response = await patchJoinLobby(joinCode, loggedUserId);
+            console.log(response);
+
+            if (response)
+            return response.id;
+        },
+        onSuccess: (newLobbyId) => {
+            queryClient.setQueryData(['lobbyId'], newLobbyId);
+        },
+        onError: (error) => {
+            console.error('Failed to create a lobby:', error);
+        }
+    });
+
+
 
     return {
-        createLobby,
-        isLoading,
-        isError,
         lobbyId,
-        getCachedLobby
+        createLobby,
+        isCreatingLobby,
+        isErrorCreatingLobby,
+        joinLobbyByCode,
+        isJoiningLobbyByCode,
+        isErrorJoiningLobbyByCode,
     }
 }

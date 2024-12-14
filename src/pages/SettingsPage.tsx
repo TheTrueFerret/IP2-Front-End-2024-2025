@@ -2,9 +2,7 @@ import { useState } from "react";
 import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup"
 import { NotificationType } from "../models/Notification"
 
-export function Settings() {
-
-
+export function SettingsPage() {
     const [showNotification, setShowNotification] = useState(true);
 
     const handleCloseNotification = () => {
@@ -25,5 +23,3 @@ export function Settings() {
         </div>
     )
 }
-
-export default Settings

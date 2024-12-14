@@ -1,6 +1,6 @@
 import { NotificationCard } from "../components/notifications/notificationCard/NotificationCard"
 
-export function Achievements() {
+export function AchievementsPage() {
     return (
         <div className=''>
             <h1>Achievements</h1>
@@ -8,5 +8,3 @@ export function Achievements() {
         </div>
     )
 }
-
-export default Achievements
