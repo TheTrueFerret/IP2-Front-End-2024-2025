@@ -24,10 +24,10 @@ export function LobbyPage() {
     const { loggedUserId } = useContext(SecurityContext);
 
 
-    const hasError = isErrorLobby;
+    const hasError = isErrorLobby || !lobby;
     const isLoading = isLoadingLobby;
 
-    if (hasError || isLoading || !lobby) {
+    if (hasError || isLoading) {
         return (
             <div className="bg-gradient-to-br text-black flex flex-col p-6">
                 <NotificationCard
@@ -47,17 +47,18 @@ export function LobbyPage() {
     }
 
     const handleSettingChange = (key: string, value: number | boolean) => {
-        setSettings((prev) => ({ ...prev, [key]: value }));
-        console.log(settings);
+        if (loggedUserId === lobby.hostUser.id) {
+            setSettings((prev) => ({ ...prev, [key]: value }));
+            console.log(settings);
+        }
     };
 
     const handleStartGame = async () => {
-        if (lobby) {
-            if (lobby.users.length >= 2) {
-                await createGame({ lobbyId: lobby.id, roundTime: settings.timeBetweenTurns, startTileAmount: settings.startTileAmount })
-            } else {
-                alert("You need at least 2 players to start the game.");
-            }
+        if (lobby.users.length >= 2 && loggedUserId) {
+            await createGame({ lobbyId: lobby.id, roundTime: settings.timeBetweenTurns, startTileAmount: settings.startTileAmount, loggedInUserId: loggedUserId })
+            navigate('/Game')
+        } else {
+            alert("You need at least 2 players to start the game.");
         }
     };
 
@@ -109,9 +110,9 @@ export function LobbyPage() {
                         </button>
                         <button
                             onClick={handleStartGame}
-                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${lobby.users.length < 2 ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
+                            className={`w-1/2 py-20 bg-green-500 rounded-xl transition z-10 ${lobby.users.length < 2 || loggedUserId !== lobby.hostUser.id ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"
                                 }`}
-                            disabled={lobby.users.length < 2}
+                            disabled={lobby.users.length < 2 || loggedUserId !== lobby.hostUser.id}
                         >
                             Start Game
                         </button>
@@ -130,6 +131,7 @@ export function LobbyPage() {
                                 onChange={(e) =>
                                     handleSettingChange("timeBetweenTurns", parseInt(e.target.value, 10))
                                 }
+                                disabled={loggedUserId !== lobby.hostUser.id}
                                 className="w-20 px-2 py-1 bg-gray-700 text-white rounded-md border border-gray-500 focus:ring focus:ring-blue-200"
                             />
                         </div>
@@ -162,6 +164,7 @@ export function LobbyPage() {
                                 onChange={(e) =>
                                     handleSettingChange("startTileAmount", parseInt(e.target.value, 10))
                                 }
+                                disabled={loggedUserId !== lobby.hostUser.id}
                                 className="w-20 px-2 py-1 bg-gray-700 text-white rounded-md border border-gray-500 focus:ring focus:ring-blue-200"
                             />
                         </div>

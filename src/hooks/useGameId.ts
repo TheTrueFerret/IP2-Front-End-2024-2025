@@ -20,12 +20,14 @@ export function useGameId() {
             lobbyId: string;
             roundTime: number;
             startTileAmount: number;
+            loggedInUserId: string;
         }) => {
             try {
                 const response = await postCreateGame(
                     params.lobbyId, 
                     params.roundTime, 
-                    params.startTileAmount
+                    params.startTileAmount,
+                    params.loggedInUserId
                 );
                 console.log(response);
                 return response; // Assuming this returns the game ID
