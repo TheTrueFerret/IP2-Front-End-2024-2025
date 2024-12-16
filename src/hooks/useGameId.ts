@@ -40,8 +40,11 @@ export function useGameId() {
                     params.startTileAmount,
                     params.loggedInUserId
                 );
-                console.log(response);
-                return response; // Assuming this returns the game ID
+
+                if (response) {
+                    console.log(response.gameId);
+                    return response.gameId;
+                }
             } catch (error) {
                 console.error('Failed to create a game:', error);
                 throw error;

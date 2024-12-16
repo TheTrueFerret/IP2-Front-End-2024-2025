@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Game } from "../models/Game";
 
 
 
@@ -17,7 +18,7 @@ export function getGameLocally(playerId: String) {
 
 export async function getGameByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
-        const response = await axios.get<string>(`/api/game/${lobbyId}?userId=${loggedInUserId}`)
+        const response = await axios.get<string>(`/api/game/lobby/${lobbyId}?userId=${loggedInUserId}`)
         console.log(response)
         return response.data
     } catch (error) {
@@ -28,9 +29,9 @@ export async function getGameByLobbyId(lobbyId: string, loggedInUserId: string):
 
 
 
-export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<string> {
+export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<Game | null> {
     try {
-        const response = await axios.post<string>(`/api/game/start/${lobbyId}`, {
+        const response = await axios.post<Game>(`/api/game/start/${lobbyId}`, {
             turnTime: roundTime,
             startTileAmount: startTileAmount,
             hostUserId: loggedInUserId
@@ -40,6 +41,6 @@ export async function postCreateGame(lobbyId: string, roundTime: number, startTi
         return response.data
     } catch (error) {
         console.log('Failed to create a game because of: ' + error)
-        return ''
+        return null
     }
 }
