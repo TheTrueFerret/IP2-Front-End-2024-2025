@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { PlayerList } from "../components/Player/PlayerList.tsx";
 import { SideElements } from '../components/sideElements/SideElements.tsx';
 import { LoginButton } from '../components/loginButton/LoginButton.tsx';
@@ -13,7 +13,7 @@ import { postExitLobby } from '../services/lobbyService.ts';
 
 export function LobbyPage() {
     const navigate = useNavigate();
-    const { createGame } = useGameId();
+    const { createGame, clearGameId, gameId } = useGameId();
     const { lobby, isErrorLobby, isLoadingLobby } = useLobby();
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
@@ -22,6 +22,9 @@ export function LobbyPage() {
     });
     const [showNotification, setShowNotification] = useState(false);
     const { loggedUserId } = useContext(SecurityContext);
+
+
+    clearGameId();
 
 
     const hasError = isErrorLobby || !lobby;
@@ -44,6 +47,11 @@ export function LobbyPage() {
                 />
             </div>
         )
+    }
+
+    // Check for a valid new gameId and navigate directly
+    if (gameId) {
+        navigate('/Game'); // Redirect immediately if a valid gameId is present
     }
 
     const handleSettingChange = (key: string, value: number | boolean) => {

@@ -17,7 +17,7 @@ export function getGameLocally(playerId: String) {
 
 export async function getGameByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
-        const response = await axios.post<string>(`/api/game/start/${lobbyId}?userId=${loggedInUserId}`)
+        const response = await axios.get<string>(`/api/game/${lobbyId}?userId=${loggedInUserId}`)
         console.log(response)
         return response.data
     } catch (error) {
