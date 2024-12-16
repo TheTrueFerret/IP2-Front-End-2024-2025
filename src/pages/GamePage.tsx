@@ -1,11 +1,11 @@
 import { DndProvider } from "react-dnd";
-import { Deck } from "../../components/deck/Deck";
-import { PlayingField } from "../../components/playingField/PlayingField";
+import { Deck } from "../components/deck/Deck";
+import { PlayingField } from "../components/playingField/PlayingField";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { NotificationType } from "../../models/Notification";
-import { NotificationAlert } from "../../components/notifications/notificationAlert/NotificationAlert";
+import { NotificationType } from "../models/Notification";
+import { NotificationAlert } from "../components/notifications/notificationAlert/NotificationAlert";
 
 const dragOptions = {
   //enableMouseEvents: true

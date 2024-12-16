@@ -1,14 +1,25 @@
-import { postCreateGame } from "../services/gameService";
+import { getGameByLobbyId, postCreateGame } from "../services/gameService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLobbyId } from "./useLobbyId";
+import { useContext } from "react";
+import SecurityContext from "../context/SecurityContext";
 
 
 export function useGameId() {
     const queryClient = useQueryClient();
 
-    const { data: gameId } = useQuery({
+    const { lobbyId } = useLobbyId();
+    const { loggedUserId } = useContext(SecurityContext)
+
+    const { data: gameId, isSuccess } = useQuery({
         queryKey: ['gameId'],
-        enabled: false, // Don't run automatically
+        queryFn: () => {
+            if (!lobbyId || !loggedUserId) return Promise.resolve(null); // No lobby ID, return nothing
+            return getGameByLobbyId(lobbyId, loggedUserId); // Fetch lobby by ID
+        },
+        enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value
+        refetchInterval: 4000, // Poll every 4 seconds
     });
 
     const {
@@ -20,15 +31,20 @@ export function useGameId() {
             lobbyId: string;
             roundTime: number;
             startTileAmount: number;
+            loggedInUserId: string;
         }) => {
             try {
                 const response = await postCreateGame(
-                    params.lobbyId, 
-                    params.roundTime, 
-                    params.startTileAmount
+                    params.lobbyId,
+                    params.roundTime,
+                    params.startTileAmount,
+                    params.loggedInUserId
                 );
-                console.log(response);
-                return response; // Assuming this returns the game ID
+
+                if (response) {
+                    console.log(response.gameId);
+                    return response.gameId;
+                }
             } catch (error) {
                 console.error('Failed to create a game:', error);
                 throw error;
@@ -45,11 +61,18 @@ export function useGameId() {
         return queryClient.getQueryData<string>(['gameId']);
     };
 
+
+    const clearGameId = () => {
+        queryClient.setQueryData(['gameId'], null);
+    };
+
     return {
         createGame,
         isLoading,
         isError,
         gameId,
-        getCachedGameId
+        isSuccess,
+        getCachedGameId,
+        clearGameId
     }
 }
