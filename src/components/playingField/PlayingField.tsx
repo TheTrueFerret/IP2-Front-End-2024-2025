@@ -1,33 +1,45 @@
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
+import { NotificationType } from "../../models/Notification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
+import { NotificationCard } from "../notifications/notificationCard/NotificationCard";
 import { Tile } from "../tile/Tile"
 import "./PlayingField.css"
 
 
 
 export function PlayingField() {
-  const { fieldTiles, updateFieldTile, addFieldTile, isTileInField } = useFieldTiles()
-  const { deckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTiles, updateFieldTile, addFieldTile, isTileInField } = useFieldTiles()
+  const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
 
+  const hasError = isErrorDeckTiles || isErrorFieldTiles || !fieldTiles;
+  const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
-  if (!fieldTiles || !deckTiles) {
+  if (hasError || isLoading) {
     return (
-      <div>tiles not found</div>
-    )
+      <section className="PlayingField flex items-center justify-center">
+        <NotificationCard loading={isLoading} notification={
+          hasError
+              ? {
+                title: 'Failed to Load DeckTiles or FieldTiles',
+                description: 'DeckTiles or FieldTiles are Empty',
+                type: NotificationType.Error,
+              }
+              : undefined
+        } />
+      </section>
+    );
   }
+
 
   const handleDrop = async (id: number, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
     try {
-
       const tileInField = await isTileInField(id);
-
       console.log(tileInField)
 
       if (!tileInField) {
-
         const tileInDeck = await isTileInDeck(id);
         console.log(tileInDeck)
 
@@ -39,7 +51,6 @@ export function PlayingField() {
       } else {
         updateFieldTile({ id, column, row })
       }
-
     } catch (error) {
       console.error("Error checking tile in field or deck:", error);
     }

@@ -1,12 +1,14 @@
-import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
-import { SideElements } from "../../components/sideElements/SideElements.tsx";
-import { MenuList } from "../../components/menuList/MenuList";
+import { LoginButton } from "../components/loginButton/LoginButton.tsx";
+import { SideElements } from "../components/sideElements/SideElements.tsx";
+import { MenuList } from "../components/menuList/MenuList";
 
 
 export function HomePage() {
     return (
         <div className="flex flex-col">
-            <LoginButton />
+            <div className='z-20 absolute top-2 right-2'>
+                <LoginButton />
+            </div>
             <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
 
                 <MenuList menuItems={[{

@@ -1,18 +1,32 @@
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
+import { NotificationType } from "../../models/Notification";
 import { EmptyTile } from "../emptyTile/EmptyTile";
+import { NotificationCard } from "../notifications/notificationCard/NotificationCard";
 import { Tile } from "../tile/Tile";
 import './Deck.css'
 
 
 export function Deck() {
-  const { deckTiles, updateDeckTile, addDeckTile, isTileInDeck } = useDeckTiles()
-  const { fieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
+  const { isErrorDeckTiles, isLoadingDeckTiles, deckTiles, updateDeckTile, addDeckTile, isTileInDeck } = useDeckTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, removeFieldTile, isTileInField } = useFieldTiles()
 
+  const hasError = isErrorDeckTiles || isErrorFieldTiles || !deckTiles;
+  const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
-  if (!deckTiles || !fieldTiles) {
+  if (hasError || isLoading) {
     return (
-      <div>tiles not found</div>
+      <div className='deck'>
+        <NotificationCard loading={isLoading} notification={
+          hasError
+              ? {
+                title: 'Failed to Load DeckTiles or FieldTiles',
+                description: 'DeckTiles or FieldTiles are Empty',
+                type: NotificationType.Error,
+              }
+              : undefined
+        } />
+      </div>
     )
   }
 
@@ -25,7 +39,7 @@ export function Deck() {
       console.log(tileInDeck)
 
       if (!tileInDeck) {
-      const tileInField = await isTileInField(id);
+        const tileInField = await isTileInField(id);
         console.log(tileInField)
 
         if (tileInField) {
