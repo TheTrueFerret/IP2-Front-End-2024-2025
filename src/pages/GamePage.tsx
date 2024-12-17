@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { NotificationType } from "../models/Notification";
 import { NotificationAlert } from "../components/notifications/notificationAlert/NotificationAlert";
+import { usePlayerId } from "../hooks/usePlayerId";
+import { ActionPanel } from "../components/actionPanel/ActionPanel";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -13,7 +15,11 @@ const dragOptions = {
 
 export function GamePage() {
   const [showNotification, setShowNotification] = useState(false);
+  const { playerId } = usePlayerId();
   const navigate = useNavigate();
+
+
+  console.log(playerId)
 
   const handleExit = () => {
     setShowNotification(true);
@@ -40,6 +46,7 @@ export function GamePage() {
       <DndProvider backend={HTML5Backend} options={dragOptions}>
         <PlayingField />
         <Deck />
+        <ActionPanel />
       </DndProvider>
       {showNotification && (
         <NotificationAlert

@@ -1,0 +1,25 @@
+.action-panel {
+    position: absolute;
+    gap: 10px;
+    padding: 10px;
+    background-color: black;
+    height: 270px;
+    width: 317px;
+    left: 75%;
+    bottom: 0;
+    border-radius: 10px 10px 0px 0px;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.action-panel button {
+    color: black;
+    border: red;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.5em;
+    cursor: pointer;
+    width: 35%;
+    height: 175px;
+}

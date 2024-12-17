@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPlayerIdLocally } from "../services/playerService";
+import { getPlayerIdByUserId, } from "../services/playerService";
+import { useContext } from "react";
+import SecurityContext from "../context/SecurityContext";
 
 
 
@@ -7,10 +9,18 @@ import { getPlayerIdLocally } from "../services/playerService";
 export function usePlayerId() {
   const queryClient = useQueryClient();
 
+  const { loggedUserId } = useContext(SecurityContext)
+
   const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['playerId'],
-      queryFn: () => getPlayerIdLocally("d276d5f9-4bca-44ed-b4da-9e3000000011"),
+      queryFn: () => {
+        if (!loggedUserId) return Promise.resolve(null); // No user ID, return nothing
+        return getPlayerIdByUserId(loggedUserId, 4, 2000); // Fetch player by ID
+      },
+      enabled: !!loggedUserId, // Only fetch if lobbyId is set
+      staleTime: Infinity,
+      gcTime: Infinity,
     }
   )
 
@@ -20,7 +30,7 @@ export function usePlayerId() {
     isError: isErrorGettingPlayerId,
   } = useMutation({
     mutationFn: async (userId: string) => {
-      return await getPlayerIdLocally(userId);
+      return await getPlayerIdByUserId(userId);
     },
     onSuccess: (newPlayerId) => {
       queryClient.setQueryData(['playerId'], newPlayerId);
