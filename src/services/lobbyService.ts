@@ -19,7 +19,7 @@ export function getLobbyLocally(lobbyId: string) {
 
 export async function getLobby(lobbyId: string): Promise<Lobby | null> {
     try {
-        const response = await axios.post<Lobby>(`/api/lobby/${lobbyId}`);
+        const response = await axios.get<Lobby>(`/api/lobby/${lobbyId}`);
         return response.data
     } catch (error) {
         console.log('Failed to get the lobby because of: ' + error);
@@ -28,7 +28,19 @@ export async function getLobby(lobbyId: string): Promise<Lobby | null> {
 }
 
 
-// Returns LobbyId?
+export async function postExitLobby(lobbyId: string, userId: string): Promise<Lobby | null> {
+    try {
+        console.log('Exiting lobby: ' + lobbyId + ' with userId: ' + userId)
+        const response = await axios.post<Lobby>(`/api/lobby/leave/${lobbyId}?userId=${userId}`)
+        console.log('Response= ' + response)
+        return response.data
+    } catch (error) {
+        console.log('Failed to create a lobby because of: ' + error)
+        return null
+    }
+}
+
+
 export async function postCreateLobby(joinCode: string, userId: string): Promise<Lobby | null> {
     try {
         console.log('Creating lobby with joinCode: ' + joinCode + ' and userId: ' + userId)
@@ -41,6 +53,21 @@ export async function postCreateLobby(joinCode: string, userId: string): Promise
         return response.data
     } catch (error) {
         console.log('Failed to create a lobby because of: ' + error)
+        return null
+    }
+}
+
+
+export async function patchJoinLobby(joinCode: string, userId: string): Promise<Lobby | null> {
+    try {
+        console.log('joining lobby with joinCode: ' + joinCode + ' and userId: ' + userId)
+        const response = await axios.patch<Lobby>(`/api/lobby/join?userId=${userId}`, {
+            joinCode: joinCode
+        })
+        console.log('Response= ' + response)
+        return response.data
+    } catch (error) {
+        console.log('Failed to join lobby because of: ' + error)
         return null
     }
 }

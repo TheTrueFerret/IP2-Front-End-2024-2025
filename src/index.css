@@ -3,6 +3,23 @@
 @tailwind utilities;
 
 
+/*Notification Colors*/
+.Success {
+    background-color: #4caf50;
+}
+
+.Error {
+    background-color: #f44336;
+}
+
+.Info {
+    background-color: #2196f3;
+}
+
+.Warning {
+    background-color: #ff9800;
+}
+
 html, body {
   height: 100%;
   margin: 0;

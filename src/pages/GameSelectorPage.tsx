@@ -1,24 +1,16 @@
-import { LoginButton } from "../../components/loginButton/LoginButton.tsx";
-import { SideElements } from "../../components/sideElements/SideElements.tsx";
-import { MenuList } from "../../components/menuList/MenuList.tsx";
-import { useCreateLobby } from "../../hooks/useCreateLobby.ts";
+import { LoginButton } from "../components/loginButton/LoginButton.tsx";
+import { SideElements } from "../components/sideElements/SideElements.tsx";
+import { MenuList } from "../components/menuList/MenuList.tsx";
 import { useNavigate } from "react-router-dom";
-import { useLobby } from "../../hooks/useLobby.ts";
-import { Lobby } from "../../models/Lobby.ts";
+import { useLobbyId } from "../hooks/useLobbyId.ts";
 
 export function GameSelectorPage() {
     const navigate = useNavigate();
-    const { setLobby } = useLobby();
-    const { createLobby } = useCreateLobby();
+    const { createLobby } = useLobbyId();
 
     const handleCreateGame = async () => {
         try {
-            const response: Lobby | null = await createLobby();
-            console.log("Lobby created:", response);
-            if (response) {
-                console.log("setting the lobby id")
-                setLobby(response)
-            }
+            await createLobby();
             navigate("/Lobby");
         } catch (error) {
             console.error("Failed to create a lobby:", error);
@@ -27,7 +19,9 @@ export function GameSelectorPage() {
 
     return (
         <div className="flex flex-col">
-            <LoginButton />
+            <div className='z-20 absolute top-2 right-2'>
+                <LoginButton />
+            </div>
             <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
 
                 <MenuList menuItems={[{
@@ -36,7 +30,7 @@ export function GameSelectorPage() {
                 },
                 {
                     menuItemName: "Join Friends",
-                    menuItemLink: "/FriendGames",
+                    menuItemLink: "/LobbyCodePage",
                 },
                 {
                     menuItemName: "Create Game",
