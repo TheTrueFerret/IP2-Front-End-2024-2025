@@ -1,8 +1,8 @@
-import {useParams} from "react-router-dom";
-import {LoginButton} from "../components/loginButton/LoginButton.tsx";
-import useUsers from "../hooks/useUsers.ts";
-import {PlayerInfo} from "../components/player/PlayerInfo.tsx";
-import {PlayerAchievements} from "../components/player/PlayerAchievements.tsx";
+import { useParams } from "react-router-dom";
+import { LoginButton } from "../components/loginButton/LoginButton";
+import { PlayerAchievements } from "../components/player/PlayerAchievements";
+import { PlayerInfo } from "../components/player/PlayerInfo";
+import useUsers from "../hooks/useUsers";
 
 export function UserprofilePage() {
     const {userId} = useParams<{ userId: string }>();
