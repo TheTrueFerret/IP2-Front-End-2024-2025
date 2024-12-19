@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import './App.css'
 import { HomePage } from './pages/HomePage'
 import { GamePage } from './pages/GamePage'
@@ -13,6 +13,7 @@ import { GameSelectorPage } from "./pages/GameSelectorPage.tsx";
 import { Background } from './components/background/Background.tsx'
 import { RouteGuard } from './components/RouteGuard.tsx'
 import { LobbyCodePage } from './pages/LobbyCodePage.tsx'
+import UserprofilePage from './pages/UserprofilePage.tsx'
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -35,6 +36,7 @@ function App() {
                             <Route path='/GameSelectorPage' element={<RouteGuard><GameSelectorPage /></RouteGuard>} />
                             <Route path='/LobbyCodePage' element={<RouteGuard><LobbyCodePage /></RouteGuard>} />
                             <Route path='/Lobby' element={<RouteGuard><LobbyPage /></RouteGuard>} />
+                            <Route path='/Userprofile/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>

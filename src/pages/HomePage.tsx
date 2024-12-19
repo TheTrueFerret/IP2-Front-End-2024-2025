@@ -1,6 +1,6 @@
-import { LoginButton } from "../components/loginButton/LoginButton.tsx";
-import { SideElements } from "../components/sideElements/SideElements.tsx";
+import { LoginButton } from "../components/loginButton/LoginButton";
 import { MenuList } from "../components/menuList/MenuList";
+import { SideElements } from "../components/sideElements/SideElements";
 
 
 export function HomePage() {

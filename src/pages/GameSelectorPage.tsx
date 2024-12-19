@@ -1,8 +1,8 @@
-import { LoginButton } from "../components/loginButton/LoginButton.tsx";
-import { SideElements } from "../components/sideElements/SideElements.tsx";
-import { MenuList } from "../components/menuList/MenuList.tsx";
 import { useNavigate } from "react-router-dom";
-import { useLobbyId } from "../hooks/useLobbyId.ts";
+import { LoginButton } from "../components/loginButton/LoginButton";
+import { MenuList } from "../components/menuList/MenuList";
+import { SideElements } from "../components/sideElements/SideElements";
+import { useLobbyId } from "../hooks/useLobbyId";
 
 export function GameSelectorPage() {
     const navigate = useNavigate();
