@@ -27,7 +27,6 @@ export function UserProfileCard({userId}: { userId: string }) {
                 <p className="text-lg">Games Played: {user.gamesPlayed}</p>
             </div>
         </div>
-
     );
 }
 

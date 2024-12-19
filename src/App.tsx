@@ -9,7 +9,7 @@ import axios from 'axios'
 import {LobbyPage} from "./pages/Lobby/LobbyPage.tsx";
 import Achievements from "./pages/Achievements.tsx";
 import Settings from "./pages/Settings.tsx";
-import {UserProfile} from "./pages/userProfile/Userprofile.tsx";
+import {UserprofilePage} from "./pages/UserprofilePage.tsx";
 import {GameSelectorPage} from "./pages/GameSelectorPage/GameSelectorPage.tsx";
 import {Background} from './components/background/Background.tsx'
 import {RouteGuard} from './components/RouteGuard.tsx'
@@ -34,7 +34,7 @@ function App() {
                             <Route path='/Settings' element={<RouteGuard><Settings/></RouteGuard>}/>
                             <Route path='/GameSelectorPage' element={<RouteGuard><GameSelectorPage/></RouteGuard>}/>
                             <Route path='/Lobby' element={<RouteGuard><LobbyPage/></RouteGuard>}/>
-                            <Route path='/UserProfile/:userId' element={<RouteGuard><UserProfile/></RouteGuard>}/>
+                            <Route path='/Userprofile/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>
