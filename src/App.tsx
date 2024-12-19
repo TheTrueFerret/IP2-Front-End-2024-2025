@@ -13,6 +13,7 @@ import { GameSelectorPage } from "./pages/GameSelectorPage.tsx";
 import { Background } from './components/background/Background.tsx'
 import { RouteGuard } from './components/RouteGuard.tsx'
 import { LobbyCodePage } from './pages/LobbyCodePage.tsx'
+import UserprofilePage from './pages/UserprofilePage.tsx'
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL

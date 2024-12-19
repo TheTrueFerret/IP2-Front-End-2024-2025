@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { PlayerList } from "../components/Player/PlayerList.tsx";
+import { PlayerList } from "../components/player/PlayerList.tsx";
 import { SideElements } from '../components/sideElements/SideElements.tsx';
 import { LoginButton } from '../components/loginButton/LoginButton.tsx';
 import { useLobby } from '../hooks/useLobby.ts';
