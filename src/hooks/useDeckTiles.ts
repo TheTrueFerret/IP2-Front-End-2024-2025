@@ -2,19 +2,26 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
 import { setDeckTiles } from "../services/tileService";
 import { useEffect, useState } from "react";
+import { usePlayerId } from "./usePlayerId";
 import { getDeckTilesLocaly } from "../services/dataService";
 
 
 export function useDeckTiles() {
   const queryClient = useQueryClient();
 
+  const { playerId } = usePlayerId();
+
   const [localDeckTiles, setLocalDeckTiles] = useState<Tile[] | undefined>(undefined);
 
   const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['deckTiles'],
-      queryFn: () => getDeckTilesLocaly(),
-      initialData: [] as Tile[],
+      queryFn: () => {
+        if (!playerId) return Promise.resolve(null); // No lobby ID, return nothing
+        return getDeckTilesLocaly(playerId); // Fetch lobby by ID
+      },
+      enabled: !!playerId, // Only fetch if lobbyId is set
+      initialData: null, // Initial value
     }
   )
 

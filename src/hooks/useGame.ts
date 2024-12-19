@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getGameLocally } from "../services/gameService";
+import { getFieldTilesLocaly } from "../services/dataService";
 
 export function useGame() {
   const queryClient = useQueryClient();
@@ -8,7 +9,9 @@ export function useGame() {
     {
       queryKey: ['game'],
       // here a Game gets called by the GameId
-      queryFn: () => getGameLocally("d276d5f9-4bca-44ed-b4da-9e3000000011"),
+      queryFn: () => getFieldTilesLocaly(),
+      initialData: null, // Initial value
+      refetchInterval: 4000, // Poll every 4 seconds
     }
   )
 

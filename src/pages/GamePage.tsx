@@ -18,7 +18,6 @@ export function GamePage() {
   const { playerId } = usePlayerId();
   const navigate = useNavigate();
 
-
   console.log(playerId)
 
   const handleExit = () => {
@@ -32,7 +31,6 @@ export function GamePage() {
   const handleExecuteExit = () => {
     navigate('/');
   };
-
 
   return (
     <div className="relative flex justify-center w-screen h-screen bg-neutral-900">

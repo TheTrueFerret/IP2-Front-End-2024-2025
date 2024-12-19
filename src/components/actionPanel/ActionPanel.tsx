@@ -1,13 +1,14 @@
 import { useState } from "react";
 import "./ActionPanel.css";
+import { useDeckTiles } from "../../hooks/useDeckTiles";
 
 
 export function ActionPanel() {
+    const { drawTile } = useDeckTiles()
     const [score, setScore] = useState(2000000);
 
-    function drawTile() {
-        console.log("Drawing tile");
-
+    function drawTileFunction() {
+        drawTile()
     }
 
     function nextTurn() {
@@ -21,7 +22,7 @@ export function ActionPanel() {
 
             <div className="flex space-x-4 justify-center items-center flex-grow w-full">
                 <button className="w-16 h-16 bg-yellow-200 rounded-lg transition-all hover:scale-110 text-2xl font-semibold"
-                onClick={drawTile}>
+                onClick={drawTileFunction}>
                     Draw Tile
                 </button>s
                 <button className="w-16 h-16 bg-green-500 rounded-lg transition-all hover:scale-110 text-2xl font-semibold"
