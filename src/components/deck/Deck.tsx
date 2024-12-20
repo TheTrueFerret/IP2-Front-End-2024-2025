@@ -63,7 +63,7 @@ export function Deck() {
   return (
     <div className='deck'>
       {[...Array(2)].map((_, row) =>
-        [...Array(10)].map((_, column) => (
+        [...Array(11)].map((_, column) => (
           <EmptyTile
             key={count++}
             column={column + 1}
@@ -76,8 +76,8 @@ export function Deck() {
         <Tile
           key={tile.id}
           id={tile.id}
-          tileNumber={tile.tileNumber}
-          tileColor={tile.tileColor}
+          tileNumber={tile.numberValue}
+          tileColor={tile.color}
           column={tile.gridColumn}
           row={tile.gridRow}
         />

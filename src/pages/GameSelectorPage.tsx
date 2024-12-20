@@ -3,6 +3,7 @@ import { LoginButton } from "../components/loginButton/LoginButton";
 import { MenuList } from "../components/menuList/MenuList";
 import { SideElements } from "../components/sideElements/SideElements";
 import { useLobbyId } from "../hooks/useLobbyId";
+import { BackButton } from "../components/BackButton";
 
 export function GameSelectorPage() {
     const navigate = useNavigate();
@@ -19,11 +20,11 @@ export function GameSelectorPage() {
 
     return (
         <div className="flex flex-col">
+            <BackButton backLink={'/'} />
             <div className='z-20 absolute top-2 right-2'>
                 <LoginButton />
             </div>
             <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
-
                 <MenuList menuItems={[{
                     menuItemName: "Find Game",
                     menuItemLink: "/Game",
@@ -36,10 +37,6 @@ export function GameSelectorPage() {
                     menuItemName: "Create Game",
                     menuItemLink: "#",
                     menuItemAction: handleCreateGame,
-                },
-                {
-                    menuItemName: "Go Back",
-                    menuItemLink: "/",
                 },
                 ]}
                 />

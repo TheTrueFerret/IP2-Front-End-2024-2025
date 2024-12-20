@@ -1,4 +1,4 @@
-import { getGameByLobbyId, postCreateGame } from "../services/gameService";
+import { getGameIdByLobbyId, postCreateGame } from "../services/gameService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLobbyId } from "./useLobbyId";
 import { useContext } from "react";
@@ -14,8 +14,8 @@ export function useGameId() {
     const { data: gameId, isSuccess } = useQuery({
         queryKey: ['gameId'],
         queryFn: () => {
-            if (!lobbyId || !loggedUserId) return Promise.resolve(null); // No lobby ID, return nothing
-            return getGameByLobbyId(lobbyId, loggedUserId); // Fetch lobby by ID
+            if (!lobbyId || !loggedUserId) return Promise.resolve(null); // No lobby Id or userId, return nothing
+            return getGameIdByLobbyId(lobbyId, loggedUserId); // Fetch gameID
         },
         enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value

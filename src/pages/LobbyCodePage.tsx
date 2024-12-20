@@ -1,3 +1,4 @@
+import { BackButton } from "../components/BackButton";
 import { LobbyCodeInput } from "../components/LobbyCodeInput";
 import { LoginButton } from "../components/loginButton/LoginButton";
 import { SideElements } from "../components/sideElements/SideElements";
@@ -6,6 +7,7 @@ import { SideElements } from "../components/sideElements/SideElements";
 export function LobbyCodePage() {
   return (
     <main className="z-20 flex-grow flex justify-center items-center p-12 gap-x-20">
+      <BackButton backLink={'/GameSelectorPage'}  />
       <div className='z-20 absolute top-2 right-2'>
         <LoginButton />
       </div>

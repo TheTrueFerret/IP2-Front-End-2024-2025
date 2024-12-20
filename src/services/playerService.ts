@@ -19,32 +19,38 @@ export async function getPlayerIdByUserId(userId: string): Promise<string | null
 */
 
 
-export async function getPlayerIdByUserId(
-  userId: string, 
-  maxRetries: number = 5, 
-  baseDelay: number = 1000
-): Promise<string | null> {
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+export async function getPlayerIdByUserId(userId: string,): Promise<string | null> {
+  let retryCount = 0;
+  const maxInitialRetries = 3;
+  const baseDelay = 2000;
+  
+  while (retryCount < maxInitialRetries) {
     try {
       const response = await axios.get<string>(`/api/game/player/${userId}`);
-      
       if (response.data) {
         return response.data;
       }
-      
-      if (attempt < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, baseDelay * attempt));
+
+      // If no data but not an error, wait and retry
+      retryCount++;
+      if (retryCount < maxInitialRetries) {
+        await new Promise(resolve => setTimeout(resolve, baseDelay * retryCount));
       }
     } catch (error) {
-      console.log(`Attempt ${attempt} failed to get player ID: `, error);
-      
-      if (attempt === maxRetries) {
-        return null;
+      // Only retry on 404 or if the error indicates player not ready
+      const isNotFoundError = axios.isAxiosError(error) && error.response?.status === 404;
+      if (!isNotFoundError) {
+        console.error('Failed to fetch player ID:', error);
+        throw error; // Don't retry on non-404 errors
       }
-      
-      await new Promise(resolve => setTimeout(resolve, baseDelay * attempt));
+
+      retryCount++;
+      if (retryCount < maxInitialRetries) {
+        await new Promise(resolve => setTimeout(resolve, baseDelay * retryCount));
+      }
     }
   }
   return null;
 }
+
 
