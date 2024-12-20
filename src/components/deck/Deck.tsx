@@ -76,8 +76,8 @@ export function Deck() {
         <Tile
           key={tile.id}
           id={tile.id}
-          tileNumber={tile.tileNumber}
-          tileColor={tile.tileColor}
+          tileNumber={tile.numberValue}
+          tileColor={tile.color}
           column={tile.gridColumn}
           row={tile.gridRow}
         />

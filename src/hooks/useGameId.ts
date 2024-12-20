@@ -19,6 +19,7 @@ export function useGameId() {
         },
         enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value
+        refetchInterval: 4000, // Poll every 4 seconds
     });
 
     const {

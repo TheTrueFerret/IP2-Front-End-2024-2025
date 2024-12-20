@@ -1,3 +1,4 @@
+import { BackButton } from "../components/BackButton";
 import { LoginButton } from "../components/loginButton/LoginButton";
 import { MenuList } from "../components/menuList/MenuList";
 import { SideElements } from "../components/sideElements/SideElements";
@@ -6,6 +7,7 @@ import { SideElements } from "../components/sideElements/SideElements";
 export function HomePage() {
     return (
         <div className="flex flex-col">
+            <BackButton backLink={null}  />
             <div className='z-20 absolute top-2 right-2'>
                 <LoginButton />
             </div>
