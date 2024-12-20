@@ -47,3 +47,28 @@ export async function getPlayingFieldTiles(gameId: string): Promise<Tile[]> {
     return []
   }
 }
+
+
+
+export async function getDrawTile(gameId: string, playerId: string): Promise<Tile | null> {
+  try {
+    const response = await axios.patch<ApiTile>(`/api/game/pull-tile`, {
+      gameId: gameId,
+      playerId: playerId
+    })
+
+    const mappedTile: Tile = {
+      id: response.data.id,
+      tileNumber: response.data.numberValue,
+      tileColor: response.data.tileColor,
+      gridColumn: response.data.columnPosition + 1,
+      gridRow: response.data.rowPosition + 1,
+    };
+
+    console.log(response)
+    return mappedTile
+  } catch (error) {
+    console.log('Failed to get tiles from the PlayingField with id: ' + gameId + ' because of: ' + error)
+    return null
+  }
+}

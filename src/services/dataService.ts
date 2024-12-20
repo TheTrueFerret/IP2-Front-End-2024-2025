@@ -15,6 +15,7 @@ export function getFieldTilesLocaly(): Tile[] {
 
 
 export function getDeckTilesLocaly(playerId: string): Tile[] {
+  console.log(playerId)
   return [
     { id:7, tileNumber: 3, tileColor: "red", gridColumn: 1, gridRow: 1 },
     { id:8, tileNumber: 3, tileColor: "black", gridColumn: 2, gridRow: 1 },

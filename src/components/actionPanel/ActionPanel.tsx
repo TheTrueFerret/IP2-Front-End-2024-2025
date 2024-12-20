@@ -5,7 +5,7 @@ import { useDeckTiles } from "../../hooks/useDeckTiles";
 
 export function ActionPanel() {
     const { drawTile } = useDeckTiles()
-    const [score, setScore] = useState(2000000);
+    const [score] = useState(2000000);
 
     function drawTileFunction() {
         drawTile()
@@ -21,11 +21,11 @@ export function ActionPanel() {
             <div className="text-white text-2xl font-semibold justify-self-center">Score: {score.toLocaleString()}</div>
 
             <div className="flex space-x-4 justify-center items-center flex-grow w-full">
-                <button className="w-16 h-16 bg-yellow-200 rounded-lg transition-all hover:scale-110 text-2xl font-semibold"
+                <button className="w-[70px] h-[130px] bg-yellow-200 rounded-lg transition-all hover:scale-105 text-2xl font-semibold"
                 onClick={drawTileFunction}>
                     Draw Tile
                 </button>s
-                <button className="w-16 h-16 bg-green-500 rounded-lg transition-all hover:scale-110 text-2xl font-semibold"
+                <button className="w-[70px] h-[130px] bg-green-500 rounded-lg transition-all hover:scale-105 text-2xl font-semibold"
             onClick={nextTurn}>
                     Next Turn
                 </button>

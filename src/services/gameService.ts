@@ -16,7 +16,7 @@ export function getGameLocally(playerId: String) {
 }
 
 
-export async function getGameByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
+export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
         const response = await axios.get<string>(`/api/game/lobby/${lobbyId}?userId=${loggedInUserId}`)
         console.log(response)

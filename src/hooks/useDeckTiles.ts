@@ -1,15 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
-import { setDeckTiles } from "../services/tileService";
+import { getDrawTile, setDeckTiles } from "../services/tileService";
 import { useEffect, useState } from "react";
 import { usePlayerId } from "./usePlayerId";
 import { getDeckTilesLocaly } from "../services/dataService";
+import { useGameId } from "./useGameId";
 
 
 export function useDeckTiles() {
   const queryClient = useQueryClient();
 
   const { playerId } = usePlayerId();
+  const { gameId } = useGameId();
+
+  const width: number = 11;
+  const height: number = 2;
 
   const [localDeckTiles, setLocalDeckTiles] = useState<Tile[] | undefined>(undefined);
 
@@ -17,10 +22,10 @@ export function useDeckTiles() {
     {
       queryKey: ['deckTiles'],
       queryFn: () => {
-        if (!playerId) return Promise.resolve(null); // No lobby ID, return nothing
-        return getDeckTilesLocaly(playerId); // Fetch lobby by ID
+        if (!playerId) return Promise.resolve(null); // no PlayerId Return Nothing
+        return getDeckTilesLocaly(playerId);
       },
-      enabled: !!playerId, // Only fetch if lobbyId is set
+      enabled: !!playerId, // Only fetch if playerId is Set
       initialData: null, // Initial value
     }
   )
@@ -143,6 +148,42 @@ export function useDeckTiles() {
 
 
 
+  const {
+    mutate: mutateDrawTile,
+    isPending: isDrawingTile,
+    isError: isErrorDrawingTile,
+  } = useMutation({
+    mutationFn: async () => {
+      if (!localDeckTiles) {
+        throw new Error("Tiles data is unavailable");
+      }
+
+      if (gameId && playerId) {
+        const response = await getDrawTile(gameId, playerId);
+
+        if (response) {
+          for (let column = 1; column < width; column++) {
+            for (let row = 1; row < height; row++) {
+
+              if (!localDeckTiles.some(tile =>
+                tile.gridRow === row && tile.gridColumn === column
+              )) {
+                response.gridColumn = column;
+                response.gridRow = row;
+                console.log(response);
+                mutateAddDeckTile(response)
+                return;
+              }
+            }
+          }
+
+        }
+      }
+    },
+  })
+
+
+
   useEffect(() => {
     console.log('Updated deckTiles:', localDeckTiles);
   }, [localDeckTiles]);
@@ -168,5 +209,8 @@ export function useDeckTiles() {
     isTileInDeck: mutateIsTileInDeck,
     isCheckingTileInDeck,
     isErrorCheckingTileInDeck,
+    drawTile: mutateDrawTile,
+    isDrawingTile,
+    isErrorDrawingTile,
   }
 }

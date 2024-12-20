@@ -16,11 +16,10 @@ export function usePlayerId() {
       queryKey: ['playerId'],
       queryFn: () => {
         if (!loggedUserId) return Promise.resolve(null); // No user ID, return nothing
-        return getPlayerIdByUserId(loggedUserId, 4, 2000); // Fetch player by ID
+        return getPlayerIdByUserId(loggedUserId); // Fetch player by ID
       },
       enabled: !!loggedUserId, // Only fetch if lobbyId is set
-      staleTime: Infinity,
-      gcTime: Infinity,
+      retry: false,
     }
   )
 
