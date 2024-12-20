@@ -37,6 +37,7 @@ function App() {
                             <Route path='/LobbyCodePage' element={<RouteGuard><LobbyCodePage /></RouteGuard>} />
                             <Route path='/Lobby' element={<RouteGuard><LobbyPage /></RouteGuard>} />
                             <Route path='/Userprofile/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
+                            <Route path='/FriendList/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>
