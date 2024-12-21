@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Player } from "../models/Player";
 
 
 
@@ -54,3 +55,12 @@ export async function getPlayerIdByUserId(userId: string,): Promise<string | nul
 }
 
 
+export async function getCurrentPlayerTurn(gameId: string): Promise<Player | null> {
+  try {
+    const response = await axios.get<Player>(`/game/${gameId}/turns/current-player-turn`);
+    return response.data;
+  } catch (error) {
+    console.log('Failed to get the current player turn because of: ' + error);
+    return null;
+  }
+}

@@ -8,6 +8,7 @@ import { NotificationType } from "../models/Notification";
 import { NotificationAlert } from "../components/notifications/notificationAlert/NotificationAlert";
 import { usePlayerId } from "../hooks/usePlayerId";
 import { ActionPanel } from "../components/actionPanel/ActionPanel";
+import { useCurrentPlayerTurn } from "../hooks/useCurrentPlayerTurn";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -16,9 +17,13 @@ const dragOptions = {
 export function GamePage() {
   const [showNotification, setShowNotification] = useState(false);
   const { playerId } = usePlayerId();
+  const { currentPlayerTurn } = useCurrentPlayerTurn();
   const navigate = useNavigate();
 
-  console.log(playerId)
+
+  console.log(playerId);
+  console.log(currentPlayerTurn);
+  
 
   const handleExit = () => {
     setShowNotification(true);
