@@ -42,7 +42,7 @@ export async function getPlayingFieldTiles(gameId: string): Promise<Tile[]> {
 
 export async function getDrawTile(gameId: string, playerId: string): Promise<Tile | null> {
   try {
-    const response = await axios.patch<Tile>(`/api/game/pull-tile`, {
+    const response = await axios.patch<Tile>(`/api/turns/player-pull-tile`, {
       gameId: gameId,
       playerId: playerId
     })
