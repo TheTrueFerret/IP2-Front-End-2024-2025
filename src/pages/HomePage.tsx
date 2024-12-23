@@ -7,7 +7,7 @@ import { SideElements } from "../components/sideElements/SideElements";
 export function HomePage() {
     return (
         <div className="flex flex-col">
-            <BackButton backLink={null}  />
+            <BackButton backAction={null} />
             <div className='z-20 absolute top-2 right-2'>
                 <LoginButton />
             </div>

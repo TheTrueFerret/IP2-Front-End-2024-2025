@@ -22,42 +22,66 @@ export async function getPlayerIdByUserId(userId: string): Promise<string | null
 
 export async function getPlayerIdByUserId(userId: string,): Promise<string | null> {
   let retryCount = 0;
-  const maxInitialRetries = 3;
-  const baseDelay = 2000;
-  
-  while (retryCount < maxInitialRetries) {
+  const maxRetries = 3;
+  const delayRetries = 2000;
+
+   while (retryCount < maxRetries) {
     try {
-      const response = await axios.get<string>(`/api/game/player/${userId}`);
-      if (response.data) {
+      const response = await axios.get<any>(`/api/players/${userId}`);
+      
+      // Check if response contains an error object
+      if (response.data && response.data.error) {
+        console.log(`Attempt ${retryCount}: Received error response:`, response.data);
+        retryCount++;
+        if (retryCount < maxRetries) {
+          const delay = Math.min(delayRetries * Math.pow(2, retryCount - 1), delayRetries);
+          console.log(`Retrying in ${delay/1000} seconds...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+      }
+
+      // Validate that we have a proper player ID string
+      if (response.data && typeof response.data === 'string') {
         return response.data;
       }
 
-      // If no data but not an error, wait and retry
+      // If we get here, we got a response but it wasn't what we expected
       retryCount++;
-      if (retryCount < maxInitialRetries) {
-        await new Promise(resolve => setTimeout(resolve, baseDelay * retryCount));
+      if (retryCount < maxRetries) {
+        const delay = Math.min(delayRetries * Math.pow(2, retryCount - 1), delayRetries);
+        console.log(`Attempt ${retryCount}: Invalid response format, retrying in ${delay/1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
       }
     } catch (error) {
-      // Only retry on 404 or if the error indicates player not ready
-      const isNotFoundError = axios.isAxiosError(error) && error.response?.status === 404;
+      const axiosError = error as any;
+      const isNotFoundError = axios.isAxiosError(axiosError) && 
+        (axiosError.response?.status === 404 || 
+         axiosError.response?.data?.error === 'IllegalArgumentException');
+
       if (!isNotFoundError) {
-        console.error('Failed to fetch player ID:', error);
-        throw error; // Don't retry on non-404 errors
+        console.error('Unrecoverable error while fetching player ID:', error);
+        throw error;
       }
 
       retryCount++;
-      if (retryCount < maxInitialRetries) {
-        await new Promise(resolve => setTimeout(resolve, baseDelay * retryCount));
+      if (retryCount < maxRetries) {
+        const delay = Math.min(delayRetries * Math.pow(2, retryCount - 1), delayRetries);
+        console.log(`Attempt ${retryCount}: Player not found, retrying in ${delay/1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
   }
+
+  console.error(`Failed to fetch player ID after ${maxRetries} attempts`);
   return null;
 }
 
 
+
 export async function getCurrentPlayerTurn(gameId: string): Promise<Player | null> {
   try {
-    const response = await axios.get<Player>(`/game/${gameId}/turns/current-player-turn`);
+    const response = await axios.get<Player>(`/api/players/game/${gameId}/turns/current-player-turn`);
     return response.data;
   } catch (error) {
     console.log('Failed to get the current player turn because of: ' + error);

@@ -18,7 +18,7 @@ export function getGameLocally(playerId: String) {
 
 export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
-        const response = await axios.get<string>(`/api/game/lobby/${lobbyId}?userId=${loggedInUserId}`)
+        const response = await axios.get<string>(`/api/games/lobby/${lobbyId}?userId=${loggedInUserId}`)
         console.log(response)
         return response.data
     } catch (error) {
@@ -31,7 +31,7 @@ export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string
 
 export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<Game | null> {
     try {
-        const response = await axios.post<Game>(`/api/game/start/${lobbyId}`, {
+        const response = await axios.post<Game>(`/api/games/start/${lobbyId}`, {
             turnTime: roundTime,
             startTileAmount: startTileAmount,
             hostUserId: loggedInUserId

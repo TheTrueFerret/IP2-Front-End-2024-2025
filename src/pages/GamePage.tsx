@@ -9,6 +9,7 @@ import { NotificationAlert } from "../components/notifications/notificationAlert
 import { usePlayerId } from "../hooks/usePlayerId";
 import { ActionPanel } from "../components/actionPanel/ActionPanel";
 import { useCurrentPlayerTurn } from "../hooks/useCurrentPlayerTurn";
+import { BackButton } from "../components/BackButton";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -23,7 +24,7 @@ export function GamePage() {
 
   console.log(playerId);
   console.log(currentPlayerTurn);
-  
+
 
   const handleExit = () => {
     setShowNotification(true);
@@ -39,12 +40,7 @@ export function GamePage() {
 
   return (
     <div className="relative flex justify-center w-screen h-screen bg-neutral-900">
-      <button
-        className="z-10 absolute text-white text-2xl font-bold flex justify-center items-center h-10 transition-all duration-200 ease-in-out transform hover:scale-105"
-        onClick={handleExit}
-      >
-        <p>Exit Game</p>
-      </button>
+      <BackButton backAction={handleExit} />
       <DndProvider backend={HTML5Backend} options={dragOptions}>
         <PlayingField />
         <Deck />

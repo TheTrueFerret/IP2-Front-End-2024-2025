@@ -19,7 +19,11 @@ export function useGameId() {
         },
         enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value
-        refetchInterval: 4000, // Poll every 4 seconds
+        refetchInterval: (data) => {
+            // If we have a gameId, stop polling by returning false/null
+            // Otherwise continue polling every 4 seconds
+            return data ? false : 4000;
+        },
     });
 
     const {

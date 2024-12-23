@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 
 
 interface BackButtonProps {
-  backLink: string | null;
+  backAction: (() => void) | null;
 }
 
-export function BackButton({ backLink }: BackButtonProps) {
+export function BackButton({ backAction }: BackButtonProps) {
   return (
     <div className='z-20 absolute top-2 left-4 flex flex-row'>
-      {backLink != null ? (
-        <Link className='text-4xl font-extrabold text-white pr-4 pl-4 hover:scale-110' to={backLink}>&lt;</Link>
+      {backAction != null ? (
+        <button className='bg-neutral-900/60 backdrop-blur rounded-3xl text-4xl font-extrabold text-white pr-5 pl-5 pb-2 hover:scale-110' onClick={backAction}>&lt;</button>
       ) : (
         <div className='p-7'></div>
       )}

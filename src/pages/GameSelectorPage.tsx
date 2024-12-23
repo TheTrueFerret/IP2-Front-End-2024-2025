@@ -20,7 +20,7 @@ export function GameSelectorPage() {
 
     return (
         <div className="flex flex-col">
-            <BackButton backLink={'/'} />
+            <BackButton backAction={() => navigate('/')} />
             <div className='z-20 absolute top-2 right-2'>
                 <LoginButton />
             </div>

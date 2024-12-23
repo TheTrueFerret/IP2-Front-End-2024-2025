@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getCurrentPlayerTurn } from "../services/playerService";
 import { useGameId } from "./useGameId";
 
@@ -15,7 +15,7 @@ export function useCurrentPlayerTurn() {
         return getCurrentPlayerTurn(gameId); // Fetch current player turn by gameID
       },
       initialData: null,
-      refetchInterval: 4000, // Poll every 4 seconds
+      refetchInterval: 5000, // Poll every 4 seconds
     }
   )
 
