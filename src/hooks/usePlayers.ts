@@ -5,7 +5,8 @@ import { getPlayersByGameId } from "../services/playerService";
 
 
 export function usePlayers() {
-  const { gameId } = useGameId();
+  const { getCachedGameId } = useGameId();
+  const gameId = getCachedGameId();
 
   const { isLoading, isError, data } = useQuery(
     {

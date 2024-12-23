@@ -13,6 +13,11 @@ export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string
     }
 }
 
+export async function getGameIdByPlayerId(playerId: string): Promise<string> {
+    return '';
+    // TODO implement
+}
+
 
 export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<Game | null> {
     try {

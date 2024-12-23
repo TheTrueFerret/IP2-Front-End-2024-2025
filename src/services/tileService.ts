@@ -9,22 +9,42 @@ export async function getDeckTiles(playerId: string): Promise<Tile[]> {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       const response = await axios.get<Tile[]>(`/api/players/tiles/${playerId}`);
+
+      let row = 1;
+      let column = 1;
+      response.data.forEach(tile => {
+        // TODO REMOVE HARDCODED GRID ROW AND COLUMN???
+        const maxRow = 2;
+        const maxColumn = 11;
+
+        tile.gridRow = row;
+        tile.gridColumn = column;
+        column++;
+
+        if (column >= maxColumn) {
+          row++;
+          column = 1;
+        }
+        if (row >= maxRow) {
+          //throw some kind of error
+        }
+      });
       return response.data;
-      
-    } catch (error) {
-      console.log(`Attempt ${attempt + 1}/${maxRetries}: Failed to get Deck tiles for player ${playerId}`);
 
-      if (attempt === maxRetries - 1) {
-        console.error('Max retries reached. Returning empty array.');
-        return [];
-      }
+  } catch (error) {
+    console.log(`Attempt ${attempt + 1}/${maxRetries}: Failed to get Deck tiles for player ${playerId}`);
 
-      // Wait before trying again
-      await new Promise(resolve => setTimeout(resolve, delay));
+    if (attempt === maxRetries - 1) {
+      console.error('Max retries reached. Returning empty array.');
+      return [];
     }
-  }
 
-  return [];
+    // Wait before trying again
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+}
+
+return [];
 }
 
 

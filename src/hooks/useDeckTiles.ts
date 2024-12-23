@@ -10,7 +10,7 @@ export function useDeckTiles() {
   const queryClient = useQueryClient();
 
   const { playerId } = usePlayerId();
-  const { gameId } = useGameId();
+  const { getCachedGameId } = useGameId();
 
   const width: number = 11;
   const height: number = 2;
@@ -140,6 +140,8 @@ export function useDeckTiles() {
       if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
+
+      const gameId = getCachedGameId();
 
       if (gameId && playerId) {
         const response = await getDrawTile(gameId, playerId);
