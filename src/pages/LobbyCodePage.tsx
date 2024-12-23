@@ -15,17 +15,9 @@ export function LobbyCodePage() {
         <LoginButton />
       </div>
       <main className="z-20 flex-grow flex justify-center items-center p-12 gap-x-20">
-        <div className='z-20'>
-          <LobbyCodeInput />
-        </div>
+        <LobbyCodeInput />
         <SideElements
           upperElement={
-            <>
-              <h2 className="text-2xl font-bold mb-2">Put in the Game Code from your Friends Lobby</h2>
-              <p className="text-lg">More Info</p>
-            </>
-          }
-          bottemElement={
             <>
               <h2 className="text-2xl font-bold mb-2">Active Event!</h2>
               <p className="text-lg">
@@ -33,9 +25,14 @@ export function LobbyCodePage() {
                 side in a rapid motion until you cant anymore...
               </p>
             </>
+          }
+          bottemElement={
+            <>
+              <h2 className="text-2xl font-bold mb-2">Put in the Game Code from your Friends Lobby</h2>
+              <p className="text-lg">More Info</p>
+            </>
           } />
       </main>
     </div>
-
   )
 }

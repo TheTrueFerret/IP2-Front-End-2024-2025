@@ -22,7 +22,7 @@ export function useGameId() {
         refetchInterval: (data) => {
             // If we have a gameId, stop polling by returning false/null
             // Otherwise continue polling every 4 seconds
-            return data ? false : 4000;
+            return (data !== null) ? false : 4000;
         },
     });
 

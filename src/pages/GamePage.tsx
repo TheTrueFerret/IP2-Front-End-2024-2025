@@ -10,6 +10,7 @@ import { usePlayerId } from "../hooks/usePlayerId";
 import { ActionPanel } from "../components/actionPanel/ActionPanel";
 import { useCurrentPlayerTurn } from "../hooks/useCurrentPlayerTurn";
 import { BackButton } from "../components/BackButton";
+import { PlayerTurnList } from "../components/PlayerTurnList";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -41,6 +42,7 @@ export function GamePage() {
   return (
     <div className="relative flex justify-center w-screen h-screen bg-neutral-900">
       <BackButton backAction={handleExit} />
+      <PlayerTurnList />
       <DndProvider backend={HTML5Backend} options={dragOptions}>
         <PlayingField />
         <Deck />

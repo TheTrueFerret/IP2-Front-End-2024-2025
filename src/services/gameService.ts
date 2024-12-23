@@ -2,20 +2,6 @@ import axios from "axios";
 import { Game } from "../models/Game";
 
 
-
-export function getGameLocally(playerId: String) {
-  return {
-    gameId: "d276d5f9-4bca-44ed-b4da-9e312953826a",
-    turnTime: 70,
-    nextPlayer: {playerId: "d276d5f9-4bca-44ed-b4da-9e3000000011", userName: "player1", profileImage: "imageLink"},
-    players: [
-      {playerId: playerId, userName: "player1", profileImage: "imageLink"},
-      {playerId: "d276d5f9-4bca-44ed-b4da-9e3000000012", userName: "player2", profileImage: "imageLink"}
-    ]
-  }
-}
-
-
 export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
         const response = await axios.get<string>(`/api/games/lobby/${lobbyId}?userId=${loggedInUserId}`)
@@ -26,7 +12,6 @@ export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string
         return ''
     }
 }
-
 
 
 export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<Game | null> {
@@ -43,4 +28,10 @@ export async function postCreateGame(lobbyId: string, roundTime: number, startTi
         console.log('Failed to create a game because of: ' + error)
         return null
     }
+}
+
+
+// TODO implement a leaveGame Function
+export async function leaveGame() {
+    
 }

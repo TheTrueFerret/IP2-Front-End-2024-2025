@@ -1,9 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
-import { getDrawTile, setDeckTiles } from "../services/tileService";
+import { getDeckTiles, getDrawTile } from "../services/tileService";
 import { useEffect, useState } from "react";
 import { usePlayerId } from "./usePlayerId";
-import { getDeckTilesLocaly } from "../services/dataService";
 import { useGameId } from "./useGameId";
 
 
@@ -23,7 +22,7 @@ export function useDeckTiles() {
       queryKey: ['deckTiles'],
       queryFn: () => {
         if (!playerId) return Promise.resolve(null); // no PlayerId Return Nothing
-        return getDeckTilesLocaly(playerId);
+        return getDeckTiles(playerId);
       },
       enabled: !!playerId, // Only fetch if playerId is Set
       initialData: null, // Initial value
@@ -36,22 +35,6 @@ export function useDeckTiles() {
       setLocalDeckTiles(data); // Set the fetched data to local state
     }
   }, [data]);
-
-
-  const {
-    mutate: mutateSetDeckTiles,
-    isPending: isSettingDeckTiles,
-    isError: isErrorSettingDeckTiles,
-  } = useMutation({
-    mutationFn: async (tiles: Tile[]) => {
-      return await setDeckTiles(tiles);  // Call your API to set deck tiles
-    },
-    onSuccess: (updatedDeckTiles) => {
-      queryClient.setQueryData(['deckTiles'], updatedDeckTiles);  // Update cache with new data
-      setLocalDeckTiles(updatedDeckTiles);  // Also update local state
-    },
-  });
-
 
 
   const {
@@ -162,8 +145,8 @@ export function useDeckTiles() {
         const response = await getDrawTile(gameId, playerId);
 
         if (response) {
-          for (let column = 1; column < width; column++) {
-            for (let row = 1; row < height; row++) {
+          for (let column = 1; column <= width; column++) {
+            for (let row = 1; row <= height; row++) {
 
               if (!localDeckTiles.some(tile =>
                 tile.gridRow === row && tile.gridColumn === column
@@ -171,14 +154,17 @@ export function useDeckTiles() {
                 response.gridColumn = column;
                 response.gridRow = row;
                 console.log(response);
-                mutateAddDeckTile(response)
-                return;
+                const updatedDeckTiles = [...localDeckTiles, response];
+                setLocalDeckTiles(updatedDeckTiles);
+                return updatedDeckTiles
               }
             }
           }
-
         }
       }
+    },
+    onSuccess: (updatedDeckTiles) => {
+      queryClient.setQueryData(['deckTiles'], updatedDeckTiles);
     },
   })
 
@@ -194,9 +180,6 @@ export function useDeckTiles() {
     isLoadingDeckTiles: isLoading,
     isErrorDeckTiles: isError,
     deckTiles: localDeckTiles,
-    setDeckTiles: mutateSetDeckTiles,
-    isSettingDeckTiles,
-    isErrorSettingDeckTiles,
     updateDeckTile: mutateUpdateDeckTile,
     isUpdatingDeckTile,
     isErrorUpdatingDeckTile,

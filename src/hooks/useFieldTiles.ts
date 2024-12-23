@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
-import { setFieldTiles } from "../services/tileService";
 import { useEffect, useState } from "react";
 import { getFieldTilesLocaly } from "../services/dataService";
 
@@ -25,20 +24,6 @@ export function useFieldTiles() {
     }
   }, [data]);
 
-
-  const {
-    mutate: mutateSetFieldTiles,
-    isPending: isSettingFieldTiles,
-    isError: isErrorSettingFieldTiles,
-  } = useMutation({
-    mutationFn: async (tiles: Tile[]) => {
-      return await setFieldTiles(tiles);  // Call your API to set deck tiles
-    },
-    onSuccess: (updatedDeckTiles) => {
-      queryClient.setQueryData(['deckTiles'], updatedDeckTiles);  // Update cache with new data
-      setLocalFieldTiles(updatedDeckTiles);  // Also update local state
-    },
-  });
 
 
   const {
@@ -144,9 +129,6 @@ export function useFieldTiles() {
     isLoadingFieldTiles: isLoading,
     isErrorFieldTiles: isError,
     fieldTiles: localFieldTiles,
-    setFieldTiles: mutateSetFieldTiles,
-    isSettingFieldTiles,
-    isErrorSettingFieldTiles,
     updateFieldTile: mutateUpdateFieldTile,
     isUpdatingFieldTile,
     isErrorUpdatingFieldTile,

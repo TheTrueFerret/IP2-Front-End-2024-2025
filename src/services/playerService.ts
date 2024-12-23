@@ -20,6 +20,17 @@ export async function getPlayerIdByUserId(userId: string): Promise<string | null
 */
 
 
+export async function getPlayersByGameId(gameId: string): Promise<Player[]> {
+  try {
+    const response = await axios.get<Player[]>(`/api/players/game/${gameId}`);
+    return response.data;
+  } catch (error) {
+    console.log('Failed to get the players because of: ' + error);
+    return [];
+  }
+}
+
+
 export async function getPlayerIdByUserId(userId: string,): Promise<string | null> {
   let retryCount = 0;
   const maxRetries = 3;
@@ -27,21 +38,8 @@ export async function getPlayerIdByUserId(userId: string,): Promise<string | nul
 
    while (retryCount < maxRetries) {
     try {
-      const response = await axios.get<any>(`/api/players/${userId}`);
-      
-      // Check if response contains an error object
-      if (response.data && response.data.error) {
-        console.log(`Attempt ${retryCount}: Received error response:`, response.data);
-        retryCount++;
-        if (retryCount < maxRetries) {
-          const delay = Math.min(delayRetries * Math.pow(2, retryCount - 1), delayRetries);
-          console.log(`Retrying in ${delay/1000} seconds...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
-          continue;
-        }
-      }
+      const response = await axios.get<string>(`/api/players/${userId}`);
 
-      // Validate that we have a proper player ID string
       if (response.data && typeof response.data === 'string') {
         return response.data;
       }

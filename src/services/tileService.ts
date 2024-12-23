@@ -2,26 +2,29 @@ import axios from "axios";
 import { Tile } from "../models/Tile";
 
 
-export function setFieldTiles(tiles: Tile[]): Tile[] {
-  return tiles
-}
-
-
-export function setDeckTiles(tiles: Tile[]): Tile[] {
-  return tiles
-}
-
-
-
 export async function getDeckTiles(playerId: string): Promise<Tile[]> {
-  try {
-    const response = await axios.get<Tile[]>(`/api/game/tiles/player/${playerId}`)
-    console.log(response)
-    return response.data
-  } catch (error) {
-    console.log('Failed to get Deck tile of Player with id: ' + playerId + ' because of: ' + error)
-    return []
+  const maxRetries = 5;
+  const delay = 2000;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await axios.get<Tile[]>(`/api/players/tiles/${playerId}`);
+      return response.data;
+      
+    } catch (error) {
+      console.log(`Attempt ${attempt + 1}/${maxRetries}: Failed to get Deck tiles for player ${playerId}`);
+
+      if (attempt === maxRetries - 1) {
+        console.error('Max retries reached. Returning empty array.');
+        return [];
+      }
+
+      // Wait before trying again
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
   }
+
+  return [];
 }
 
 
@@ -29,7 +32,6 @@ export async function getDeckTiles(playerId: string): Promise<Tile[]> {
 export async function getPlayingFieldTiles(gameId: string): Promise<Tile[]> {
   try {
     const response = await axios.get<Tile[]>(`/api/tile-positions/game/${gameId}`)
-
     console.log(response.data)
     return response.data
   } catch (error) {
