@@ -1,6 +1,7 @@
 import {User} from "../models/User.ts";
 import axios from "axios";
 import {Friend} from "../models/Friend.ts";
+import {FriendRequest} from "../models/FriendRequest.ts";
 
 
 export function getUserById(userId: string): Promise<User> {
@@ -17,7 +18,7 @@ export function getUserFriends(userId: string): Promise<Friend[]> {
         .then((response) => response.data)
         .catch((error) => {
             console.error('User Service: Error fetching friends:', error);
-            throw error;
+            return [];
         });
 }
 
@@ -27,7 +28,7 @@ export function searchUserByName(searchTerm: string, uuid: string): Promise<Frie
         .then((response) => response.data)
         .catch((error) => {
             console.error('User Service: Error searching users:', error);
-            throw error;
+            return [];
         });
 }
 
@@ -36,6 +37,31 @@ export function sendFriendRequest(userId: string, friendUsername: string): Promi
         .then((response) => response.data)
         .catch((error) => {
             console.error('User Service: Error sending friend request:', error);
+            throw error;
+        });
+}
+
+export function getFriendRequests(userId: string): Promise<FriendRequest[]> {
+    return axios.get(`/api/gameuser/friendRequests?userId=${userId}`)
+        .then((response) => response.data)
+        .catch((error) => {
+            console.error('User Service: Error getting friend requests:', error);
+            return [];
+        });
+}
+
+export function acceptRequest(requestId: string, userId: string): Promise<void> {
+    return axios.post(`/api/gameuser/friendRequest/accept/${requestId}?userId=${userId}`).then((response) => response.data)
+        .catch((error) => {
+            console.error('User Service: Error accepting friend request:', error);
+            throw error;
+        });
+}
+
+export function declineRequest(requestId: string, userId: string): Promise<void> {
+    return axios.post(`/api/gameuser/friendRequest/decline/${requestId}?userId=${userId}`).then((response) => response.data)
+        .catch((error) => {
+            console.error('User Service: Error rejecting friend request:', error);
             throw error;
         });
 }
