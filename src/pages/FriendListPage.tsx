@@ -36,17 +36,19 @@ export function UserprofilePage() {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen ">
+        <div className="flex items-center justify-center h-full shadow-current ">
             <div className='z-20 absolute top-2 right-2'>
                 <LoginButton/>
             </div>
-            <div className="bg-gray-500 z-50 p-1 rounded-lg">
-                <main className="bg-gray-900 text-white p-10 rounded-lg shadow-2xl max-w-3xl w-full z-50 opacity-100">
-                    <h1>{user?.username} Friend List</h1>
-                    <div>
-                        <FriendList users={friends || []}></FriendList>
-                    </div>
-                </main>
+            <div
+                className="flex flex-row bg-gray-600 text-white p-3 gap-1 rounded-lg shadow-2xl max-w-3xl w-full h-2/3 z-50 opacity-100">
+                <div className="flex flex-col w-1/2 items-center justify-items-center justify-center bg-gray-500 rounded-lg">
+                    <h1>My friends: {friends?.length}</h1>
+                    <FriendList users={friends || []}></FriendList>
+                </div>
+                <div className="w-1/2 items-center justify-items-center justify-center bg-gray-500 rounded-lg">
+                    <h1>Friend Requests</h1>
+                </div>
             </div>
         </div>
     );

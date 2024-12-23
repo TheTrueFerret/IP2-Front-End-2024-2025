@@ -1,6 +1,6 @@
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {User} from "../models/User.ts";
-import {getUserById, getUserFriends, searchUserByName} from "../services/userService.ts";
+import {getUserById, getUserFriends, searchUserByName, sendFriendRequest} from "../services/userService.ts";
 import {useContext, useEffect, useState} from "react";
 import SecurityContext from "../context/SecurityContext.ts";
 import {Friend} from "../models/Friend.ts";
@@ -12,6 +12,7 @@ interface UseUsersReturn {
     searchUsers: (searchTerm: string) => void;
     isError: boolean;
     isLoading: boolean;
+    friendRequest: (userName: string) => boolean;
 }
 
 const useUsers = (userId?: string): UseUsersReturn => {
@@ -56,6 +57,19 @@ const useUsers = (userId?: string): UseUsersReturn => {
         setSearchTerm(term);
     };
 
+    const friendRequest = (userName: string) => {
+        if (loggedUserId && userName) {
+            console.log('Sending friend request to:', userName);
+            sendFriendRequest(loggedUserId, userName).catch((error) => {
+                console.error('Failed to send friend request:', error);
+                return false;
+            }).finally(() => {
+                return true;
+            });
+        }
+        return false;
+    }
+
     return {
         user: user ?? null,
         searchedUsers: searchedUsers ?? null,
@@ -63,6 +77,7 @@ const useUsers = (userId?: string): UseUsersReturn => {
         searchUsers,
         isLoading: isLoadingUser || isLoadingFriends || isLoadingSearch,
         isError: isErrorUser || isErrorFriends || isErrorSearch,
+        friendRequest,
     };
 };
 
