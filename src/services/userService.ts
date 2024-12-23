@@ -1,5 +1,6 @@
 import {User} from "../models/User.ts";
 import axios from "axios";
+import {Friend} from "../models/Friend.ts";
 
 
 export function getUserById(userId: string): Promise<User> {
@@ -11,7 +12,7 @@ export function getUserById(userId: string): Promise<User> {
         });
 }
 
-export function getUserFriends(userId: string): Promise<User[]> {
+export function getUserFriends(userId: string): Promise<Friend[]> {
     return axios.get(`/api/gameuser/friends?userId=${userId}`)
         .then((response) => response.data)
         .catch((error) => {
@@ -20,8 +21,9 @@ export function getUserFriends(userId: string): Promise<User[]> {
         });
 }
 
-export function searchUserByName(searchTerm: string): Promise<User[]> {
-    return axios.get(`/api/gameuser/users/${searchTerm}`)
+export function searchUserByName(searchTerm: string,uuid:string): Promise<Friend[]> {
+    console.log("Search Term:" + searchTerm);
+    return axios.get(`/api/gameuser/users/${searchTerm}?uuid=${uuid}`)
         .then((response) => response.data)
         .catch((error) => {
             console.error('User Service: Error searching users:', error);

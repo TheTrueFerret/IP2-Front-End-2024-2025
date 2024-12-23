@@ -10,45 +10,46 @@ export function UserprofilePage() {
     const {user, friends, isLoading, isError} = useUsers(userId);
 
     if (isLoading) {
-        <NotificationCard
-            loading={isLoading}
-            notification={
-                {
+        return (
+            <NotificationCard
+                loading={isLoading}
+                notification={{
                     title: 'Loading',
                     description: 'Friend List is Loading',
                     type: NotificationType.Info,
-                }
-            }
-        />
+                }}
+            />
+        );
     }
 
     if (isError) {
-        <NotificationCard
-            loading={false}
-            notification={
-                {
+        return (
+            <NotificationCard
+                loading={false}
+                notification={{
                     title: 'Error',
                     description: 'Failed to load friend list',
                     type: NotificationType.Error,
-                }
-            }
-        />
+                }}
+            />
+        );
     }
 
     return (
         <div className="flex items-center justify-center min-h-screen ">
-            <LoginButton/>
+            <div className='z-20 absolute top-2 right-2'>
+                <LoginButton/>
+            </div>
             <div className="bg-gray-500 z-50 p-1 rounded-lg">
                 <main className="bg-gray-900 text-white p-10 rounded-lg shadow-2xl max-w-3xl w-full z-50 opacity-100">
                     <h1>{user?.username} Friend List</h1>
                     <div>
-                        <FriendList users={friends}></FriendList>
+                        <FriendList users={friends || []}></FriendList>
                     </div>
                 </main>
             </div>
         </div>
-    )
-        ;
+    );
 }
 
 export default UserprofilePage;

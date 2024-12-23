@@ -14,6 +14,7 @@ import { Background } from './components/background/Background.tsx'
 import { RouteGuard } from './components/RouteGuard.tsx'
 import { LobbyCodePage } from './pages/LobbyCodePage.tsx'
 import UserprofilePage from './pages/UserprofilePage.tsx'
+import FriendListPage from "./pages/FriendListPage.tsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -37,7 +38,7 @@ function App() {
                             <Route path='/LobbyCodePage' element={<RouteGuard><LobbyCodePage /></RouteGuard>} />
                             <Route path='/Lobby' element={<RouteGuard><LobbyPage /></RouteGuard>} />
                             <Route path='/Userprofile/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
-                            <Route path='/FriendList/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
+                            <Route path='/FriendList/:userId' element={<RouteGuard><FriendListPage/></RouteGuard>}/>
                         </Routes>
                     </div>
                 </BrowserRouter>
