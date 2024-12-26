@@ -36,8 +36,6 @@ export function UserprofilePage() {
         );
     }
 
-    console.log("AAAAAAAAAAAh" +friendRequests);
-
     return (
         <div className="flex items-center justify-center h-full shadow-current ">
             <div className='z-20 absolute top-2 right-2'>

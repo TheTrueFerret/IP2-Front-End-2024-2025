@@ -24,7 +24,10 @@ export function FriendList({users}: { users: Friend[] | null }) {
     }
 
     return (
-        <div className="mt-8 w-full flex flex-col justify-between h-full">
+        <div className="mt-2 w-full flex flex-col h-full">
+            <button onClick={() => setAddFriendOpened(true)}
+                    className={"w-2/6 self-center m-2 p-2 bg-green-400 text-white rounded items-center"}>Search Friend
+            </button>
             {addFriendOpened && (
                 <FriendSearch onAddFriend={onAddFriend} onClose={() => setAddFriendOpened(false)}/>
             )}
@@ -42,22 +45,21 @@ export function FriendList({users}: { users: Friend[] | null }) {
             {users == null || users.length === 0 ? (
                 <>
                     <p className="text-white text-center">No friends available</p>
-                    <button onClick={() => setAddFriendOpened(true)}
-                            className={"w-2/6 self-center m-2 p-2 bg-green-400 text-white rounded items-center"}>Search Friend
-                    </button>
                 </>
             ) : (
                 <>
-                    <h3 className="text-2xl font-semibold mb-4 text-center">
-                        Friends: {users.length}
-                    </h3>
                     <ul className="space-y-2">
                         {users.map((user) => (
-                            <li key={user.id} className="flex justify-between items-center">
-                                <span>{user.username}</span>
+                            <li key={user.id}
+                                className="flex justify-between items-center bg-white text-black rounded-lg p-4 shadow-md">
+                                <div className="flex items-center space-x-4">
+                                    <img src={`../../../public/${user.avatar}`} alt={`${user.username}'s avatar`}
+                                         className="w-10 h-10 rounded-full"/>
+                                    <span className="text-xl font-semibold">{user.username}</span>
+                                </div>
                                 <button
                                     onClick={() => onRemoveFriend(user.id.toString())}
-                                    className="ml-2 p-2 bg-red-800 text-white rounded"
+                                    className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                 >
                                     Remove Friend
                                 </button>
