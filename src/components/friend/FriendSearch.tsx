@@ -3,6 +3,7 @@ import useUsers from "../../hooks/useUsers.ts";
 import {NotificationCard} from "../notifications/notificationCard/NotificationCard.tsx";
 import {NotificationType} from "../../models/Notification.ts";
 import SecurityContext from "../../context/SecurityContext.ts";
+import UserProfileCard from "../player/PlayerCardHover.tsx";
 
 interface FriendSearchProps {
     onAddFriend: (userId: string) => void;
@@ -13,9 +14,18 @@ export function FriendSearch({onAddFriend, onClose}: FriendSearchProps) {
     const {loggedUserId} = useContext(SecurityContext);
     const [searchTerm, setSearchTerm] = useState("");
     const {searchedUsers, isLoading, isError, searchUsers} = useUsers();
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
     const handleSearch = async () => {
         searchUsers(searchTerm);
+    };
+
+    const handleUserClick = (userId: string) => {
+        setSelectedUserId(userId);
+    };
+
+    const handleClose = () => {
+        setSelectedUserId(null);
     };
 
     if (isLoading) {
@@ -48,7 +58,8 @@ export function FriendSearch({onAddFriend, onClose}: FriendSearchProps) {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-5 rounded-lg shadow-lg w-full max-w-md">
                 <div className={"flex-row "}>
-                    <button onClick={onClose} className="bg-gray-400 mt-2 p-2 rounded-xl text-gray-500 w-1/6 hover:text-black ">
+                    <button onClick={onClose}
+                            className="bg-gray-400 mt-2 p-2 rounded-xl text-gray-500 w-1/6 hover:text-black ">
                         Close
                     </button>
                     <input
@@ -63,13 +74,19 @@ export function FriendSearch({onAddFriend, onClose}: FriendSearchProps) {
                     </button>
                 </div>
                 <ul className="mt-4 ">
+                    <p className={"text-gray-600"}>Click name for more info</p>
                     {searchedUsers && searchedUsers.length > 0 ? (
                         searchedUsers.map((user) => {
                             const isFriend = user.isFriend;
                             const isSelf = user.id === loggedUserId;
                             return (
                                 <li key={user.id} className="flex justify-between items-center">
-                                    <span className={"text-black"}>{user.username}</span>
+                                    <span
+                                        className={"text-black cursor-pointer"}
+                                        onClick={() => handleUserClick(user.id)}
+                                    >
+                                        {user.username}
+                                    </span>
                                     {isSelf ? (
                                         <span className="ml-2 p-2 bg-gray-500 rounded">This is you</span>
                                     ) : isFriend ? (
@@ -81,6 +98,11 @@ export function FriendSearch({onAddFriend, onClose}: FriendSearchProps) {
                                         >
                                             Add Friend
                                         </button>
+                                    )}
+                                    {selectedUserId === user.id && (
+                                        <div className="absolute z-50 bg-white p-4 rounded-lg shadow-lg">
+                                            <UserProfileCard userId={user.id} close={handleClose} add={() => onAddFriend(user.username)}/>
+                                        </div>
                                     )}
                                 </li>
                             );

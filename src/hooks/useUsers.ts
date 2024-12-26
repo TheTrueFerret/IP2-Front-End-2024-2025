@@ -22,6 +22,7 @@ interface UseUsersReturn {
     searchUsers: (searchTerm: string) => void;
     isError: boolean;
     isLoading: boolean;
+    isFriend: boolean;
     friendRequest: (userName: string) => boolean;
     acceptFriendRequest: (friendRequestId: string) => void;
     rejectFriendRequest: (friendRequestId: string) => void;
@@ -76,6 +77,7 @@ const useUsers = (userId?: string): UseUsersReturn => {
         retry: 3,
     });
 
+
     const searchUsers = (term: string) => {
         setSearchTerm(term);
     };
@@ -100,6 +102,8 @@ const useUsers = (userId?: string): UseUsersReturn => {
         declineRequest(friendRequestId, loggedUserId!);
     }
 
+    const isFriend = friends?.some(friend => friend.id === loggedUserId) ?? false;
+
     return {
         acceptFriendRequest,
         rejectFriendRequest,
@@ -110,7 +114,8 @@ const useUsers = (userId?: string): UseUsersReturn => {
         isLoading: isLoadingUser || isLoadingFriends || isLoadingSearch || isLoadingFriendRequests,
         isError: isErrorUser || isErrorFriends || isErrorSearch || isErrorFriendRequests,
         friendRequest,
-        friendRequests: friendRequests ?? []
+        friendRequests: friendRequests ?? [],
+        isFriend
     };
 };
 

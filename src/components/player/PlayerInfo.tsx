@@ -1,7 +1,14 @@
-import {User} from "../../models/User.ts";
+import useUsers from "../../hooks/useUsers.ts";
+import SecurityContext from "../../context/SecurityContext.ts";
+import {useContext} from "react";
 
+export function PlayerInfo({userId}:{ userId: string}) {
+    const {user,isFriend} = useUsers(userId);
+    const {loggedUserId} = useContext(SecurityContext);
+    if (!user) {
+        return <h1>No user found</h1>;
+    }
 
-export function PlayerInfo({user,userId}:{user: User, userId: string}) {
     return (
         <div className="flex flex-row items-start gap-8">
             <div className="w-32 h-32 rounded-full overflow-hidden">
@@ -17,8 +24,10 @@ export function PlayerInfo({user,userId}:{user: User, userId: string}) {
                 <p className="text-lg mt-2">Wins: {user.gamesWon} 🏆</p>
                 <p className="text-lg">Games Played: {user.gamesPlayed}</p>
                 {/*TODO: When already friend remove friend button. Add Friend Button REPLACE TRUE WHEN WITH THE FIX */}
-                {userId === user.id.toString() && true ? (
+                {userId === loggedUserId ? (
                     <p> You cannot add yourself as a friend! </p>
+                ) : isFriend ? (
+                    <p>You are already friends with this user.</p>
                 ) : (
                     <>
                         <button

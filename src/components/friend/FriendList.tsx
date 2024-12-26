@@ -4,17 +4,19 @@ import {Friend} from "../../models/Friend.ts";
 import useUsers from "../../hooks/useUsers.ts";
 import {NotificationType} from "../../models/Notification.ts";
 import {NotificationAlert} from "../notifications/notificationAlert/NotificationAlert.tsx";
+import {Link} from "react-router-dom";
 
 export function FriendList({users}: { users: Friend[] | null }) {
     const [addFriendOpened, setAddFriendOpened] = useState(false);
-    const [requestSent, setRequesSent] = useState(false);
+    const [requestSent, setRequestSent] = useState(false);
     const [sentUsername, setSentUsername] = useState<string | null>(null);
     const {friendRequest} = useUsers();
 
     function onAddFriend(username: string) {
         if (friendRequest(username)) {
-            setRequesSent(true);
+            setRequestSent(true);
             setSentUsername(username);
+            setTimeout(() => setRequestSent(false), 3000); // Hide the popup after 3 seconds
         }
     }
 
@@ -33,14 +35,14 @@ export function FriendList({users}: { users: Friend[] | null }) {
             )}
             {requestSent && (
                 <NotificationAlert
-                    buttons={true}
-                    closeButtonText={"Close"}
+                    buttons={false}
                     notification={{
-                        title: 'Friend request sent',
-                        description: 'You sent a friend request to ' + sentUsername,
-                        type: NotificationType.Warning,
+                        title: 'Friend Request Sent',
+                        description: `Friend request sent to ${sentUsername}`,
+                        type: NotificationType.Success,
                     }}
-                    onClose={() => setRequesSent(!requestSent)}/>
+                    onClose={() => setRequestSent(false)}
+                />
             )}
             {users == null || users.length === 0 ? (
                 <>
@@ -55,7 +57,7 @@ export function FriendList({users}: { users: Friend[] | null }) {
                                 <div className="flex items-center space-x-4">
                                     <img src={`../../../public/${user.avatar}`} alt={`${user.username}'s avatar`}
                                          className="w-10 h-10 rounded-full"/>
-                                    <span className="text-xl font-semibold">{user.username}</span>
+                                    <Link to={`/UserProfile/${user.id}`} className="text-lg font-bold">{user.username}</Link>
                                 </div>
                                 <button
                                     onClick={() => onRemoveFriend(user.id.toString())}
