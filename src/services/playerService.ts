@@ -7,18 +7,6 @@ export function getPlayerIdLocally(userId: String): String {
   return userId;
 }
 
-/*
-export async function getPlayerIdByUserId(userId: string): Promise<string | null> {
-    try {
-        const response = await axios.get<string>(`/api/game/player/${userId}`);
-        return response.data
-    } catch (error) {
-        console.log('Failed to get the lobby because of: ' + error);
-        return null;
-    }
-}
-*/
-
 
 export async function getPlayersByGameId(gameId: string): Promise<Player[]> {
   try {

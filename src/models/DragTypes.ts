@@ -1,4 +1,5 @@
 
 export const DragTypes = {
-  TILE: 'Tile'
+  TILE: 'Tile',
+  TILESET: 'Tileset'
 }

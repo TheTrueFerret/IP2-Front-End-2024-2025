@@ -2,21 +2,6 @@ import axios from "axios";
 import { Lobby } from "../models/Lobby";
 
 
-
-export function getLobbyLocally(lobbyId: string) {
-    return {
-        lobbyId: lobbyId,
-        status: "active",
-        host: { userName: "player1", profileImage: "imageLink" },
-        players: [
-            { userName: "player1", profileImage: "imageLink" },
-            { userName: "player2", profileImage: "imageLink" }
-        ],
-        minimumPlayers: 2,
-        maximumPlayers: 4,
-    }
-}
-
 export async function getLobby(lobbyId: string): Promise<Lobby | null> {
     try {
         const response = await axios.get<Lobby>(`/api/lobby/${lobbyId}`);

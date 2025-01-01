@@ -1,25 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
 import { useEffect, useState } from "react";
-import { getFieldTilesLocaly } from "../services/dataService";
+import { getPlayingFieldTiles } from "../services/tileService";
+import { useGameId } from "./useGameId";
+import { TileSet } from "../models/TileSet";
 
 
 export function useFieldTiles() {
   const queryClient = useQueryClient();
 
-  const [localFieldTiles, setLocalFieldTiles] = useState<Tile[] | undefined>(undefined);
+  const { getCachedGameId } = useGameId();
+  const gameId = getCachedGameId();
+
+  const [localFieldTileSets, setLocalFieldTiles] = useState<TileSet[]>([]);
 
   const { isLoading, isError, data } = useQuery(
     {
-      queryKey: ['fieldTiles'],
-      queryFn: () => getFieldTilesLocaly(),
+      queryKey: ['fieldTileSets'],
+      queryFn: () => {
+        if (!gameId) return Promise.resolve(null); // no gameId Return Nothing
+        getPlayingFieldTiles(gameId)
+      },
+      enabled: !!gameId, // Only fetch if gameId is set
       initialData: null,
     }
   )
 
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
       setLocalFieldTiles(data); // Set the fetched data to local state
     }
   }, [data]);
@@ -32,52 +41,96 @@ export function useFieldTiles() {
     isError: isErrorUpdatingFieldTile,
   } = useMutation({
     mutationFn: async ({ id, column, row }: { id: number, column: number, row: number }) => {
-      if (!localFieldTiles) {
+      if (!localFieldTileSets) {
         throw new Error("Tiles data is unavailable");
       }
 
-      // Update the specific tile in the tiles array
-      const updatedFieldTiles = localFieldTiles.map((tile) => {
-        if (tile.id === id) {
-          tile.gridColumn = column;
-          tile.gridRow = row;
-          return tile; // Update the grid position of the tile
-        }
-        return tile;
+      // TODO Move TileSets?
+      const updatedFieldTileSets = localFieldTileSets.map((tileSet) => {
+        const updatedTiles = tileSet.tiles.map((tile) => {
+          if (tile.id === id) {
+            tile.gridColumn = column;
+            tile.gridRow = row;
+            return tile;
+          }
+          return tile;
+        });
+
+        return { ...tileSet, tiles: updatedTiles };
       });
 
-      return updatedFieldTiles;
+      return updatedFieldTileSets;
     },
-    onSuccess: (updatedFieldTiles) => {
-      queryClient.setQueryData(['fieldTiles'], updatedFieldTiles);
-      setLocalFieldTiles(updatedFieldTiles);
+    onSuccess: (updatedFieldTileSets) => {
+      queryClient.setQueryData(['fieldTileSets'], updatedFieldTileSets);
+      setLocalFieldTiles(updatedFieldTileSets);
     },
   })
 
 
 
   const {
-    mutate: mutateAddFieldTile,
-    isPending: isAddingFieldTile,
-    isError: isErrorAddingFieldTile,
+    mutate: mutateAddTileToField,
+    isPending: isAddingTileToField,
+    isError: isErrorAddingTileToField,
   } = useMutation({
     mutationFn: async (tile: Tile) => {
-      if (!localFieldTiles) {
+      if (!localFieldTileSets) {
         throw new Error("Tiles data is unavailable");
       }
 
       // Check if the tile is already in the field
-      const isTileAlreadyInField = localFieldTiles.some((t) => t.id === tile.id);
+      const isTileAlreadyInField = localFieldTileSets.some((tileSet) => tileSet.tiles.some((t) => t.id === tile.id));
+
 
       if (!isTileAlreadyInField) {
-        const updatedFieldTiles = [...localFieldTiles, tile];
-        setLocalFieldTiles(updatedFieldTiles);
-        return updatedFieldTiles;
+
+        // probably impossible to do this because there will be an element in place before the TileSet
+        const beforeTileSet = localFieldTileSets.find(
+          tileSet => tileSet.startCoord - 1 === tile.gridColumn
+        );
+        if (beforeTileSet) {
+          return localFieldTileSets
+        }
+
+
+        const afterTileSet = localFieldTileSets.find(
+          tileSet => tileSet.endCoord + 1 === tile.gridColumn
+        );
+
+        let updatedFieldTileSets;
+
+        if (afterTileSet != null) {
+          updatedFieldTileSets = localFieldTileSets.map((tileSet) => {
+            if (tileSet == afterTileSet) {
+              return {
+                ...tileSet,
+                endCoord: tile.gridColumn,
+                tiles: [...tileSet.tiles, tile]
+              };
+            }
+            return tileSet;
+          });
+        } else {
+          console.log('No TileSet found after the Tile, creating a new one');
+          const newTileSet = {
+            gridRow: tile.gridRow,
+            startCoord: tile.gridColumn - 1,
+            endCoord: tile.gridColumn,
+            tiles: [tile]
+          };
+          updatedFieldTileSets = [...localFieldTileSets, newTileSet];
+        }
+        console.log('Added a Tile to fieldTiles:', updatedFieldTileSets);
+        setLocalFieldTiles(updatedFieldTileSets);
+        return updatedFieldTileSets;
+
       }
-      return localFieldTiles;
+      console.log('Tile is already in the field!!!');
+      return localFieldTileSets;
     },
     onSuccess: (updatedFieldTiles) => {
-      queryClient.setQueryData(['fieldTiles'], updatedFieldTiles);
+      queryClient.setQueryData(['fieldTileSets'], updatedFieldTiles);
     },
   })
 
@@ -88,32 +141,43 @@ export function useFieldTiles() {
     isPending: isRemovingFieldTile,
     isError: isErrorRemovingFieldTile,
   } = useMutation({
-    mutationFn: async (tile: Tile) => {
-      if (!localFieldTiles) {
+    mutationFn: async (tileToRemove: Tile) => {
+      if (!localFieldTileSets) {
         throw new Error("Tiles data is unavailable");
       }
 
-      const updatedFieldTiles = localFieldTiles.filter((fieldTile) => fieldTile.id !== tile.id);
+      const updatedFieldTiles = localFieldTileSets.map((tileSet) => ({
+        ...tileSet,
+        tiles: tileSet.tiles.filter((tile) => tile.id !== tileToRemove.id),
+      }));
+
+      console.log('Removed a Tile fieldTiles:', updatedFieldTiles);
+
       setLocalFieldTiles(updatedFieldTiles);
       return updatedFieldTiles;
     },
     onSuccess: (updatedFieldTiles) => {
-      queryClient.setQueryData(['fieldTiles'], updatedFieldTiles);
+      queryClient.setQueryData(['fieldTileSets'], updatedFieldTiles);
     },
   })
 
 
-    const {
+  const {
     mutateAsync: mutateIsTileInField,
     isPending: isCheckingTileInField,
     isError: isErrorCheckingTileInField,
   } = useMutation({
     mutationFn: async (id: number) => {
-      if (!localFieldTiles) {
+      if (!localFieldTileSets) {
         throw new Error("Tiles data is unavailable");
       }
 
-      const isTileInField = localFieldTiles.find((tile) => tile.id === id);
+      const isTileInField = localFieldTileSets.some((tileSet) =>
+        tileSet.tiles.some((tile) => tile.id === id)
+      );
+      
+      console.log('Checking if Tile is in field:', isTileInField);
+
       return isTileInField;
     },
   })
@@ -121,20 +185,20 @@ export function useFieldTiles() {
 
 
   useEffect(() => {
-    console.log('Updated fieldTiles:', localFieldTiles);
-  }, [localFieldTiles]);
+    console.log('Updated fieldTiles:', localFieldTileSets);
+  }, [localFieldTileSets]);
 
 
   return {
     isLoadingFieldTiles: isLoading,
     isErrorFieldTiles: isError,
-    fieldTiles: localFieldTiles,
+    fieldTileSets: localFieldTileSets,
     updateFieldTile: mutateUpdateFieldTile,
     isUpdatingFieldTile,
     isErrorUpdatingFieldTile,
-    addFieldTile: mutateAddFieldTile,
-    isAddingFieldTile,
-    isErrorAddingFieldTile,
+    addFieldTile: mutateAddTileToField,
+    isAddingTileToField,
+    isErrorAddingTileToField,
     removeFieldTile: mutateRemoveFieldTile,
     isRemovingFieldTile,
     isErrorRemovingFieldTile,

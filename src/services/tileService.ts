@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Tile } from "../models/Tile";
+import { TileSet } from "../models/TileSet";
 
 
 export async function getDeckTiles(playerId: string): Promise<Tile[]> {
@@ -49,9 +50,9 @@ return [];
 
 
 
-export async function getPlayingFieldTiles(gameId: string): Promise<Tile[]> {
+export async function getPlayingFieldTiles(gameId: string): Promise<TileSet[]> {
   try {
-    const response = await axios.get<Tile[]>(`/api/tile-positions/game/${gameId}`)
+    const response = await axios.get<TileSet[]>(`/api/playingfields/${gameId}`)
     console.log(response.data)
     return response.data
   } catch (error) {
