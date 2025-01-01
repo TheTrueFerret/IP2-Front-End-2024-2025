@@ -6,15 +6,20 @@ import { DragTypes } from "../../models/DragTypes";
 interface EmptyTileProps {
   column: number;
   row: number;
-  onDrop: (id: number) => void;
+  onDropTile: (tileId: string) => void;
+  onDropTileSet?: (tileSetId: string) => void;
 }
 
-export function EmptyTile({ column, row, onDrop }: EmptyTileProps) {
+export function EmptyTile({ column, row, onDropTile, onDropTileSet }: EmptyTileProps) {
   const [{ isOver }, dropRef] = useDrop(
     () => ({
-      accept: DragTypes.TILE,
-      drop: (item: { id: number }) => {
-        onDrop(item.id);
+      accept: [DragTypes.TILE, DragTypes.TILE_SET],
+      drop: (item: { id: string; type: string }) => {
+        if (item.type == DragTypes.TILE) {
+          onDropTile(item.id);
+        } else if (item.type == DragTypes.TILE_SET && onDropTileSet) {
+          onDropTileSet(item.id);
+        }
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),

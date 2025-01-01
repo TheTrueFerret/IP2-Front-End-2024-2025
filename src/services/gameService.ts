@@ -1,5 +1,8 @@
 import axios from "axios";
 import { Game } from "../models/Game";
+import { Tile } from "../models/Tile";
+import { TileSet } from "../models/TileSet";
+import { Player } from "../models/Player";
 
 
 export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
@@ -34,4 +37,33 @@ export async function postCreateGame(lobbyId: string, roundTime: number, startTi
 // TODO implement a leaveGame Function
 export async function leaveGame() {
     
+}
+
+
+const isGeneratedId = (id: string) => /^\d{13}-\d+(\.\d+)?$/.test(id); // Matches format: <timestamp>-<random>
+
+export async function commitTurn(playerId: string, gameId: string, playingField: TileSet[], deck: Tile[]): Promise<Player | null> {
+    try {
+        // Remove IDs from newly created TileSets
+        const sanitizedPlayingField = playingField.map(tileSet => {
+            if (isGeneratedId(tileSet.id)) {
+                const { id, ...rest } = tileSet;
+                return rest;
+            }
+            return tileSet;
+        });
+        console.log(sanitizedPlayingField);
+
+        const response = await axios.post<Player>(`/api/turns/player-make-move`, {
+            playerId: playerId,
+            gameId: gameId,
+            playingField: sanitizedPlayingField,
+            deck: deck
+        })
+        console.log(response)
+        return response.data
+    } catch (error) {
+        console.log('Failed to commit turn because of: ' + error)
+        return null
+    }
 }

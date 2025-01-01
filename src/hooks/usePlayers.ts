@@ -16,7 +16,6 @@ export function usePlayers() {
         return getPlayersByGameId(gameId); // Fetch player by gameId
       },
       enabled: !!gameId, // Only fetch if gameId is set
-      retry: false,
     }
   )
 

@@ -4,7 +4,7 @@ import { DragTypes } from "../../models/DragTypes";
 
 
 interface TileProps {
-  id: number;
+  id: string;
   tileNumber: number;
   tileColor: string;
   column: number;
@@ -15,7 +15,7 @@ export function Tile({ id, tileNumber, tileColor, column, row }: TileProps) {
   const [{ opacity }, dragRef] = useDrag(
     () => ({
       type: DragTypes.TILE,
-      item: { id },
+      item: { id, type: DragTypes.TILE },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.5 : 1
       })

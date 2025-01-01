@@ -30,12 +30,11 @@ export function Deck() {
     )
   }
 
-  const handleDrop = async (id: number, column: number, row: number) => {
+  const handleDrop = async (id: string, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
     try {
       const tileInDeck = await isTileInDeck(id);
-
       console.log(tileInDeck)
 
       if (!tileInDeck) {
@@ -68,7 +67,8 @@ export function Deck() {
             key={count++}
             column={column + 1}
             row={row + 1}
-            onDrop={(id) => handleDrop(id, column + 1, row + 1)} />
+            onDropTile={(id) => handleDrop(id, column + 1, row + 1)}
+          />
         ))
       )}
 

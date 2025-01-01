@@ -2,18 +2,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: theme('colors.gray.400');
+  background-color: transparent;
+  color: white;
   border-radius: 10px;
   font-size: 60px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
   transition: transform 0.2s, box-shadow 0.2s; /* Smooth interaction */
 }
 
-.NormalTile:hover {
+.DragTileSet:hover {
   transform: translateY(-4px); /* Slight lift on hover */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+  text-shadow: 0 6px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
 }
 
 

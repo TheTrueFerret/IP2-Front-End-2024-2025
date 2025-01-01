@@ -1,7 +1,7 @@
 
 
 export interface Tile {
-  id: number;
+  id: string;
   numberValue: number;
   color: string;
   gridColumn: number;

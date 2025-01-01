@@ -1,8 +1,9 @@
 import { useDrag } from "react-dnd";
 import { DragTypes } from "../../models/DragTypes";
+import './DragTileSet.css';
 
 interface TileProps {
-  id: number;
+  id: string;
   column: number;
   row: number;
 }
@@ -10,8 +11,8 @@ interface TileProps {
 export function DragTileSet({ id, column, row }: TileProps) {
   const [{ opacity }, dragRef] = useDrag(
     () => ({
-      type: DragTypes.TILESET,
-      item: { id },
+      type: DragTypes.TILE_SET,
+      item: { id, type: DragTypes.TILE_SET},
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.5 : 1
       })
@@ -27,7 +28,7 @@ export function DragTileSet({ id, column, row }: TileProps) {
         gridColumn: column,
         gridRow: row,
       }}>
-      HandleDrag
+      :::
     </div>
   )
 }
