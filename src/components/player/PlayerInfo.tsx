@@ -31,7 +31,6 @@ export function PlayerInfo({userId}:{ userId: string}) {
                 {/*Add wins and games played to the DTO in backend.*/}
                 <p className="text-lg mt-2">Wins: {user.gamesWon} 🏆</p>
                 <p className="text-lg">Games Played: {user.gamesPlayed}</p>
-                {/*TODO: When already friend remove friend button. Add Friend Button REPLACE TRUE WHEN WITH THE FIX */}
                 {userId === loggedUserId ? (
                     <p> You cannot add yourself as a friend! </p>
                 ) : isFriend ? (

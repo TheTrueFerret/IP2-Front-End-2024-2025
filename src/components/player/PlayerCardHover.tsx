@@ -23,9 +23,6 @@ export function UserProfileCard({userId, close, add}: { userId: string, close: (
         close();
     };
 
-    console.log(user.avatar);
-    console.log(isFriend);
-
     return (
         <div className="flex flex-row items-start gap-8 bg-gray-500 rounded-lg">
             <div className="w-32 h-32 rounded-full overflow-hidden">
