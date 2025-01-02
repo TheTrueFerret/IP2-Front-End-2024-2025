@@ -48,15 +48,18 @@ export function UserProfileCard({userId, close, add}: { userId: string, close: (
                     Close
                 </button>
                 {isFriend ? (
-                    <span className="mt-2 p-2 bg-gray-500 text-white rounded-xl">
-        Already a Friend
-    </span>
+                    <button
+                        onClick={handleAddFriend}
+                        className="mt-2 p-2 bg-red-500 text-white rounded-xl"
+                    >
+                        Remove Friend
+                    </button>
                 ) : (
                     <button
                         onClick={handleAddFriend}
                         className="mt-2 p-2 bg-green-500 text-white rounded-xl"
                     >
-                        Add
+                    Add Friend
                     </button>
                 )}
             </div>

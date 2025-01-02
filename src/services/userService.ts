@@ -65,3 +65,11 @@ export function declineRequest(requestId: string, userId: string): Promise<void>
             throw error;
         });
 }
+
+export function removeFromFriendList(userId: string, friendId: string): Promise<void> {
+    return axios.post(`/api/gameuser/friend/remove/${userId}?friendId=${friendId}`).then((response) => response.data)
+        .catch((error) => {
+            console.error('User Service: Error removing friend:', error);
+            throw error;
+        });
+}

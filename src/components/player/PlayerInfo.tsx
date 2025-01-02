@@ -3,10 +3,18 @@ import SecurityContext from "../../context/SecurityContext.ts";
 import {useContext} from "react";
 
 export function PlayerInfo({userId}:{ userId: string}) {
-    const {user,isFriend} = useUsers(userId);
+    const {user,isFriend,friendRequest,removeFriend} = useUsers(userId);
     const {loggedUserId} = useContext(SecurityContext);
     if (!user) {
         return <h1>No user found</h1>;
+    }
+
+    const handleAddFriend = () => {
+        friendRequest(user.username);
+    }
+
+    const handleRemoveFriend = () => {
+        removeFriend(user.id.toString());
     }
 
     return (
@@ -27,13 +35,19 @@ export function PlayerInfo({userId}:{ userId: string}) {
                 {userId === loggedUserId ? (
                     <p> You cannot add yourself as a friend! </p>
                 ) : isFriend ? (
-                    <p>You are already friends with this user.</p>
+                    <button
+                        className="mt-4 py-2 px-6 bg-red-500 text-white rounded-lg hover:bg-green-600 transition"
+                        onClick={handleRemoveFriend}
+                    >
+                        Remove Friend
+                    </button>
                 ) : (
                     <>
                         <button
                             className="mt-4 py-2 px-6 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+                            onClick={handleAddFriend}
                         >
-                            Add Friend
+                        Add Friend
                         </button>
                     </>
                 )}
