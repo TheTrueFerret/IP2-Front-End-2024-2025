@@ -39,25 +39,97 @@ export function useFieldTiles() {
     isError: isErrorUpdatingFieldTile,
   } = useMutation({
     mutationFn: async ({ id, column, row }: { id: string, column: number, row: number }) => {
-      if (!localFieldTileSets) {
+      if (!localFieldTileSets || !Array.isArray(localFieldTileSets)) {
         throw new Error("Tiles data is unavailable");
       }
 
-      // TODO Move TileSets?
-      const updatedFieldTileSets = localFieldTileSets.map((tileSet) => {
-        const updatedTiles = tileSet.tiles.map((tile) => {
-          if (tile.id === id) {
-            tile.gridColumn = column;
-            tile.gridRow = row;
-            return tile;
+      const tileSetWithTile: TileSet | undefined = localFieldTileSets.find((tileSet) => tileSet.tiles.find((tile) => tile.id === id));
+      const foundTile: Tile | undefined = tileSetWithTile?.tiles.find((tile) => tile.id === id);
+
+      if (!tileSetWithTile || !foundTile) {
+        console.error("Tile not found in field");
+        return localFieldTileSets;
+      }
+
+      // Special case: If the tile is added to the back of the TileSet
+      if (tileSetWithTile.endCoord + 1 == column && tileSetWithTile.gridRow == row) {
+        const updatedFieldTileSets = localFieldTileSets.map((tileSet) => {
+          if (tileSet.id == tileSetWithTile.id) {
+            const updatedTiles = tileSet.tiles.map((tile) => {
+              if (tile.id === id) {
+                return {
+                  ...tile,
+                  gridColumn: column - 1,
+                };
+              } else if (
+                foundTile.gridColumn < column &&
+                foundTile.gridColumn < tile.gridColumn &&
+                tile.gridColumn <= column
+              ) {
+                return {
+                  ...tile,
+                  gridColumn: tile.gridColumn - 1,
+                };
+              }
+              return tile;
+            });
+            return {
+              ...tileSet,
+              tiles: updatedTiles.sort((a, b) => a.gridColumn - b.gridColumn), // Sort tiles by gridColumn to make sure when they are returned to the backend they are in the correct order!!!
+            };
           }
-          return tile;
+          return tileSet;
         });
+        return updatedFieldTileSets;
+      }
 
-        return { ...tileSet, tiles: updatedTiles };
-      });
 
-      return updatedFieldTileSets;
+      // If the tile is not moved to the back of the oldTileSet
+      if (column < tileSetWithTile.startCoord || tileSetWithTile.endCoord < column || tileSetWithTile.gridRow != row) {
+
+        // Remove Tile from current TileSet
+        const oldTileSet: TileSet = tileSetWithTile;
+        oldTileSet.tiles = tileSetWithTile.tiles.filter((tile) => tile.id !== id);
+
+        // make a temporary copy of the tileSets
+        let updatedTileSets: TileSet[] = localFieldTileSets;
+
+        // If the TileSet where the tile comes from is empty... remove it
+        if (oldTileSet.tiles.length == 0) {
+          updatedTileSets = localFieldTileSets.filter((tileSet) => tileSet.id !== oldTileSet.id);
+          console.log('TileSet is empty, removing it from the field');
+        } else {
+          // RemoveGaps from oldTileSet
+          // Move the start coord up 1 if the first tile is removed
+          const firstTile: boolean = oldTileSet.startCoord == foundTile.gridColumn;
+          if (firstTile) {
+            oldTileSet.startCoord += 1;
+          }
+
+          if (!firstTile) {
+            oldTileSet.tiles = oldTileSet.tiles.map((tile) => {
+              if (foundTile.gridColumn < tile.gridColumn) {
+                return {
+                  ...tile,
+                  gridColumn: tile.gridColumn - 1,
+                };
+              }
+              return tile;
+            });
+            oldTileSet.endCoord -= 1;
+          }
+        }
+        [...updatedTileSets, oldTileSet];
+
+        const updatedTile: Tile = {
+          ...foundTile as Tile,
+          gridColumn: column,
+          gridRow: row,
+        };
+
+        return addTileToTileSetOrCreateNewTileSet(updatedTile, updatedTileSets);
+      }
+      return localFieldTileSets;
     },
     onSuccess: (updatedFieldTileSets) => {
       queryClient.setQueryData(['fieldTileSets'], updatedFieldTileSets);
@@ -73,47 +145,15 @@ export function useFieldTiles() {
     isError: isErrorAddingTileToField,
   } = useMutation({
     mutationFn: async (tile: Tile) => {
-      // To temporarily generate unique IDs for new TileSets
-      const generateUniqueId = () => `${Date.now()}-${Math.random()}`;
 
       if (!localFieldTileSets || localFieldTileSets.length == 0 || !localFieldTileSets[0]) {
-        return [{id: generateUniqueId(), tiles: [tile], gridRow: tile.gridRow, startCoord: tile.gridColumn, endCoord: tile.gridColumn}] as TileSet[];
+        return [{ id: generateUniqueId(), tiles: [tile], gridRow: tile.gridRow, startCoord: tile.gridColumn, endCoord: tile.gridColumn }] as TileSet[];
       }
-
       // Check if the tile is already in the field
       const isTileAlreadyInField = localFieldTileSets.some((tileSet) => tileSet.tiles.some((t) => t.id === tile.id));
 
       if (!isTileAlreadyInField) {
-        const afterTileSet = localFieldTileSets.find(
-          tileSet => tileSet.endCoord + 1 === tile.gridColumn
-        );
-
-        let updatedFieldTileSets;
-
-        if (afterTileSet != null) {
-          updatedFieldTileSets = localFieldTileSets.map((tileSet) => {
-            if (tileSet == afterTileSet) {
-              return {
-                ...tileSet,
-                endCoord: tile.gridColumn,
-                tiles: [...tileSet.tiles, tile]
-              };
-            }
-            return tileSet;
-          });
-        } else {
-          const newTileSet = {
-            // IMPORTANT: DO NOT GIVE THIS ID TO THE BACKEND!!!!
-            // WHEN A NEW TILESET IS CREATED, NO ID WILL BE GIVEN TO THE BACKEND TO AVOID DUPLICATE ID'S
-            id: generateUniqueId(),
-            gridRow: tile.gridRow,
-            startCoord: tile.gridColumn,
-            endCoord: tile.gridColumn,
-            tiles: [tile]
-          };
-          updatedFieldTileSets = [...localFieldTileSets, newTileSet];
-        }
-        return updatedFieldTileSets;
+        return addTileToTileSetOrCreateNewTileSet(tile, localFieldTileSets);
       }
       return localFieldTileSets;
     },
@@ -123,6 +163,42 @@ export function useFieldTiles() {
     },
   })
 
+
+  function generateUniqueId() {
+    // To temporarily generate unique IDs for new TileSets
+    return `${Date.now()}-${Math.random()}`;
+  }
+
+
+  // This Function adds a tile to a TileSet or creates a new TileSet
+  function addTileToTileSetOrCreateNewTileSet(tile: Tile, updatedFieldTiles: TileSet[]) {
+    const afterTileSet = localFieldTileSets.find(
+      tileSet => tileSet.endCoord + 1 === tile.gridColumn
+    );
+    if (afterTileSet != null) {
+      return updatedFieldTiles.map((tileSet) => {
+        if (tileSet == afterTileSet) {
+          return {
+            ...tileSet,
+            endCoord: tile.gridColumn,
+            tiles: [...tileSet.tiles, tile]
+          };
+        }
+        return tileSet;
+      });
+    } else {
+      const newTileSet = {
+        // IMPORTANT: DO NOT GIVE THIS ID TO THE BACKEND!!!!
+        // WHEN A NEW TILESET IS CREATED, NO ID WILL BE GIVEN TO THE BACKEND TO AVOID DUPLICATE ID'S
+        id: generateUniqueId(),
+        gridRow: tile.gridRow,
+        startCoord: tile.gridColumn,
+        endCoord: tile.gridColumn,
+        tiles: [tile]
+      };
+      return [...updatedFieldTiles, newTileSet];
+    }
+  }
 
 
   const {
@@ -160,7 +236,7 @@ export function useFieldTiles() {
       const tileSetInField = localFieldTileSets.find((tileSet) =>
         tileSet.tiles.find((tile) => tile.id === id)
       );
-      
+
       console.log('Checking if Tile is in field:', tileSetInField);
 
       if (!tileSetInField) {

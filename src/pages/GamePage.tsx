@@ -12,6 +12,7 @@ import { useCurrentPlayerTurn } from "../hooks/useCurrentPlayerTurn";
 import { BackButton } from "../components/BackButton";
 import { PlayerTurnList } from "../components/PlayerTurnList";
 import { useGameId } from "../hooks/useGameId";
+import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -19,6 +20,7 @@ const dragOptions = {
 
 export function GamePage() {
   const [showNotification, setShowNotification] = useState(false);
+  const [yourTurnNotification, setYourTurnNotification] = useState(false);
   const { playerId } = usePlayerId();
   const { currentPlayerTurn } = useCurrentPlayerTurn();
   const { getGameId } = useGameId();
@@ -33,6 +35,10 @@ export function GamePage() {
     getGameId(playerId);
   }, [playerId]);
 
+  console.log("Current Player Turn: ", currentPlayerTurn);
+  const shouldDisable = currentPlayerTurn?.id !== playerId;
+  console.log("Should Disable: ", shouldDisable);
+
   const handleExit = () => {
     setShowNotification(true);
   };
@@ -40,6 +46,19 @@ export function GamePage() {
   const handleCloseNotification = () => {
     setShowNotification(false);
   };
+
+  const handleClosePupupNotification = () => {
+    setYourTurnNotification(false);
+  }
+
+  useEffect(() => {
+    if (currentPlayerTurn?.id === playerId) {
+      setYourTurnNotification(true);
+    }
+  }, [currentPlayerTurn]);
+  //if (currentPlayerTurn?.id === playerId) {
+  //  setYourTurnNotification(true);
+  //}
 
   const handleExecuteExit = () => {
     navigate('/');
@@ -50,9 +69,9 @@ export function GamePage() {
       <BackButton backAction={handleExit} />
       <PlayerTurnList />
       <DndProvider backend={HTML5Backend} options={dragOptions}>
-        <PlayingField />
-        <Deck />
-        <ActionPanel />
+        <PlayingField disabled={shouldDisable} />
+        <Deck/>
+        <ActionPanel disabled={shouldDisable} />
       </DndProvider>
       {showNotification && (
         <NotificationAlert
@@ -67,6 +86,15 @@ export function GamePage() {
           closeButtonText="No"
           executeButtonText="Yes"
         />
+      )}
+      {yourTurnNotification && (
+        <NotificationPopup
+        notification={{
+            title: 'IT\'S YOUR TURN!!!!!',
+            description: 'Drag Tiles on the Playing Field or Draw a Tile',
+            type: NotificationType.Info,
+          }}
+        onClose={handleClosePupupNotification} />
       )}
     </div>
   )

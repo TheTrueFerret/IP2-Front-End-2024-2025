@@ -8,7 +8,7 @@ interface EmptyTileProps {
   row: number;
   onDropTile: (tileId: string) => void;
   onDropTileSet?: (tileSetId: string) => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 export function EmptyTile({ column, row, onDropTile, onDropTileSet, disabled }: EmptyTileProps) {

@@ -7,7 +7,11 @@ import { useFieldTiles } from "../../hooks/useFieldTiles";
 import { usePlayerId } from "../../hooks/usePlayerId";
 
 
-export function ActionPanel() {
+interface ActionPanelProps {
+    disabled: boolean;
+}
+
+export function ActionPanel({disabled}: ActionPanelProps) {
     const { drawTile } = useDeckTiles()
     const [score] = useState(2000000);
     const { getCachedGameId } = useGameId();
@@ -38,12 +42,16 @@ export function ActionPanel() {
             <div className="text-white text-2xl font-semibold justify-self-center">Score: {score.toLocaleString()}</div>
 
             <div className="flex space-x-4 justify-center items-center flex-grow w-full">
-                <button className="w-[70px] h-[130px] bg-yellow-200 rounded-lg transition-all hover:scale-105 text-2xl font-semibold"
-                    onClick={drawTileFunction}>
+                <button className={`w-[70px] h-[130px] bg-yellow-200 rounded-lg transition-all text-2xl font-semibold
+                ${disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}`}
+                    onClick={drawTileFunction}
+                    disabled={disabled}>
                     Draw Tile
                 </button>s
-                <button className="w-[70px] h-[130px] bg-green-500 rounded-lg transition-all hover:scale-105 text-2xl font-semibold"
-                    onClick={nextTurn}>
+                <button className={`w-[70px] h-[130px] bg-green-500 rounded-lg transition-all text-2xl font-semibold
+                ${disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}`}
+                    onClick={nextTurn}
+                    disabled={disabled}>
                     Next Turn
                 </button>
             </div>

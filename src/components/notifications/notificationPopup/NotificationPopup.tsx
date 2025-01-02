@@ -10,7 +10,7 @@ export function NotificationPopup({ notification, onClose }: NotificationPopupPr
     return (
         <div className={`notification-popup bg-neutral-900/60 backdrop-blur`}>
             <div className="notification-header">
-                <h4>{`${notification.type}: ${notification.title}`}</h4>
+                <h4>{`${notification.title}`}</h4>
                 <button onClick={onClose} className="close-button">
                     ×
                 </button>

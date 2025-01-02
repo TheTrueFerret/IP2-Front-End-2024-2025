@@ -28,7 +28,7 @@ export function Tile({ id, tileNumber, tileColor, column, row, disabled }: TileP
     <div ref={dragRef}
       className='NormalTile'
       style={{
-        opacity: opacity || disabled ? 0.5 : 1,
+        opacity: disabled ? 0.5 : opacity,
         color: tileColor,
         gridColumn: column,
         gridRow: row,

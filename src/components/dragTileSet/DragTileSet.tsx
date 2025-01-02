@@ -25,7 +25,7 @@ export function DragTileSet({ id, column, row, disabled }: TileProps) {
     <div ref={dragRef}
       className='DragTileSet'
       style={{
-        opacity: opacity || disabled ? 0.5 : 1,
+        opacity: disabled ? 0.5 : opacity,
         gridColumn: column,
         gridRow: row,
         pointerEvents: disabled ? "none" : "auto", // Disable interaction

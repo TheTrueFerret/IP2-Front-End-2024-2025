@@ -1,7 +1,5 @@
-import { useCurrentPlayerTurn } from "../../hooks/useCurrentPlayerTurn";
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
-import { usePlayerId } from "../../hooks/usePlayerId";
 import { NotificationType } from "../../models/Notification";
 import { DragTileSet } from "../dragTileSet/DragTileSet";
 import { EmptyTile } from "../emptyTile/EmptyTile";
@@ -10,12 +8,13 @@ import { Tile } from "../tile/Tile"
 import "./PlayingField.css"
 
 
+interface PlayingFieldProps {
+  disabled: boolean;
+}
 
-export function PlayingField() {
+export function PlayingField({disabled}: PlayingFieldProps) {
   const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets, updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles();
   const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles();
-  const { getCachedCurrentPlayerTurn } = useCurrentPlayerTurn();
-  const { playerId } = usePlayerId();
 
   const hasError = isErrorDeckTiles || isErrorFieldTiles;
   const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
@@ -37,21 +36,16 @@ export function PlayingField() {
   }
 
 
-  const currentPlayerTurn = getCachedCurrentPlayerTurn();
-  console.log("Current Player Turn: ", currentPlayerTurn);
-  const shouldDisable = currentPlayerTurn?.id !== playerId;
-
-
   const handleDropTile = async (id: string, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
     try {
       const tileInField = await isTileInField(id);
-      console.log(tileInField);
+      console.log("tile in field? " + tileInField);
 
       if (!tileInField) {
         const tileInDeck = await isTileInDeck(id);
-        console.log(tileInDeck);
+        console.log("tile in the deck? " + tileInDeck);
 
         if (tileInDeck) {
           removeDeckTile(tileInDeck)
@@ -85,8 +79,9 @@ export function PlayingField() {
               key={countEmptyTile++}
               column={column + 1}
               row={row + 1}
-              onDropTile={(tileId) => !shouldDisable && handleDropTile(tileId, column + 1, row + 1)}
-              onDropTileSet={(tileSetId) => !shouldDisable && handleDropTileSet(tileSetId, column + 1, row + 1)}
+              onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
+              onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
+              disabled={disabled}
             />
           ))
         )}
@@ -103,9 +98,9 @@ export function PlayingField() {
             key={countEmptyTile++}
             column={column + 1}
             row={row + 1}
-            onDropTile={(tileId) => !shouldDisable && handleDropTile(tileId, column + 1, row + 1)}
-            onDropTileSet={(tileSetId) => !shouldDisable && handleDropTileSet(tileSetId, column + 1, row + 1)}
-            disabled={shouldDisable}
+            onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
+            onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
+            disabled={disabled}
           />
         ))
       )}
@@ -119,7 +114,7 @@ export function PlayingField() {
             tileColor={tile.color}
             column={tile.gridColumn}
             row={tile.gridRow}
-            disabled={shouldDisable}
+            disabled={disabled}
           />
         ));
       })}
@@ -130,7 +125,7 @@ export function PlayingField() {
           id={tileSet.id}
           column={tileSet.startCoord - 1}
           row={tileSet.gridRow}
-          disabled={shouldDisable}
+          disabled={disabled}
         />
       ))}
     </section>
