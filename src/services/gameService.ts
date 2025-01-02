@@ -68,3 +68,17 @@ export async function commitTurn(playerId: string, gameId: string, playingField:
         return null
     }
 }
+
+
+
+export async function getGameIdByPlayerId(playerId: string): Promise<string> {
+    try {
+        const response = await axios.get<string>(`/api/games/player/${playerId}`);
+        console.log(response);
+        return response.data;
+    }
+    catch (error) {
+        console.log('Failed to get game id because of: ' + error);
+        return '';
+    }
+}

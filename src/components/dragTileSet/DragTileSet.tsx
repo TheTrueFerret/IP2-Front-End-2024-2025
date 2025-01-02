@@ -6,9 +6,10 @@ interface TileProps {
   id: string;
   column: number;
   row: number;
+  disabled: boolean;
 }
 
-export function DragTileSet({ id, column, row }: TileProps) {
+export function DragTileSet({ id, column, row, disabled }: TileProps) {
   const [{ opacity }, dragRef] = useDrag(
     () => ({
       type: DragTypes.TILE_SET,
@@ -24,9 +25,10 @@ export function DragTileSet({ id, column, row }: TileProps) {
     <div ref={dragRef}
       className='DragTileSet'
       style={{
-        opacity: opacity,
+        opacity: opacity || disabled ? 0.5 : 1,
         gridColumn: column,
         gridRow: row,
+        pointerEvents: disabled ? "none" : "auto", // Disable interaction
       }}>
       :::
     </div>

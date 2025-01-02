@@ -68,6 +68,7 @@ export function Deck() {
             column={column + 1}
             row={row + 1}
             onDropTile={(id) => handleDrop(id, column + 1, row + 1)}
+            disabled={false}
           />
         ))
       )}
@@ -80,6 +81,7 @@ export function Deck() {
           tileColor={tile.color}
           column={tile.gridColumn}
           row={tile.gridRow}
+          disabled={false}
         />
       )}
     </div>

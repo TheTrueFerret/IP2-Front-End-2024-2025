@@ -8,9 +8,10 @@ interface EmptyTileProps {
   row: number;
   onDropTile: (tileId: string) => void;
   onDropTileSet?: (tileSetId: string) => void;
+  disabled?: boolean;
 }
 
-export function EmptyTile({ column, row, onDropTile, onDropTileSet }: EmptyTileProps) {
+export function EmptyTile({ column, row, onDropTile, onDropTileSet, disabled }: EmptyTileProps) {
   const [{ isOver }, dropRef] = useDrop(
     () => ({
       accept: [DragTypes.TILE, DragTypes.TILE_SET],
@@ -27,7 +28,7 @@ export function EmptyTile({ column, row, onDropTile, onDropTileSet }: EmptyTileP
     }),
     []
   );
-  
+
 
   return (
     <div
@@ -37,8 +38,11 @@ export function EmptyTile({ column, row, onDropTile, onDropTileSet }: EmptyTileP
         gridColumn: column,
         gridRow: row,
         backgroundColor: isOver ? "lightblue" : "transparent",
-        borderRadius: 10
-      }}>
+        borderRadius: 10,
+        pointerEvents: disabled ? "none" : "auto", // Disable interaction
+        opacity: disabled ? 0.5 : 1, // Add visual indication of being disabled
+      }}
+    >
     </div>
   )
 }

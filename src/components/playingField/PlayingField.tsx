@@ -1,5 +1,7 @@
+import { useCurrentPlayerTurn } from "../../hooks/useCurrentPlayerTurn";
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
+import { usePlayerId } from "../../hooks/usePlayerId";
 import { NotificationType } from "../../models/Notification";
 import { DragTileSet } from "../dragTileSet/DragTileSet";
 import { EmptyTile } from "../emptyTile/EmptyTile";
@@ -10,8 +12,10 @@ import "./PlayingField.css"
 
 
 export function PlayingField() {
-  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets, updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles()
-  const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets, updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles();
+  const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles();
+  const { getCachedCurrentPlayerTurn } = useCurrentPlayerTurn();
+  const { playerId } = usePlayerId();
 
   const hasError = isErrorDeckTiles || isErrorFieldTiles;
   const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
@@ -32,6 +36,10 @@ export function PlayingField() {
     );
   }
 
+
+  const currentPlayerTurn = getCachedCurrentPlayerTurn();
+  console.log("Current Player Turn: ", currentPlayerTurn);
+  const shouldDisable = currentPlayerTurn?.id !== playerId;
 
 
   const handleDropTile = async (id: string, column: number, row: number) => {
@@ -68,26 +76,25 @@ export function PlayingField() {
 
   let countEmptyTile: number = 1;
 
-
   if (!Array.isArray(fieldTileSets) || fieldTileSets.length === 0) {
     return (
       <section className='PlayingField'>
-      {[...Array(7)].map((_, row) =>
-        [...Array(17)].map((_, column) => (
-          <EmptyTile
-            key={countEmptyTile++}
-            column={column + 1}
-            row={row + 1}
-            onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
-            onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
-          />
-        ))
-      )}
+        {[...Array(7)].map((_, row) =>
+          [...Array(17)].map((_, column) => (
+            <EmptyTile
+              key={countEmptyTile++}
+              column={column + 1}
+              row={row + 1}
+              onDropTile={(tileId) => !shouldDisable && handleDropTile(tileId, column + 1, row + 1)}
+              onDropTileSet={(tileSetId) => !shouldDisable && handleDropTileSet(tileSetId, column + 1, row + 1)}
+            />
+          ))
+        )}
       </section>
     )
   }
 
-  
+
   return (
     <section className='PlayingField'>
       {[...Array(7)].map((_, row) =>
@@ -96,8 +103,9 @@ export function PlayingField() {
             key={countEmptyTile++}
             column={column + 1}
             row={row + 1}
-            onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
-            onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
+            onDropTile={(tileId) => !shouldDisable && handleDropTile(tileId, column + 1, row + 1)}
+            onDropTileSet={(tileSetId) => !shouldDisable && handleDropTileSet(tileSetId, column + 1, row + 1)}
+            disabled={shouldDisable}
           />
         ))
       )}
@@ -111,6 +119,7 @@ export function PlayingField() {
             tileColor={tile.color}
             column={tile.gridColumn}
             row={tile.gridRow}
+            disabled={shouldDisable}
           />
         ));
       })}
@@ -121,6 +130,7 @@ export function PlayingField() {
           id={tileSet.id}
           column={tileSet.startCoord - 1}
           row={tileSet.gridRow}
+          disabled={shouldDisable}
         />
       ))}
     </section>
