@@ -19,11 +19,16 @@ export function ActionPanel() {
         drawTile()
     }
 
-    function nextTurn() {
+    async function nextTurn() {
         console.log("Next Turn");
         const gameId = getCachedGameId();
-        if (playerId && gameId && fieldTileSets && deckTiles)
-        commitTurn(playerId ,gameId, fieldTileSets, deckTiles)
+        if (playerId && gameId && fieldTileSets && deckTiles) {
+            console.log("Calling commitTurn...");
+            await commitTurn(playerId, gameId, fieldTileSets, deckTiles);
+            console.log("commitTurn done");
+        } else {
+            console.log("Conditions not met for commitTurn", { playerId, gameId, fieldTileSets, deckTiles });
+        }
         console.log("Next Turn done");
     }
 

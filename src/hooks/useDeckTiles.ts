@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tile } from "../models/Tile";
 import { getDeckTiles, getDrawTile } from "../services/tileService";
+import { useEffect, useState } from "react";
 import { usePlayerId } from "./usePlayerId";
 import { useGameId } from "./useGameId";
 
@@ -14,9 +15,9 @@ export function useDeckTiles() {
   const width: number = 11;
   const height: number = 2;
 
+  const [localDeckTiles, setLocalDeckTiles] = useState<Tile[]>([]);
 
-
-  const { isLoading, isError, data: deckTiles } = useQuery(
+  const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['deckTiles'],
       queryFn: () => {
@@ -29,18 +30,25 @@ export function useDeckTiles() {
   )
 
 
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setLocalDeckTiles(data); // Set the fetched data to local state
+    }
+  }, [data]);
+
+
   const {
     mutate: mutateUpdateDeckTile,
     isPending: isUpdatingDeckTile,
     isError: isErrorUpdatingDeckTile,
   } = useMutation({
     mutationFn: async ({ id, column, row }: { id: string, column: number, row: number }) => {
-      if (!deckTiles) {
+      if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
       // Update the specific tile in the tiles array
-      const updatedDeckTiles = deckTiles.map((tile) => {
+      const updatedDeckTiles = localDeckTiles.map((tile) => {
         if (tile.id === id) {
           tile.gridColumn = column;
           tile.gridRow = row;
@@ -53,6 +61,7 @@ export function useDeckTiles() {
     },
     onSuccess: (updatedDeckTiles) => {
       queryClient.setQueryData(['deckTiles'], updatedDeckTiles);
+      setLocalDeckTiles(updatedDeckTiles);
     },
   })
 
@@ -64,21 +73,21 @@ export function useDeckTiles() {
     isError: isErrorAddingDeckTile,
   } = useMutation({
     mutationFn: async (tile: Tile) => {
-      if (!deckTiles) {
+      if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
       // Check if the tile is already in the deck
-      const isTileAlreadyInDeck = deckTiles.some((t) => t.id === tile.id);
+      const isTileAlreadyInDeck = localDeckTiles.some((t) => t.id === tile.id);
 
       if (!isTileAlreadyInDeck) {
-        const updatedDeckTiles = [...deckTiles, tile];
-        return updatedDeckTiles
+        return [...localDeckTiles, tile];
       }
-      return deckTiles
+      return localDeckTiles
     },
     onSuccess: (updatedDeckTiles) => {
       queryClient.setQueryData(['deckTiles'], updatedDeckTiles);
+      setLocalDeckTiles(updatedDeckTiles);
     },
   })
 
@@ -90,14 +99,14 @@ export function useDeckTiles() {
     isError: isErrorRemovingDeckTile,
   } = useMutation({
     mutationFn: async (tile: Tile) => {
-      if (!deckTiles) {
+      if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
-      const updatedDeckTiles = deckTiles.filter((deckTile) => deckTile.id !== tile.id);
-      return updatedDeckTiles;
+      return localDeckTiles.filter((deckTile) => deckTile.id !== tile.id);
     },
     onSuccess: (updatedDeckTiles) => {
       queryClient.setQueryData(['deckTiles'], updatedDeckTiles);
+      setLocalDeckTiles(updatedDeckTiles);
     },
   })
 
@@ -109,11 +118,11 @@ export function useDeckTiles() {
     isError: isErrorCheckingTileInDeck,
   } = useMutation({
     mutationFn: async (id: string) => {
-      if (!deckTiles) {
+      if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
-      const isTileInDeck = deckTiles.find((tile) => tile.id === id);
+      const isTileInDeck = localDeckTiles.find((tile) => tile.id === id);
       return isTileInDeck;
     },
   })
@@ -126,7 +135,7 @@ export function useDeckTiles() {
     isError: isErrorDrawingTile,
   } = useMutation({
     mutationFn: async () => {
-      if (!deckTiles) {
+      if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
@@ -139,14 +148,15 @@ export function useDeckTiles() {
           for (let column = 1; column <= width; column++) {
             for (let row = 1; row <= height; row++) {
 
-              if (!deckTiles.some(tile =>
+              if (!localDeckTiles.some(tile =>
                 tile.gridRow === row && tile.gridColumn === column
               )) {
                 response.gridColumn = column;
                 response.gridRow = row;
                 console.log(response);
-                const updatedDeckTiles = [...deckTiles, response];
-                return updatedDeckTiles
+                const updatedDeckTiles = [...localDeckTiles, response];
+                setLocalDeckTiles(updatedDeckTiles);
+                return updatedDeckTiles;
               }
             }
           }
@@ -164,18 +174,18 @@ export function useDeckTiles() {
     isError: isErrorGettingDeckTiles,
   } = useMutation({
     mutationFn: async () => {
-      if (!deckTiles) {
+      if (!localDeckTiles) {
         throw new Error("Tiles data is unavailable");
       }
 
       if (playerId) {
-        const newDeckTiles = await getDeckTiles(playerId)
-        return newDeckTiles;
+        return await getDeckTiles(playerId);
       }
-      return deckTiles;
+      return localDeckTiles;
     },
     onSuccess: (updatedDeckTiles) => {
       queryClient.setQueryData(['deckTiles'], updatedDeckTiles);
+      setLocalDeckTiles(updatedDeckTiles);
     }
   })
 
@@ -183,7 +193,7 @@ export function useDeckTiles() {
   return {
     isLoadingDeckTiles: isLoading,
     isErrorDeckTiles: isError,
-    deckTiles,
+    deckTiles: localDeckTiles,
     updateDeckTile: mutateUpdateDeckTile,
     isUpdatingDeckTile,
     isErrorUpdatingDeckTile,

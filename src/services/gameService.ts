@@ -43,6 +43,7 @@ export async function leaveGame() {
 const isGeneratedId = (id: string) => /^\d{13}-\d+(\.\d+)?$/.test(id); // Matches format: <timestamp>-<random>
 
 export async function commitTurn(playerId: string, gameId: string, playingField: TileSet[], deck: Tile[]): Promise<Player | null> {
+    console.log('committing turn...')
     try {
         // Remove IDs from newly created TileSets
         const sanitizedPlayingField = playingField.map(tileSet => {

@@ -10,7 +10,7 @@ import "./PlayingField.css"
 
 
 export function PlayingField() {
-  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets = [], updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles()
+  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets, updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles()
   const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
 
   const hasError = isErrorDeckTiles || isErrorFieldTiles;
@@ -31,6 +31,7 @@ export function PlayingField() {
       </section>
     );
   }
+
 
 
   const handleDropTile = async (id: string, column: number, row: number) => {
@@ -67,8 +68,26 @@ export function PlayingField() {
 
   let countEmptyTile: number = 1;
 
-  const safeFieldTileSets = fieldTileSets || [];
 
+  if (!Array.isArray(fieldTileSets) || fieldTileSets.length === 0) {
+    return (
+      <section className='PlayingField'>
+      {[...Array(7)].map((_, row) =>
+        [...Array(17)].map((_, column) => (
+          <EmptyTile
+            key={countEmptyTile++}
+            column={column + 1}
+            row={row + 1}
+            onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
+            onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
+          />
+        ))
+      )}
+      </section>
+    )
+  }
+
+  
   return (
     <section className='PlayingField'>
       {[...Array(7)].map((_, row) =>
@@ -83,31 +102,27 @@ export function PlayingField() {
         ))
       )}
 
-
-      {safeFieldTileSets.map((tileSet) => {
-          return tileSet.tiles.map((tile) => (
-            <Tile
-              key={tile.id}
-              id={tile.id}
-              tileNumber={tile.numberValue}
-              tileColor={tile.color}
-              column={tile.gridColumn}
-              row={tile.gridRow}
-            />
-          ));
-        })
-      }
-
-      {safeFieldTileSets.map((tileSet) => {
-        return (
-          <DragTileSet
-            key={tileSet.id}
-            id={tileSet.id}
-            column={tileSet.startCoord - 1}
-            row={tileSet.gridRow}
+      {fieldTileSets.map((tileSet) => {
+        return tileSet.tiles.map((tile) => (
+          <Tile
+            key={tile.id}
+            id={tile.id}
+            tileNumber={tile.numberValue}
+            tileColor={tile.color}
+            column={tile.gridColumn}
+            row={tile.gridRow}
           />
-        );
+        ));
       })}
+
+      {fieldTileSets.map((tileSet) => (
+        <DragTileSet
+          key={tileSet.id}
+          id={tileSet.id}
+          column={tileSet.startCoord - 1}
+          row={tileSet.gridRow}
+        />
+      ))}
     </section>
   )
 }

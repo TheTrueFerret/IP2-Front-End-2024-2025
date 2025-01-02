@@ -58,6 +58,9 @@ export async function getPlayingFieldTiles(gameId: string): Promise<TileSet[]> {
     try {
       const response = await axios.get<TileSet[]>(`/api/playingFields/${gameId}`)
       console.log(response.data)
+      if (response.data.length === 0) {
+        return [];
+      }
       return response.data
 
 
