@@ -1,16 +1,30 @@
 import useUsers from "../../hooks/useUsers.ts";
+import {useContext} from "react";
+import SecurityContext from "../../context/SecurityContext.ts";
 
-export function UserProfileCard({userId}: { userId: string }) {
-    const user = useUsers(userId).user;
+export function UserProfileCard({userId, close, add}: { userId: string, close: () => void, add: () => void }) {
+    const {user, isFriend} = useUsers(userId);
+    const {loggedUserId} = useContext(SecurityContext);
 
 
     if (!user) {
         return <h1>No user found</h1>;
     }
-    if (!userId) {
+    if (!userId || !loggedUserId) {
         return <h1>No userId found</h1>;
     }
 
+    const handleClose = () => {
+        close();
+    };
+
+    const handleAddFriend = () => {
+        add();
+        close();
+    };
+
+    console.log(user.avatar);
+    console.log(isFriend);
 
     return (
         <div className="flex flex-row items-start gap-8 bg-gray-500 rounded-lg">
@@ -26,8 +40,29 @@ export function UserProfileCard({userId}: { userId: string }) {
                 <p className="text-lg mt-2">Wins: {user.gamesWon} 🏆</p>
                 <p className="text-lg">Games Played: {user.gamesPlayed}</p>
             </div>
+            <div className="flex flex-col items-center justify-between h-full">
+                <button
+                    onClick={handleClose}
+                    className="mt-2 p-2 bg-red-500 text-white rounded-xl"
+                >
+                    Close
+                </button>
+                {isFriend ? (
+                    <span className="mt-2 p-2 bg-gray-500 text-white rounded-xl">
+        Already a Friend
+    </span>
+                ) : (
+                    <button
+                        onClick={handleAddFriend}
+                        className="mt-2 p-2 bg-green-500 text-white rounded-xl"
+                    >
+                        Add
+                    </button>
+                )}
+            </div>
         </div>
-    );
+    )
+        ;
 }
 
 export default UserProfileCard;

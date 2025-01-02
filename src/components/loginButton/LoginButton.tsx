@@ -28,6 +28,10 @@ export function LoginButton() {
                         <Link to={`/UserProfile/${loggedUserId}`}
                               className="w-full px-4 py-2 text-white font-bold text-left hover:bg-neutral-900 rounded-xl">View
                             Profile</Link>
+                        <br/>
+                        <Link to={`/FriendList/${loggedUserId}`}
+                              className="w-full px-4 py-2 text-white font-bold text-left hover:bg-neutral-900 rounded-xl">
+                            Friend List</Link>
                         <button
                             onClick={() => {
                                 logout();
