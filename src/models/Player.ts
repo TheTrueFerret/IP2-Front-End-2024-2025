@@ -5,6 +5,7 @@ export interface Player {
   id?: string;
   username: string;
   profileImage: string;
+  score: number;
 }
 
 

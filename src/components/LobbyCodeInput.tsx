@@ -39,7 +39,7 @@ export function LobbyCodeInput() {
 
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4">
+    <form onSubmit={handleSubmit} className="min-w-fit relative bg-neutral-900/60 backdrop-blur flex flex-col items-center space-y-4 w-2/5">
       <input
         type="text"
         placeholder="Put in Game Code"

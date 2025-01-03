@@ -1,0 +1,48 @@
+.DragTileSet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  color: white;
+  border-radius: 10px;
+  font-size: 60px;
+  font-weight: 600;
+  cursor: pointer;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth interaction */
+}
+
+.DragTileSet:hover {
+  transform: translateY(-4px); /* Slight lift on hover */
+  text-shadow: 0 6px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+}
+
+
+/* Small Ipad and Above */
+@media (min-width: 640px) {
+  
+}
+
+/* Big Ipad and Above */
+@media (min-width: 768px) {
+  
+}
+
+
+/* Laptop Screen and Above*/
+@media (min-width: 1024px) {
+  
+}
+
+
+/* Small Desktop Screen and Above */
+@media (min-width: 1280px) {
+  
+}
+
+/* Big Desktop Screen and Above */
+@media (min-width: 1780px) {
+  
+}
+
+

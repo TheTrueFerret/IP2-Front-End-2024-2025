@@ -1,25 +1,23 @@
-import { getGameByLobbyId, postCreateGame } from "../services/gameService";
+import { getGameIdByLobbyId, getGameIdByPlayerId, postCreateGame } from "../services/gameService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLobbyId } from "./useLobbyId";
 import { useContext } from "react";
 import SecurityContext from "../context/SecurityContext";
 
-
 export function useGameId() {
     const queryClient = useQueryClient();
-
     const { lobbyId } = useLobbyId();
     const { loggedUserId } = useContext(SecurityContext)
 
     const { data: gameId, isSuccess } = useQuery({
         queryKey: ['gameId'],
         queryFn: () => {
-            if (!lobbyId || !loggedUserId) return Promise.resolve(null); // No lobby ID, return nothing
-            return getGameByLobbyId(lobbyId, loggedUserId); // Fetch lobby by ID
+            if (!lobbyId || !loggedUserId) return Promise.resolve(null); // No lobby Id or userId, return nothing
+            return getGameIdByLobbyId(lobbyId, loggedUserId); // Fetch gameID
         },
         enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value
-        refetchInterval: 4000, // Poll every 4 seconds
+        refetchInterval: 4000, // Refetch every 4 seconds
     });
 
     const {
@@ -56,6 +54,19 @@ export function useGameId() {
         }
     });
 
+    const {
+        mutate: mutateGetGameId,
+        isPending: isGettingGameId,
+        isError: isErrorGettingGameId,
+    } = useMutation({
+        mutationFn: async (playerId: string) => {
+            return await getGameIdByPlayerId(playerId);
+        },
+        onSuccess: (newGameId) => {
+            queryClient.setQueryData(['gameId'], newGameId);
+        },
+    });
+
     // Helper function to get the cached game ID
     const getCachedGameId = () => {
         return queryClient.getQueryData<string>(['gameId']);
@@ -73,6 +84,9 @@ export function useGameId() {
         gameId,
         isSuccess,
         getCachedGameId,
-        clearGameId
+        clearGameId,
+        getGameId: mutateGetGameId,
+        isGettingGameId,
+        isErrorGettingGameId,
     }
 }

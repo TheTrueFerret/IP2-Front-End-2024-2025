@@ -1,22 +1,19 @@
 import { useDrag } from "react-dnd";
-import "./Tile.css"
 import { DragTypes } from "../../models/DragTypes";
-
+import './DragTileSet.css';
 
 interface TileProps {
   id: string;
-  tileNumber: number;
-  tileColor: string;
   column: number;
   row: number;
   disabled: boolean;
 }
 
-export function Tile({ id, tileNumber, tileColor, column, row, disabled }: TileProps) {
+export function DragTileSet({ id, column, row, disabled }: TileProps) {
   const [{ opacity }, dragRef] = useDrag(
     () => ({
-      type: DragTypes.TILE,
-      item: { id, type: DragTypes.TILE },
+      type: DragTypes.TILE_SET,
+      item: { id, type: DragTypes.TILE_SET},
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.5 : 1
       })
@@ -26,17 +23,15 @@ export function Tile({ id, tileNumber, tileColor, column, row, disabled }: TileP
 
   return (
     <div ref={dragRef}
-      className='NormalTile'
+      className='DragTileSet'
       style={{
         opacity: disabled ? 0.5 : opacity,
-        color: tileColor,
         gridColumn: column,
         gridRow: row,
         pointerEvents: disabled ? "none" : "auto", // Disable interaction
       }}>
-      {tileNumber}
+      :::
     </div>
   )
 }
-
 

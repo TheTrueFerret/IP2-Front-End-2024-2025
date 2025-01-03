@@ -30,12 +30,11 @@ export function Deck() {
     )
   }
 
-  const handleDrop = async (id: number, column: number, row: number) => {
+  const handleDrop = async (id: string, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
     try {
       const tileInDeck = await isTileInDeck(id);
-
       console.log(tileInDeck)
 
       if (!tileInDeck) {
@@ -63,12 +62,14 @@ export function Deck() {
   return (
     <div className='deck'>
       {[...Array(2)].map((_, row) =>
-        [...Array(10)].map((_, column) => (
+        [...Array(11)].map((_, column) => (
           <EmptyTile
             key={count++}
             column={column + 1}
             row={row + 1}
-            onDrop={(id) => handleDrop(id, column + 1, row + 1)} />
+            onDropTile={(id) => handleDrop(id, column + 1, row + 1)}
+            disabled={false}
+          />
         ))
       )}
 
@@ -76,10 +77,11 @@ export function Deck() {
         <Tile
           key={tile.id}
           id={tile.id}
-          tileNumber={tile.tileNumber}
-          tileColor={tile.tileColor}
+          tileNumber={tile.numberValue}
+          tileColor={tile.color}
           column={tile.gridColumn}
           row={tile.gridRow}
+          disabled={false}
         />
       )}
     </div>

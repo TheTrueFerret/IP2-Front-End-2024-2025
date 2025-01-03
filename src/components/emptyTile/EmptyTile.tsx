@@ -6,15 +6,21 @@ import { DragTypes } from "../../models/DragTypes";
 interface EmptyTileProps {
   column: number;
   row: number;
-  onDrop: (id: number) => void;
+  onDropTile: (tileId: string) => void;
+  onDropTileSet?: (tileSetId: string) => void;
+  disabled: boolean;
 }
 
-export function EmptyTile({ column, row, onDrop }: EmptyTileProps) {
+export function EmptyTile({ column, row, onDropTile, onDropTileSet, disabled }: EmptyTileProps) {
   const [{ isOver }, dropRef] = useDrop(
     () => ({
-      accept: DragTypes.TILE,
-      drop: (item: { id: number }) => {
-        onDrop(item.id);
+      accept: [DragTypes.TILE, DragTypes.TILE_SET],
+      drop: (item: { id: string; type: string }) => {
+        if (item.type == DragTypes.TILE) {
+          onDropTile(item.id);
+        } else if (item.type == DragTypes.TILE_SET && onDropTileSet) {
+          onDropTileSet(item.id);
+        }
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
@@ -22,7 +28,7 @@ export function EmptyTile({ column, row, onDrop }: EmptyTileProps) {
     }),
     []
   );
-  
+
 
   return (
     <div
@@ -32,8 +38,11 @@ export function EmptyTile({ column, row, onDrop }: EmptyTileProps) {
         gridColumn: column,
         gridRow: row,
         backgroundColor: isOver ? "lightblue" : "transparent",
-        borderRadius: 10
-      }}>
+        borderRadius: 10,
+        pointerEvents: disabled ? "none" : "auto", // Disable interaction
+        opacity: disabled ? 0.5 : 1, // Add visual indication of being disabled
+      }}
+    >
     </div>
   )
 }
