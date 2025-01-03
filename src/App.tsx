@@ -15,7 +15,6 @@ import { RouteGuard } from './components/RouteGuard.tsx'
 import { LobbyCodePage } from './pages/LobbyCodePage.tsx'
 import UserprofilePage from './pages/UserprofilePage.tsx'
 import FriendListPage from "./pages/FriendListPage.tsx";
-import {ChatApp} from "./components/chat/ChatWidget.tsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -32,7 +31,6 @@ function App() {
                         <Background color='crimson' />
                         <Routes>
                             <Route path='/' element={<HomePage />} />
-                            <Route path='/Chat' element={<ChatApp />} />
                             <Route path='/Game' element={<RouteGuard><GamePage /></RouteGuard>} />
                             <Route path='/Achievements' element={<RouteGuard><AchievementsPage /></RouteGuard>} />
                             <Route path='/Settings' element={<RouteGuard><SettingsPage /></RouteGuard>} />

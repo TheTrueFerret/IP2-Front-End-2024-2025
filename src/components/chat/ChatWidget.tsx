@@ -31,7 +31,11 @@ export function ChatApp() {
 
     useEffect(() => {
         if (chatMessages) {
-            setMessages(chatMessages);
+            if (typeof chatMessages === "string") {
+                setMessages([{ content: chatMessages, type: "info" }]);
+            } else {
+                setMessages(chatMessages);
+            }
         }
     }, [chatMessages]);
 
@@ -83,19 +87,27 @@ export function ChatApp() {
         setMessages([]); // Clear any open messages
     };
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            handleSendMessage();
+        }
+    };
+
+
     return (
         <div className="fixed bottom-4 right-4 z-50">
             {/* Widget Toggle Button */}
             <button
                 onClick={() => setIsWidgetOpen((prev) => !prev)}
-                className="bg-blue-500 text-white rounded-full p-4 shadow-md hover:bg-blue-600 focus:outline-none mb-2"
+                className="bg-blue-500 text-white rounded-full w-12 h-12 shadow-md hover:bg-blue-600 focus:outline-none mb-2 flex items-center justify-center"
             >
                 {isWidgetOpen ? "×" : "💬"}
             </button>
 
             {/* Chat Widget */}
             {isWidgetOpen && (
-                <div className="w-96 h-[32rem] bg-white shadow-lg rounded-lg overflow-hidden flex flex-col">
+                <div className="w-96 h-[24rem] sm:w-[30rem] lg:w-[25rem] sm:h-[32rem] bg-white shadow-lg rounded-lg overflow-hidden flex flex-col">
                     <div className="flex justify-between items-center p-4 bg-blue-500 text-white">
                         {chatId ? (
                             <button
@@ -125,7 +137,7 @@ export function ChatApp() {
                                 messages.map((msg, idx) => (
                                     <div
                                         key={idx}
-                                        className={`block max-w-[70%] p-2 mb-2 rounded-lg break-words ${
+                                        className={`block max-w-[70%] p-2 mb-2 rounded-lg break-words whitespace-pre-wrap ${
                                             msg.type === "human"
                                                 ? "bg-blue-500 text-white self-end ml-auto"
                                                 : "bg-gray-300 text-black self-start mr-auto"
@@ -156,13 +168,14 @@ export function ChatApp() {
                     </div>
                     {chatId && (
                         <div className="flex items-center p-2 border-t">
-                            <input
-                                type="text"
-                                value={userMessage}
-                                onChange={(e) => setUserMessage(e.target.value)}
-                                placeholder="Type a message..."
-                                className="flex-grow border rounded-lg p-2 mr-2 focus:outline-none"
-                            />
+                <textarea
+                    value={userMessage}
+                    onChange={(e) => setUserMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Type a message..."
+                    className="flex-grow border rounded-lg p-2 mr-2 focus:outline-none resize-none"
+                    rows={1}
+                />
                             <button
                                 onClick={handleSendMessage}
                                 disabled={isLoadingSend}

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { NotificationType } from "../models/Notification";
 import { NotificationAlert } from "../components/notifications/notificationAlert/NotificationAlert";
+import {ChatApp} from "../components/chat/ChatWidget.tsx";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -55,6 +56,7 @@ export function GamePage() {
           executeButtonText="Yes"
         />
       )}
+        <ChatApp />
     </div>
   )
 }

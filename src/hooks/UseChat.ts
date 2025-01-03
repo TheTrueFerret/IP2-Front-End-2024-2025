@@ -8,12 +8,6 @@ export function useChat() {
         mutationFn: (userId: string) => createChatThread(userId),
     });
 
-    const { isLoading: isLoadingHistory, isError: isErrorHistory, data: chatHistory } = useQuery({
-        queryKey: ['chatHistory', chatId],
-        queryFn: () => getChatHistory(chatId!),
-        enabled: Boolean(chatId),
-    });
-
     const { isPending: isLoadingSend, isError: isErrorSend, mutateAsync: sendMessage } = useMutation({
         mutationFn: ({ chatId, message }: { chatId: string, message: string }) => sendMessageToBot(chatId, message),
         onSuccess: () => {
@@ -36,9 +30,6 @@ export function useChat() {
         });
 
     return {
-        isLoadingHistory,
-        isErrorHistory,
-        chatHistory,
         isLoadingCreate,
         isErrorCreate,
         createThread,
