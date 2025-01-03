@@ -1,21 +1,39 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import SecurityContext from "../../context/SecurityContext";
 import { useChat } from "../../hooks/UseChat";
+import { ChatMessage } from "../../models/ChatMessage";
 
 export function ChatApp() {
     const [userMessage, setUserMessage] = useState<string>("");
-    const [messages, setMessages] = useState<{ sender: string; message: string }[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [isWidgetOpen, setIsWidgetOpen] = useState<boolean>(false);
+    const [chatHistory, setChatHistory] = useState<string[]>([]); // Store chat IDs
+    const [chatId, setChatId] = useState<string | null>(null);
     const { loggedUserId } = useContext(SecurityContext);
 
     const {
         isLoadingCreate,
-        isErrorCreate,
         createThread,
         isLoadingSend,
         sendMessage,
+        GetChatIds,
+        GetChatHistory
     } = useChat();
 
-    const [chatId, setChatId] = useState<string | null>(null);
+    const { isLoading: isLoadingChatIds, isError: isErrorChatIds, data: chatIds, refetch: refetchChatIds} = GetChatIds(loggedUserId!);
+    const { isLoading: isLoadingChatHistory, isError: isErrorChatHistory, data: chatMessages, refetch: refetchChatHistory } = GetChatHistory(chatId!);
+
+    useEffect(() => {
+        if (chatIds) {
+            setChatHistory(chatIds);
+        }
+    }, [chatIds]);
+
+    useEffect(() => {
+        if (chatMessages) {
+            setMessages(chatMessages);
+        }
+    }, [chatMessages]);
 
     if (!loggedUserId) {
         return <div>Error: User ID is required</div>;
@@ -26,64 +44,118 @@ export function ChatApp() {
             const newChatId = await createThread(loggedUserId);
             console.log("New chat ID:", newChatId);
             setChatId(newChatId);
-            setMessages([{ sender: "bot", message: "Welcome to the chat! How can I help you today?" }]);
+            setMessages([{ content: "Welcome to the chat! How can I help you today?", type: "ai" }]);
+            refetchChatIds()
         } catch (error) {
             console.error("Failed to create chat thread:", error);
         }
     };
 
     const handleSendMessage = async () => {
-        if (!userMessage.trim() || !chatId) return; // Prevent sending empty messages or without a chat ID
+        if (!userMessage.trim() || !chatId) return;
 
-        const userMsg = { sender: "user", message: userMessage };
+        const userMsg = { content: userMessage, type: "human" };
         setMessages((prev) => [...prev, userMsg]);
         setUserMessage("");
 
         try {
-            const botResponse: string = await sendMessage(userMessage); // `mutateAsync` returns a string
-            setMessages((prev) => [...prev, { sender: "bot", message: botResponse }]);
+            const botResponse: string = await sendMessage({ chatId, message: userMessage });
+            setMessages((prev) => [...prev, { content: botResponse, type: "ai" }]);
         } catch (error) {
             console.error("Failed to send message:", error);
             setMessages((prev) => [
                 ...prev,
-                { sender: "bot", message: "Something went wrong. Please try again later." },
+                { content: "Something went wrong. Please try again later.", type: "ai" },
             ]);
         }
     };
 
+    const handleChatSelect = (selectedChatId: string) => {
+        console.log("Selected Chat ID:", selectedChatId);
+        setChatId(selectedChatId);
+        if (selectedChatId) {
+            refetchChatHistory(); // Refetch chat history when a chat is selected
+        }
+    };
 
+    const handleBackToChatList = () => {
+        setChatId(null); // Return to chat list
+        setMessages([]); // Clear any open messages
+    };
 
     return (
-        <div className="flex flex-col h-screen bg-gray-100 p-4 relative z-20">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold text-gray-800">Chat App</h1>
-                <button
-                    onClick={handleStartNewChat}
-                    disabled={isLoadingCreate}
-                    className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-400"
-                >
-                    {isLoadingCreate ? "Starting..." : "Start New Chat"}
-                </button>
-            </div>
+        <div className="fixed bottom-4 right-4 z-50">
+            {/* Widget Toggle Button */}
+            <button
+                onClick={() => setIsWidgetOpen((prev) => !prev)}
+                className="bg-blue-500 text-white rounded-full p-4 shadow-md hover:bg-blue-600 focus:outline-none mb-2"
+            >
+                {isWidgetOpen ? "×" : "💬"}
+            </button>
 
-            <div className="flex flex-col flex-grow bg-white shadow-lg rounded-lg overflow-hidden">
-                {chatId ? (
-                    <div className="flex flex-col h-full">
-                        <div className="flex-grow p-4 overflow-y-auto">
-                            {messages.map((msg, idx) => (
-                                <div
-                                    key={idx}
-                                    className={`p-2 mb-2 rounded-lg ${
-                                        msg.sender === "user"
-                                            ? "bg-blue-500 text-white self-end"
-                                            : "bg-gray-300 text-black self-start"
-                                    }`}
-                                >
-                                    {msg.message}
-                                </div>
-                            ))}
-                        </div>
-                        <div className="flex items-center p-4 border-t">
+            {/* Chat Widget */}
+            {isWidgetOpen && (
+                <div className="w-96 h-[32rem] bg-white shadow-lg rounded-lg overflow-hidden flex flex-col">
+                    <div className="flex justify-between items-center p-4 bg-blue-500 text-white">
+                        {chatId ? (
+                            <button
+                                onClick={handleBackToChatList}
+                                className="text-sm bg-white text-blue-500 px-2 py-1 rounded-lg hover:bg-gray-100"
+                            >
+                                Back
+                            </button>
+                        ) : (
+                            <h1 className="text-lg font-bold">Chat</h1>
+                        )}
+                        <button
+                            onClick={handleStartNewChat}
+                            disabled={isLoadingCreate}
+                            className="text-sm bg-white text-blue-500 px-2 py-1 rounded-lg hover:bg-gray-100 disabled:bg-gray-200"
+                        >
+                            {isLoadingCreate ? "Loading..." : "New Chat"}
+                        </button>
+                    </div>
+                    <div className="flex flex-col flex-grow p-2 overflow-y-auto">
+                        {chatId ? (
+                            isLoadingChatHistory ? (
+                                <p>Loading chat messages...</p>
+                            ) : isErrorChatHistory ? (
+                                <p>Error loading chat messages.</p>
+                            ) : (
+                                messages.map((msg, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`block max-w-[70%] p-2 mb-2 rounded-lg break-words ${
+                                            msg.type === "human"
+                                                ? "bg-blue-500 text-white self-end ml-auto"
+                                                : "bg-gray-300 text-black self-start mr-auto"
+                                        }`}
+                                    >
+                                        {msg.content}
+                                    </div>
+                                ))
+                            )
+                        ) : isLoadingChatIds ? (
+                            <p>Loading chat history...</p>
+                        ) : isErrorChatIds ? (
+                            <p>Error loading chat history.</p>
+                        ) : (
+                            <div>
+                                <h2 className="text-lg font-semibold mb-2">Chat History</h2>
+                                {chatHistory.map((chatId) => (
+                                    <button
+                                        key={chatId}
+                                        onClick={() => handleChatSelect(chatId)}
+                                        className="block w-full text-left px-4 py-2 bg-gray-100 rounded-lg mb-2 hover:bg-gray-200"
+                                    >
+                                        {chatId}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    {chatId && (
+                        <div className="flex items-center p-2 border-t">
                             <input
                                 type="text"
                                 value={userMessage}
@@ -94,20 +166,14 @@ export function ChatApp() {
                             <button
                                 onClick={handleSendMessage}
                                 disabled={isLoadingSend}
-                                className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-400"
+                                className="bg-blue-500 text-white py-1 px-3 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-400"
                             >
                                 {isLoadingSend ? "Sending..." : "Send"}
                             </button>
                         </div>
-                    </div>
-                ) : (
-                    <p className="text-gray-500 text-center mt-8">
-                        {isErrorCreate
-                            ? "Failed to start a new chat. Please try again."
-                            : "Start a new chat to begin."}
-                    </p>
-                )}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
