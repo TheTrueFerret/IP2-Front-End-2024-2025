@@ -1,24 +1,13 @@
 import axios from "axios";
 import { Game } from "../models/Game";
+import { Tile } from "../models/Tile";
+import { TileSet } from "../models/TileSet";
+import { Player } from "../models/Player";
 
 
-
-export function getGameLocally(playerId: String) {
-  return {
-    gameId: "d276d5f9-4bca-44ed-b4da-9e312953826a",
-    turnTime: 70,
-    nextPlayer: {playerId: "d276d5f9-4bca-44ed-b4da-9e3000000011", userName: "player1", profileImage: "imageLink"},
-    players: [
-      {playerId: playerId, userName: "player1", profileImage: "imageLink"},
-      {playerId: "d276d5f9-4bca-44ed-b4da-9e3000000012", userName: "player2", profileImage: "imageLink"}
-    ]
-  }
-}
-
-
-export async function getGameByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
+export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
-        const response = await axios.get<string>(`/api/game/lobby/${lobbyId}?userId=${loggedInUserId}`)
+        const response = await axios.get<string>(`/api/games/lobby/${lobbyId}?userId=${loggedInUserId}`)
         console.log(response)
         return response.data
     } catch (error) {
@@ -28,10 +17,9 @@ export async function getGameByLobbyId(lobbyId: string, loggedInUserId: string):
 }
 
 
-
 export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<Game | null> {
     try {
-        const response = await axios.post<Game>(`/api/game/start/${lobbyId}`, {
+        const response = await axios.post<Game>(`/api/games/start/${lobbyId}`, {
             turnTime: roundTime,
             startTileAmount: startTileAmount,
             hostUserId: loggedInUserId
@@ -42,5 +30,55 @@ export async function postCreateGame(lobbyId: string, roundTime: number, startTi
     } catch (error) {
         console.log('Failed to create a game because of: ' + error)
         return null
+    }
+}
+
+
+// TODO implement a leaveGame Function
+export async function leaveGame() {
+    
+}
+
+
+const isGeneratedId = (id: string) => /^\d{13}-\d+(\.\d+)?$/.test(id); // Matches format: <timestamp>-<random>
+
+export async function commitTurn(playerId: string, gameId: string, playingField: TileSet[], deck: Tile[]): Promise<Player | null> {
+    console.log('committing turn...')
+    try {
+        // Remove IDs from newly created TileSets
+        const sanitizedPlayingField = playingField.map(tileSet => {
+            if (isGeneratedId(tileSet.id)) {
+                const { id, ...rest } = tileSet;
+                return rest;
+            }
+            return tileSet;
+        });
+        console.log(sanitizedPlayingField);
+
+        const response = await axios.post<Player>(`/api/turns/player-make-move`, {
+            playerId: playerId,
+            gameId: gameId,
+            playingField: sanitizedPlayingField,
+            deck: deck
+        })
+        console.log(response)
+        return response.data
+    } catch (error) {
+        console.log('Failed to commit turn because of: ' + error)
+        return null
+    }
+}
+
+
+
+export async function getGameIdByPlayerId(playerId: string): Promise<string> {
+    try {
+        const response = await axios.get<string>(`/api/games/player/${playerId}`);
+        console.log(response);
+        return response.data;
+    }
+    catch (error) {
+        console.log('Failed to get game id because of: ' + error);
+        return '';
     }
 }

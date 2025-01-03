@@ -6,8 +6,8 @@
   grid-template-rows: repeat(100, 120px);
   border-radius: 10px 10px 0 0;
   margin-top: auto;
-  width: 95%;
-  height: 95%;
+  width: 98%;
+  height: 90%;
   background: linear-gradient(280deg, rgba(14,0,155,1) 0%, rgba(0,60,255,1) 33%, rgba(0,212,255,1) 100%); 
 }
 

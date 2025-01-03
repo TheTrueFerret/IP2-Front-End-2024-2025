@@ -1,9 +1,9 @@
 
 
 export interface Tile {
-  id: number;
-  tileNumber: number;
-  tileColor: string;
+  id: string;
+  numberValue: number;
+  color: string;
   gridColumn: number;
   gridRow: number;
 }
