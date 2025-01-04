@@ -13,6 +13,7 @@ import { BackButton } from "../components/BackButton";
 import { PlayerTurnList } from "../components/PlayerTurnList";
 import { useGameId } from "../hooks/useGameId";
 import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup";
+import {ChatApp} from "../components/chat/ChatWidget.tsx";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -96,6 +97,7 @@ export function GamePage() {
           }}
         onClose={handleClosePupupNotification} />
       )}
+        <ChatApp />
     </div>
   )
 }
