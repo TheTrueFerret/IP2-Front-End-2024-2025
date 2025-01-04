@@ -2,9 +2,17 @@ import { BackButton } from "../components/BackButton";
 import { LoginButton } from "../components/loginButton/LoginButton";
 import { MenuList } from "../components/menuList/MenuList";
 import { SideElements } from "../components/sideElements/SideElements";
+import {useContext} from "react";
+import SecurityContext from "../context/SecurityContext.ts";
 
 
 export function HomePage() {
+    const {roles} = useContext(SecurityContext)
+
+    for (let i = 0; i < roles.length; i++) {
+        console.log(roles[i])
+    }
+
     return (
         <div className="flex flex-col">
             <BackButton backAction={null} />
@@ -24,6 +32,10 @@ export function HomePage() {
                 {
                     menuItemName: "Settings",
                     menuItemLink: "/settings"
+                },
+                {
+                    menuItemName: "PredictionPage",
+                    menuItemLink: "/Predictionpage"
                 }]}
                 />
                 
