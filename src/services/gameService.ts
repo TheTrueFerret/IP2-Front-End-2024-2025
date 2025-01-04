@@ -5,6 +5,7 @@ import { TileSet } from "../models/TileSet";
 import { Player } from "../models/Player";
 
 
+// Get GameId Call
 export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string): Promise<string> {
     try {
         const response = await axios.get<string>(`/api/games/lobby/${lobbyId}?userId=${loggedInUserId}`)
@@ -17,10 +18,12 @@ export async function getGameIdByLobbyId(lobbyId: string, loggedInUserId: string
 }
 
 
+// Create Game Call
 export async function postCreateGame(lobbyId: string, roundTime: number, startTileAmount: number, loggedInUserId: string): Promise<Game | null> {
     try {
         const response = await axios.post<Game>(`/api/games/start/${lobbyId}`, {
-            turnTime: roundTime,
+            // lewis said so
+            turnTime: roundTime + 8,
             startTileAmount: startTileAmount,
             hostUserId: loggedInUserId
             //jokersEnabled:jokersEnabled,
@@ -34,9 +37,15 @@ export async function postCreateGame(lobbyId: string, roundTime: number, startTi
 }
 
 
-// TODO implement a leaveGame Function
-export async function leaveGame() {
-    
+// Leave Game Call
+export async function leaveGame(playerId: string) {
+    try {
+        const response = await axios.delete(`/api/games/leave/${playerId}`)
+        console.log(response);
+    } catch (error) {
+        console.log('Failed to leave game because of: ' + error)
+    }
+
 }
 
 
@@ -48,8 +57,15 @@ export async function commitTurn(playerId: string, gameId: string, playingField:
         // Remove IDs from newly created TileSets
         const sanitizedPlayingField = playingField.map(tileSet => {
             if (isGeneratedId(tileSet.id)) {
-                const { id, ...rest } = tileSet;
-                return rest;
+                return {
+                    ...tileSet,
+                    id: null, // Explicitly set id to null
+                };
+            } else {
+                return {
+                    ...tileSet,
+                    id: tileSet.id,
+                }
             }
             return tileSet;
         });

@@ -13,7 +13,8 @@ import { BackButton } from "../components/BackButton";
 import { PlayerTurnList } from "../components/PlayerTurnList";
 import { useGameId } from "../hooks/useGameId";
 import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup";
-import {ChatApp} from "../components/chat/ChatWidget.tsx";
+import { ChatApp } from "../components/chat/ChatWidget.tsx";
+import { leaveGame } from "../services/gameService";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -33,7 +34,7 @@ export function GamePage() {
   useEffect(() => {
     // Calling getGameId once on component mount (to make sure when reloading the page everything stays)
     if (playerId)
-    getGameId(playerId);
+      getGameId(playerId);
   }, [playerId]);
 
   console.log("Current Player Turn: ", currentPlayerTurn);
@@ -53,15 +54,15 @@ export function GamePage() {
   }
 
   useEffect(() => {
-    if (currentPlayerTurn?.id === playerId) {
+    if (currentPlayerTurn && currentPlayerTurn.id === playerId) {
       setYourTurnNotification(true);
     }
   }, [currentPlayerTurn]);
-  //if (currentPlayerTurn?.id === playerId) {
-  //  setYourTurnNotification(true);
-  //}
 
   const handleExecuteExit = () => {
+    if (playerId) {
+      leaveGame(playerId);
+    }
     navigate('/');
   };
 
@@ -71,7 +72,7 @@ export function GamePage() {
       <PlayerTurnList />
       <DndProvider backend={HTML5Backend} options={dragOptions}>
         <PlayingField disabled={shouldDisable} />
-        <Deck/>
+        <Deck />
         <ActionPanel disabled={shouldDisable} />
       </DndProvider>
       {showNotification && (
@@ -90,14 +91,14 @@ export function GamePage() {
       )}
       {yourTurnNotification && (
         <NotificationPopup
-        notification={{
+          notification={{
             title: 'IT\'S YOUR TURN!!!!!',
             description: 'Drag Tiles on the Playing Field or Draw a Tile',
             type: NotificationType.Info,
           }}
-        onClose={handleClosePupupNotification} />
+          onClose={handleClosePupupNotification} />
       )}
-        <ChatApp />
+      <ChatApp />
     </div>
   )
 }

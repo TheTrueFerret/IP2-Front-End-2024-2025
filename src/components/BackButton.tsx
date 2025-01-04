@@ -14,7 +14,7 @@ export function BackButton({ backAction }: BackButtonProps) {
         <div className='p-8'></div>
       )}
       <Link className='p-4' to='/'>
-        <img className='w-32' src="../../../public/rummikubLogo.png"></img>
+        <img className='w-32' src="/rummikubLogo.png"></img>
       </Link>
     </div>
   )

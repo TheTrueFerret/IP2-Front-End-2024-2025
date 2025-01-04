@@ -22,12 +22,13 @@ export function useFieldTiles() {
         return getPlayingFieldTiles(gameId) || []; // Fetch fieldTiles by gameId
       },
       enabled: !!gameId, // Only fetch if gameId is set
+      retry: false,
       initialData: [] as TileSet[], // Initial data is an empty array
     }
   )
 
   useEffect(() => {
-    if (data) {
+    if (data && data.length > 0) {
       setLocalFieldTiles(data); // Set the fetched data to local state
     }
   }, [data]);
