@@ -19,7 +19,7 @@ export function FindingLobbyPage() {
         if (!isJoiningOpenLobby && !findingLobbyResponse && !isErrorJoiningOpenLobby) {
             joinOpenLobby();
         }
-    }, [isJoiningOpenLobby, findingLobbyResponse, isErrorJoiningOpenLobby, joinOpenLobby]);
+    }, []);
 
     useEffect(() => {
         if (findingLobbyResponse && typeof findingLobbyResponse !== "string") {
