@@ -1,12 +1,14 @@
 import { useContext } from "react";
-import { patchJoinLobby, postCreateLobby } from "../services/lobbyService.ts";
+import {findLobbyForPlayer, patchJoinLobby, postCreateLobby} from "../services/lobbyService.ts";
 import SecurityContext from "../context/SecurityContext.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {Lobby} from "../models/Lobby.ts";
 
 
 export function useLobbyId() {
     const queryClient = useQueryClient();
     const { loggedUserId } = useContext(SecurityContext);
+
 
     // Function to generate lobby code (kept from original implementation)
     function generateLobbyCode() {
@@ -82,6 +84,30 @@ export function useLobbyId() {
         }
     });
 
+    const {
+        mutate: joinOpenLobby,
+        isPending: isJoiningOpenLobby,
+        isError: isErrorJoiningOpenLobby,
+        data: findingLobbyResponse,
+        error: errorJoiningOpenLobby,
+    } = useMutation<Lobby | string>({
+        mutationFn: async () => {
+            if (!loggedUserId) {
+                throw new Error("User is not logged in");
+            }
+
+            const response = await findLobbyForPlayer(loggedUserId);
+            console.log(response);
+
+            if (typeof response === "string") {
+                throw new Error(response); // Treat the string as an error
+            }
+
+            queryClient.setQueryData(["lobbyId"], response.id); // Cache the lobby ID
+            return response; // Valid Lobby object
+        },
+    });
+
 
 
     return {
@@ -92,5 +118,10 @@ export function useLobbyId() {
         joinLobbyByCode,
         isJoiningLobbyByCode,
         isErrorJoiningLobbyByCode,
+        joinOpenLobby,
+        isJoiningOpenLobby,
+        isErrorJoiningOpenLobby,
+        errorJoiningOpenLobby,
+        findingLobbyResponse
     }
 }

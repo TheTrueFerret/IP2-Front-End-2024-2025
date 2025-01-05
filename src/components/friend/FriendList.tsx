@@ -10,7 +10,7 @@ export function FriendList({users}: { users: Friend[] | null }) {
     const [addFriendOpened, setAddFriendOpened] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
     const [sentUsername, setSentUsername] = useState<string | null>(null);
-    const {friendRequest} = useUsers();
+    const {friendRequest,removeFriend} = useUsers();
 
     function onAddFriend(username: string) {
         if (friendRequest(username)) {
@@ -21,8 +21,7 @@ export function FriendList({users}: { users: Friend[] | null }) {
     }
 
     function onRemoveFriend(userId: string) {
-        console.log(userId);
-        // TODO: Implement this function to call backend with id
+        removeFriend(userId);
     }
 
     return (

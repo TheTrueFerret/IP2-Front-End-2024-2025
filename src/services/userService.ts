@@ -67,6 +67,15 @@ export function declineRequest(requestId: string, userId: string): Promise<void>
         });
 }
 
+
+export function removeFromFriendList(userId: string, friendId: string): Promise<void> {
+    return axios.post(`/api/gameuser/friend/remove/${userId}?friendId=${friendId}`).then((response) => response.data)
+        .catch((error) => {
+            console.error('User Service: Error removing friend:', error);
+            throw error;
+        });
+}
+
 export async function getPlayerAchievements(userId: string | undefined) {
     const {data} = await axios.get<Achievement[]>(`api/gameuser/achievements/${userId}`)
     return data;
@@ -77,3 +86,4 @@ export async function getAchievements() {
     const {data} = await axios.get<Achievement[]>(`api/achievements`)
     return data;
 }
+
