@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup"
 import { NotificationType } from "../models/Notification"
+import { BackButton } from "../components/BackButton";
+import { useNavigate } from "react-router-dom";
+
 
 export function SettingsPage() {
     const [showNotification, setShowNotification] = useState(true);
+    const navigate = useNavigate();
 
     const handleCloseNotification = () => {
         setShowNotification(false);
@@ -11,6 +15,7 @@ export function SettingsPage() {
 
     return (
         <div>
+            <BackButton backAction={() => navigate('/')}/>
             {showNotification && (
                 <NotificationPopup
                     notification={{

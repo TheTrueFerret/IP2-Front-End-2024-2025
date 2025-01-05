@@ -1,5 +1,5 @@
 import { Notification } from "../../../models/Notification";
-import { LoginButton } from "../../loginButton/LoginButton";
+import { LoginButton } from "../../LoginButton";
 
 
 interface NotificationCardProps {

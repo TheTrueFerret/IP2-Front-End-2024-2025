@@ -21,7 +21,7 @@ export function PlayerInfo({userId}:{ userId: string}) {
         <div className="flex flex-row items-start gap-8">
             <div className="w-32 h-32 rounded-full overflow-hidden">
                 <img
-                    src={`../../../../public/${user.avatar}`}
+                    src={`/${user.avatar}`}
                     alt="Profile Avatar"
                     className="w-full h-full object-cover"
                 />

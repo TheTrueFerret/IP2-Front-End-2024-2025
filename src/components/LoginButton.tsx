@@ -1,4 +1,4 @@
-import SecurityContext from "../../context/SecurityContext.ts";
+import SecurityContext from "../context/SecurityContext.ts";
 import {useContext, useState} from "react";
 import {Link} from "react-router-dom";
 
@@ -24,20 +24,21 @@ export function LoginButton() {
                 </button>
 
                 {isOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-neutral-900/60 backdrop-blur rounded-xl shadow-lg">
+                    <div className="absolute flex flex-col right-0 mt-2 p-4 w-48 bg-neutral-900/60 backdrop-blur rounded-xl shadow-lg gap-1">
                         <Link to={`/UserProfile/${loggedUserId}`}
-                              className="w-full px-4 py-2 text-white font-bold text-left hover:bg-neutral-900 rounded-xl">View
-                            Profile</Link>
-                        <br/>
+                              className="w-full p-4 text-white font-bold text-center hover:bg-neutral-900 rounded-xl">
+                                View Profile
+                        </Link>
                         <Link to={`/FriendList/${loggedUserId}`}
-                              className="w-full px-4 py-2 text-white font-bold text-left hover:bg-neutral-900 rounded-xl">
-                            Friend List</Link>
+                              className="w-full p-4 text-white font-bold text-center hover:bg-neutral-900 rounded-xl">
+                            Friend List
+                        </Link>
                         <button
                             onClick={() => {
                                 logout();
                                 setIsOpen(false); // Close the dropdown after logging out
                             }}
-                            className="w-full px-4 py-2 text-white font-bold text-left hover:bg-neutral-900 rounded-xl"
+                            className="w-full p-4 text-white font-bold text-center hover:bg-neutral-900 rounded-xl"
                         >
                             Logout
                         </button>

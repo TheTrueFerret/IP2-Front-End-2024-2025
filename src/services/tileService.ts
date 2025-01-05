@@ -1,49 +1,105 @@
 import axios from "axios";
 import { Tile } from "../models/Tile";
-import { ApiTile } from "../models/ApiTile";
-
-
-
-export function setFieldTiles(tiles: Tile[]): Tile[] {
-  return tiles
-}
-
-
-export function setDeckTiles(tiles: Tile[]): Tile[] {
-  return tiles
-}
-
+import { TileSet } from "../models/TileSet";
 
 
 export async function getDeckTiles(playerId: string): Promise<Tile[]> {
-  try {
-    const response = await axios.get<Tile[]>(`/api/game/tiles/player/${playerId}`)
-    console.log(response)
-    return response.data
-  } catch (error) {
-    console.log('Failed to get Deck tile of Player with id: ' + playerId + ' because of: ' + error)
-    return []
+  const maxRetries = 5;
+  const delay = 2000;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await axios.get<Tile[]>(`/api/players/tiles/${playerId}`);
+
+      let row = 1;
+      let column = 1;
+      response.data.forEach(tile => {
+        // TODO REMOVE HARDCODED GRID ROW AND COLUMN???
+        const maxRow = 2;
+        const maxColumn = 11;
+
+        tile.gridRow = row;
+        tile.gridColumn = column;
+        column++;
+
+        if (column >= maxColumn) {
+          row++;
+          column = 1;
+        }
+        if (row >= maxRow) {
+          //throw some kind of error
+        }
+      });
+      return response.data;
+
+    } catch (error) {
+      console.log(`Attempt ${attempt + 1}/${maxRetries}: Failed to get Deck tiles for player ${playerId}`);
+
+      if (attempt === maxRetries - 1) {
+        console.error('Max retries reached. Returning empty array.');
+        return [];
+      }
+
+      // Wait before trying again
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
   }
+
+  return [];
 }
 
 
 
-export async function getPlayingFieldTiles(gameId: string): Promise<Tile[]> {
+export async function getPlayingFieldTiles(gameId: string): Promise<TileSet[]> {
+  const maxRetries = 3;
+  const delay = 2000;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await axios.get<TileSet[]>(`/api/playingFields/${gameId}`)
+      console.log(response.data)
+      if (response.data.length === 0) {
+        return [];
+      }
+      return response.data
+
+
+    } catch (error: any) {
+      console.log('Failed to get tiles from the PlayingField with id: ' + gameId + ' because of: ' + error)
+
+      if (
+        error.response?.data?.error === "IllegalArgumentException" &&
+        error.response?.data?.message?.includes(`No TileSets found for Game ID: ${gameId}`)
+      ) {
+        console.warn(`No TileSets found for Game ID: ${gameId}. Returning empty array.`);
+        return [] as TileSet[];
+      }
+
+      if (attempt === maxRetries - 1) {
+        console.error('Max retries reached. Returning empty array.');
+        return [];
+      }
+
+      // Wait before trying again
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  return [];
+}
+
+
+
+export async function getDrawTile(gameId: string, playerId: string): Promise<Tile | null> {
   try {
-    const response = await axios.get<ApiTile[]>(`/api/tile-positions/game/${gameId}`)
+    const response = await axios.patch<Tile>(`/api/turns/player-pull-tile`, {
+      gameId: gameId,
+      playerId: playerId
+    })
 
-    const mappedTiles: Tile[] = response.data.map(tile => ({
-      id: tile.id,
-      tileNumber: tile.numberValue, // Rename `numberValue` to `tileNumber`
-      tileColor: tile.tileColor,
-      gridColumn: (tile.columnPosition + 1), // Rename `columnPosition` to `gridColumn`
-      gridRow: (tile.rowPosition + 1), // Rename `rowPosition` to `gridRow`
-    }));
-
-    console.log(response)
-    return mappedTiles
+    console.log(response.data)
+    return response.data;
   } catch (error) {
     console.log('Failed to get tiles from the PlayingField with id: ' + gameId + ' because of: ' + error)
-    return []
+    return null
   }
 }

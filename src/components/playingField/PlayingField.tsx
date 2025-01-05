@@ -1,18 +1,22 @@
 import { useDeckTiles } from "../../hooks/useDeckTiles";
 import { useFieldTiles } from "../../hooks/useFieldTiles";
 import { NotificationType } from "../../models/Notification";
+import { DragTileSet } from "../dragTileSet/DragTileSet";
 import { EmptyTile } from "../emptyTile/EmptyTile";
 import { NotificationCard } from "../notifications/notificationCard/NotificationCard";
 import { Tile } from "../tile/Tile"
 import "./PlayingField.css"
 
 
+interface PlayingFieldProps {
+  disabled: boolean;
+}
 
-export function PlayingField() {
-  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTiles, updateFieldTile, addFieldTile, isTileInField } = useFieldTiles()
-  const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles()
+export function PlayingField({ disabled }: PlayingFieldProps) {
+  const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets, updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles();
+  const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles();
 
-  const hasError = isErrorDeckTiles || isErrorFieldTiles || !fieldTiles;
+  const hasError = isErrorDeckTiles || isErrorFieldTiles;
   const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
   if (hasError || isLoading) {
@@ -20,36 +24,38 @@ export function PlayingField() {
       <section className="PlayingField flex items-center justify-center">
         <NotificationCard loading={isLoading} notification={
           hasError
-              ? {
-                title: 'Failed to Load DeckTiles or FieldTiles',
-                description: 'DeckTiles or FieldTiles are Empty',
-                type: NotificationType.Error,
-              }
-              : undefined
+            ? {
+              title: 'Failed to Load DeckTiles or FieldTiles',
+              description: 'DeckTiles or FieldTiles are Empty',
+              type: NotificationType.Error,
+            }
+            : undefined
         } />
       </section>
     );
   }
 
 
-  const handleDrop = async (id: number, column: number, row: number) => {
+  const handleDropTile = async (id: string, column: number, row: number) => {
     console.log(`Tile ${id} dropped at column ${column}, row ${row}`);
 
     try {
       const tileInField = await isTileInField(id);
-      console.log(tileInField)
+      console.log("tile in field? " + tileInField);
 
       if (!tileInField) {
         const tileInDeck = await isTileInDeck(id);
-        console.log(tileInDeck)
+        console.log("tile in the deck? " + tileInDeck);
 
         if (tileInDeck) {
           removeDeckTile(tileInDeck)
           const newTile = { ...tileInDeck, gridColumn: column, gridRow: row };
-          addFieldTile(newTile)
+          console.log("the NEW TILE!!!!");
+          console.log(newTile);
+          addFieldTile(newTile);
         }
       } else {
-        updateFieldTile({ id, column, row })
+        updateFieldTile({ id, column, row });
       }
     } catch (error) {
       console.error("Error checking tile in field or deck:", error);
@@ -57,30 +63,71 @@ export function PlayingField() {
   };
 
 
-  let count: number = 1;
+  const handleDropTileSet = async (tileSetId: string, column: number, row: number) => {
+    console.log(`TileSet ${tileSetId} dropped at column ${column}, row ${row}`);
+    moveTileSet({ tileSetId: tileSetId, newColumn: column, newRow: row });
+  };
+
+  let countEmptyTile: number = 1;
+
+  if (!Array.isArray(fieldTileSets) || fieldTileSets.length === 0) {
+    return (
+      <section className='PlayingField'>
+        {[...Array(11)].map((_, row) =>
+          [...Array(22)].map((_, column) => (
+            <EmptyTile
+              key={countEmptyTile++}
+              column={column + 1}
+              row={row + 1}
+              onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
+              onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
+              disabled={disabled}
+            />
+          ))
+        )}
+      </section>
+    )
+  }
+
 
   return (
     <section className='PlayingField'>
-      {[...Array(7)].map((_, row) =>
-        [...Array(17)].map((_, column) => (
+      {[...Array(11)].map((_, row) =>
+        [...Array(22)].map((_, column) => (
           <EmptyTile
-            key={count++}
+            key={countEmptyTile++}
             column={column + 1}
             row={row + 1}
-            onDrop={(id) => handleDrop(id, column + 1, row + 1)} />
+            onDropTile={(tileId) => handleDropTile(tileId, column + 1, row + 1)}
+            onDropTileSet={(tileSetId) => handleDropTileSet(tileSetId, column + 1, row + 1)}
+            disabled={disabled}
+          />
         ))
       )}
 
-      {fieldTiles.map(tile =>
-        <Tile
-          key={tile.id}
-          id={tile.id}
-          tileNumber={tile.tileNumber}
-          tileColor={tile.tileColor}
-          column={tile.gridColumn}
-          row={tile.gridRow}
+      {fieldTileSets.map((tileSet) => {
+        return tileSet.tiles.map((tile) => (
+          <Tile
+            key={tile.id}
+            id={tile.id}
+            tileNumber={tile.numberValue}
+            tileColor={tile.color}
+            column={tile.gridColumn}
+            row={tile.gridRow}
+            disabled={disabled}
+          />
+        ));
+      })}
+
+      {fieldTileSets.map((tileSet) => (
+        <DragTileSet
+          key={tileSet.id}
+          id={tileSet.id}
+          column={tileSet.startCoord - 1}
+          row={tileSet.gridRow}
+          disabled={disabled}
         />
-      )}
+      ))}
     </section>
   )
 }

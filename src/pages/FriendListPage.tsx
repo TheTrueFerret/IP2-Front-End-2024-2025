@@ -1,14 +1,16 @@
-import {LoginButton} from "../components/loginButton/LoginButton";
+import {LoginButton} from "../components/LoginButton";
 import useUsers from "../hooks/useUsers";
 import {FriendList} from "../components/friend/FriendList.tsx";
 import {NotificationType} from "../models/Notification.ts";
 import {NotificationCard} from "../components/notifications/notificationCard/NotificationCard.tsx";
 import {FriendRequestList} from "../components/friend/FriendRequestList.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import { BackButton } from "../components/BackButton.tsx";
 
 export function UserprofilePage() {
     const {userId} = useParams<{ userId: string }>();
     const {friendRequests, friends, isLoading, isError} = useUsers(userId);
+    const navigate = useNavigate();
 
     if (isLoading) {
         return (
@@ -38,6 +40,7 @@ export function UserprofilePage() {
 
     return (
         <div className="flex items-center justify-center h-full shadow-current ">
+            <BackButton backAction={() => navigate('/')}/>
             <div className='z-20 absolute top-2 right-2'>
                 <LoginButton/>
             </div>
