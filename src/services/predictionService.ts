@@ -15,7 +15,7 @@ export async function getRummikubPredictions(gameName: string): Promise<GamePred
 
 export async function postNewPrediction(data: PredictionFormData): Promise<void> {
     try {
-        await axios.post(`/api/prediction/Rummikub`, data);
+        await axios.post(`/api/predictions/Rummikub`, data);
     } catch (error) {
         console.error('Prediction Service: Error posting prediction:', error);
         throw error;

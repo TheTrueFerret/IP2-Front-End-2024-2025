@@ -24,7 +24,7 @@ export function usePredictionData(): UsePredictionDataReturn {
         {
             queryKey: ['Predictions'],
             queryFn: () => {
-                return getRummikubPredictions("Rummikub"); // Fetch player by ID
+                return getRummikubPredictions("Rummikub");
             },
             retry: false
         }
