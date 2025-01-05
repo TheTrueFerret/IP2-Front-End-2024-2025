@@ -1,9 +1,9 @@
 import {BackButton} from "../components/BackButton";
-import {LoginButton} from "../components/loginButton/LoginButton";
-import {MenuList} from "../components/menuList/MenuList";
+import {MenuList} from "../components/MenuList";
 import {SideElements} from "../components/sideElements/SideElements";
 import {useContext} from "react";
 import SecurityContext from "../context/SecurityContext.ts";
+import {LoginButton} from "../components/LoginButton.tsx";
 
 
 export function HomePage() {
@@ -17,41 +17,41 @@ export function HomePage() {
             </div>
             <main className="z-10 flex-grow flex justify-center items-center p-12 gap-x-20">
                 {(roles.includes("ADMIN") ? (
-                <MenuList menuItems={[
-                    {
-                        menuItemName: "Start Game",
-                        menuItemLink: "/GameSelectorPage"
-                    },
-                    {
-                        menuItemName: "Achievements",
-                        menuItemLink: "/achievements"
-                    },
-                    {
-                        menuItemName: "Settings",
-                        menuItemLink: "/settings"
-                    },
-                    {
-                        menuItemName: "Predictions",
-                        menuItemLink: "/PredictionPage"
-                    },
-                ]}
-                />
+                    <MenuList menuItems={[
+                        {
+                            menuItemName: "Start Game",
+                            menuItemLink: "/GameSelectorPage"
+                        },
+                        {
+                            menuItemName: "Achievements",
+                            menuItemLink: "/achievements"
+                        },
+                        {
+                            menuItemName: "Settings",
+                            menuItemLink: "/settings"
+                        },
+                        {
+                            menuItemName: "Predictions",
+                            menuItemLink: "/PredictionPage"
+                        },
+                    ]}
+                    />
                 ) : (
-                <MenuList menuItems={[
-                    {
-                        menuItemName: "Start Game",
-                        menuItemLink: "/GameSelectorPage"
-                    },
-                    {
-                        menuItemName: "Achievements",
-                        menuItemLink: "/achievements"
-                    },
-                    {
-                        menuItemName: "Settings",
-                        menuItemLink: "/settings"
-                    }
-                ]}
-                />
+                    <MenuList menuItems={[
+                        {
+                            menuItemName: "Start Game",
+                            menuItemLink: "/GameSelectorPage"
+                        },
+                        {
+                            menuItemName: "Achievements",
+                            menuItemLink: "/achievements"
+                        },
+                        {
+                            menuItemName: "Settings",
+                            menuItemLink: "/settings"
+                        }
+                    ]}
+                    />
                 ))}
 
                 <SideElements
