@@ -1,30 +1,26 @@
-import { useState } from "react";
-import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup"
-import { NotificationType } from "../models/Notification"
 import { BackButton } from "../components/BackButton";
 import { useNavigate } from "react-router-dom";
+import {LoginButton} from "../components/LoginButton.tsx";
 
 
 export function SettingsPage() {
-    const [showNotification, setShowNotification] = useState(true);
     const navigate = useNavigate();
 
-    const handleCloseNotification = () => {
-        setShowNotification(false);
-    };
-
+    //if loading: <NotificationCard
+    //                 notification={{
+    //                     title: 'Its Your Turn!!!',
+    //                     description: 'Make Sure to make your move Right NOW!!!!',
+    //                     type: NotificationType.Warning,
+    //                 }}
+    //                 loading={true}
+    //                 />
     return (
         <div>
             <BackButton backAction={() => navigate('/')}/>
-            {showNotification && (
-                <NotificationPopup
-                    notification={{
-                        title: 'Its Your Turn!!!',
-                        description: 'Make Sure to make your move Right NOW!!!!',
-                        type: NotificationType.Warning,
-                    }}
-                    onClose={handleCloseNotification} />
-            )}
+            <div className='z-20 absolute top-2 right-2'>
+                <LoginButton/>
+            </div>
+
         </div>
     )
 }

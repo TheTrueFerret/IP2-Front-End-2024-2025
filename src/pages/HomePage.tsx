@@ -24,6 +24,10 @@ export function HomePage() {
                 {
                     menuItemName: "Settings",
                     menuItemLink: "/settings"
+                },
+                {
+                    menuItemName: "Shop",
+                    menuItemLink: "/shop"
                 }]}
                 />
                 

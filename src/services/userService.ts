@@ -3,6 +3,7 @@ import axios from "axios";
 import {Friend} from "../models/Friend.ts";
 import {FriendRequest} from "../models/FriendRequest.ts";
 import {Achievement} from "../models/Achievement.ts";
+import {Customizable} from "../models/Customizable.ts";
 
 
 export function getUserById(userId: string): Promise<User> {
@@ -67,6 +68,15 @@ export function declineRequest(requestId: string, userId: string): Promise<void>
         });
 }
 
+export function getUserCustomizables(userId: string): Promise<Customizable[]> {
+    return axios.get<Customizable[]>(`api/gameuser/userCustomizables?userId=${userId}`)
+        .then((response) => response.data)
+        .catch((error) => {
+            console.error('User Service: Error fetching customizables:', error);
+            return [];
+        });
+}
+
 export async function getPlayerAchievements(userId: string | undefined) {
     const {data} = await axios.get<Achievement[]>(`api/gameuser/achievements/${userId}`)
     return data;
@@ -77,3 +87,4 @@ export async function getAchievements() {
     const {data} = await axios.get<Achievement[]>(`api/achievements`)
     return data;
 }
+

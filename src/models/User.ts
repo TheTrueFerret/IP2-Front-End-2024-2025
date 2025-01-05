@@ -4,6 +4,7 @@ export interface User {
     avatar: string;
     gamesPlayed: number;
     gamesWon: number;
+    points: number;
     userAchievements: UserAchievement[];
     friends: User[];
     chatHistory: ChatHistory[];

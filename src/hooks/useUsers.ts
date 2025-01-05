@@ -4,7 +4,7 @@ import {
     acceptRequest,
     declineRequest,
     getFriendRequests,
-    getUserById,
+    getUserById, getUserCustomizables,
     getUserFriends,
     searchUserByName,
     sendFriendRequest
@@ -13,6 +13,7 @@ import {useContext, useEffect, useState} from "react";
 import SecurityContext from "../context/SecurityContext.ts";
 import {Friend} from "../models/Friend.ts";
 import {FriendRequest} from "../models/FriendRequest.ts";
+import {Customizable} from "../models/Customizable.ts";
 
 interface UseUsersReturn {
     user: User | null;
@@ -20,6 +21,7 @@ interface UseUsersReturn {
     searchedUsers: Friend[] | null;
     friendRequests: FriendRequest[] | [];
     searchUsers: (searchTerm: string) => void;
+    userCustomizables: Customizable[] | [];
     isError: boolean;
     isLoading: boolean;
     isFriend: boolean;
@@ -50,9 +52,18 @@ const useUsers = (userId?: string): UseUsersReturn => {
         retry: 3, // Retry failed requests up to 3 times
     });
 
+    const {data: userCustomizables, isLoading: isLoadingUCustomizables, isError: isErrorUCustomizables} = useQuery<Customizable[]>({
+        queryKey: ['userCustomizables', userId], // Skip query if no userId
+        queryFn: () => getUserCustomizables(userId!),
+        enabled: !!userId, // Only run this query if userId is provided
+        staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+        retry: 3, // Retry failed requests up to 3 times
+    });
+
+
     const {
         data: friendRequests,
-        isLoading: isLoadingFriendRequests,
+        isLoading: isLoadingFriendRequests ,
         isError: isErrorFriendRequests
     } = useQuery<FriendRequest[]>({
         queryKey: ['requests', userId], // Skip query if no userId
@@ -111,8 +122,9 @@ const useUsers = (userId?: string): UseUsersReturn => {
         searchedUsers: searchedUsers ?? null,
         friends: friends ?? [],
         searchUsers,
-        isLoading: isLoadingUser || isLoadingFriends || isLoadingSearch || isLoadingFriendRequests,
-        isError: isErrorUser || isErrorFriends || isErrorSearch || isErrorFriendRequests,
+        userCustomizables: userCustomizables ?? [],
+        isLoading: isLoadingUser || isLoadingFriends || isLoadingSearch || isLoadingFriendRequests || isLoadingUCustomizables,
+        isError: isErrorUser || isErrorFriends || isErrorSearch || isErrorFriendRequests || isErrorUCustomizables,
         friendRequest,
         friendRequests: friendRequests ?? [],
         isFriend
