@@ -73,7 +73,6 @@ export async function getCurrentPlayerTurn(gameId: string): Promise<Player | nul
         error.response?.data?.message?.includes(`Game has ended`)
       ) {
         console.log('Game has ended, redirecting to game over page');
-        console.log('WERRKKKKKKKKK!!!!!');
         throw new Error('GAME_ENDED');
       }
     console.log('Failed to get the current player turn because of: ' + error);
