@@ -5,7 +5,7 @@ import {PredictionFormData} from "../hooks/usePredictionData.ts";
 
 export async function getRummikubPredictions(gameName: string): Promise<GamePrediction[] | []> {
     try {
-        const response = await axios.get<GamePrediction[]>(`/api/ai/predictions/${gameName}`);
+        const response = await axios.get<GamePrediction[]>(`/api/predictions/${gameName}`);
         return response.data;
     } catch (error) {
         console.error('Prediction Service: Error fetching predictions:', error);
@@ -15,7 +15,7 @@ export async function getRummikubPredictions(gameName: string): Promise<GamePred
 
 export async function postNewPrediction(data: PredictionFormData): Promise<void> {
     try {
-        await axios.post(`/api/ai/prediction/Rummikub`, data);
+        await axios.post(`/api/prediction/Rummikub`, data);
     } catch (error) {
         console.error('Prediction Service: Error posting prediction:', error);
         throw error;

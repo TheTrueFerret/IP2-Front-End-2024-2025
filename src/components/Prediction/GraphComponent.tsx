@@ -66,7 +66,7 @@ const GraphComponent = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center p-6">
-            <div className="bg-white opacity-95 shadow-md rounded-lg p-6 w-11/12 max-w-screen-lg">
+            <div className="bg-white opacity-95 shadow-md rounded-lg p-6 w-11/12 max-w-screen-lg overflow-y-auto">
                 <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">Rummikub</h1>
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-semibold text-gray-700">Optional Game Changes</h2>
@@ -91,7 +91,7 @@ const GraphComponent = () => {
                             ))}
                         </div>
                         {selectedChart !== null && (
-                            <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-screen-md">
+                            <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-screen-md pb-14">
                                 <Bar
                                     data={{
                                         labels: predictions.slice(-10).map(game =>
