@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import GraphComponent from "../components/Prediction/GraphComponent.tsx";
-import {LoginButton} from "../components/loginButton/LoginButton.tsx";
+import {LoginButton} from "../components/LoginButton.tsx";
 import SecurityContext from '../context/SecurityContext.ts';
 import {NotificationType} from "../models/Notification.ts";
 import {NotificationAlert} from "../components/notifications/notificationAlert/NotificationAlert.tsx";
