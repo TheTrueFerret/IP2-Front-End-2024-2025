@@ -4,7 +4,7 @@ import {Achievement} from "../models/Achievement.ts";
 import SecurityContext from "../context/SecurityContext.ts";
 import {useContext} from "react";
 import {BackButton} from "../components/BackButton.tsx";
-import {LoginButton} from "../components/loginButton/LoginButton.tsx";
+import {LoginButton} from "../components/LoginButton.tsx";
 import {useNavigate} from "react-router-dom";
 
 export function AchievementsPage() {
