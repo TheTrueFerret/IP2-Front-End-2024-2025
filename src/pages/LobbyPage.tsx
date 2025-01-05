@@ -18,7 +18,7 @@ export function LobbyPage() {
     const [settings, setSettings] = useState({
         timeBetweenTurns: 30,
         //jokersEnabled: false,
-        startTileAmount: 7
+        startTileAmount: 14
     });
     const [showNotification, setShowNotification] = useState(false);
     const { loggedUserId } = useContext(SecurityContext);
@@ -30,19 +30,29 @@ export function LobbyPage() {
     const hasError = isErrorLobby || !lobby;
     const isLoading = isLoadingLobby;
 
-    if (hasError || isLoading) {
+
+    if (isLoading) {
         return (
             <div className="bg-gradient-to-br text-black flex flex-col p-6">
                 <NotificationCard
                     loading={isLoading}
+                    notification={undefined}
+                />
+            </div>
+        )
+    }
+
+    if (hasError) {
+        return (
+            <div className="bg-gradient-to-br text-black flex flex-col p-6">
+                <NotificationCard
+                    loading={false}
                     notification={
-                        hasError ?
-                            {
-                                title: 'Failed to Load The Lobby',
-                                description: 'The Lobby is Empty So no Lobby can be Returned',
-                                type: NotificationType.Error,
-                            }
-                            : undefined
+                        {
+                            title: 'Failed to Load The Lobby',
+                            description: 'The Lobby is Empty So no Lobby can be Returned',
+                            type: NotificationType.Error,
+                        }
                     }
                 />
             </div>

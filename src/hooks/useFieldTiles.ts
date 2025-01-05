@@ -174,7 +174,7 @@ export function useFieldTiles() {
   // This Function adds a tile to a TileSet or creates a new TileSet
   function addTileToTileSetOrCreateNewTileSet(tile: Tile, updatedFieldTiles: TileSet[]) {
     const afterTileSet = localFieldTileSets.find(
-      tileSet => tileSet.endCoord + 1 === tile.gridColumn
+      tileSet => tileSet.endCoord + 1 === tile.gridColumn && tileSet.gridRow === tile.gridRow
     );
     if (afterTileSet != null) {
       return updatedFieldTiles.map((tileSet) => {

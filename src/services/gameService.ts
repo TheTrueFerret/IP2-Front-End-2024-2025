@@ -110,3 +110,16 @@ export async function getScoreByPlayerId(playerId: string): Promise<number> {
         return 0;
     }
 }
+
+
+export async function getLeaderboard(gameId: string) {
+    try {
+        const response = await axios.get<string[]>(`/api/games/${gameId}/leaderboard`);
+        console.log(response);
+        return response.data;
+    }
+    catch (error) {
+        console.log('Failed to get leaderboard because of: ' + error);
+        return [];
+    }
+}

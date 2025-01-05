@@ -19,17 +19,23 @@ export function PlayingField({ disabled }: PlayingFieldProps) {
   const hasError = isErrorDeckTiles || isErrorFieldTiles;
   const isLoading = isLoadingDeckTiles || isLoadingFieldTiles;
 
+
+  if (isLoading) {
+    <section className="PlayingField flex items-center justify-center">
+      <NotificationCard loading={isLoading} notification={undefined} />
+    </section>
+  }
+
+
   if (hasError || isLoading) {
     return (
       <section className="PlayingField flex items-center justify-center">
-        <NotificationCard loading={isLoading} notification={
-          hasError
-            ? {
+        <NotificationCard loading={false} notification={
+          {
               title: 'Failed to Load DeckTiles or FieldTiles',
               description: 'DeckTiles or FieldTiles are Empty',
               type: NotificationType.Error,
-            }
-            : undefined
+          }
         } />
       </section>
     );
