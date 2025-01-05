@@ -21,10 +21,10 @@ const GraphForm = () => {
             [name]: value
         });
     };
-
-    const handlePredict = () => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         postPrediction(formData);
-    }
+    };
 
     if (isLoading) {
         return <NotificationAlert
@@ -51,7 +51,7 @@ const GraphForm = () => {
     }
 
     return (
-        <form className="grid grid-cols-3 gap-4 bg-gray-200 p-4 rounded-lg">
+        <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-4 bg-gray-200 p-4 rounded-lg">
             <label className="flex flex-col">
                 <span className="text-gray-700">Min Players</span>
                 <input
@@ -108,7 +108,7 @@ const GraphForm = () => {
                 />
             </label>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded self-end"
-                    onClick={handlePredict}>
+                    type={"submit"}>
                 Predict Data
             </button>
         </form>
