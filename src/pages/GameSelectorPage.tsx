@@ -33,6 +33,10 @@ export function GameSelectorPage() {
                     menuItemName: "Join Friends",
                     menuItemLink: "/LobbyCodePage",
                 },
+                 {
+                    menuItemName: "Join Open Lobby",
+                    menuItemLink: "/FindingLobby",
+                 },
                 {
                     menuItemName: "Create Game",
                     menuItemLink: "#",
