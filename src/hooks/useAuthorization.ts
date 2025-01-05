@@ -15,7 +15,7 @@ export function useAuthorization(): UseAuthorizationReturn {
         setIsLoading(true);
         setIsError(false);
         try {
-            console.log('Posting user');
+            //console.log('Posting user');
             await postingUser(id, username);
         } catch (error) {
             console.error('Failed to post user:', error);
