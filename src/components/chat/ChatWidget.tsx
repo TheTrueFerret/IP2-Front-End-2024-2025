@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import SecurityContext from "../../context/SecurityContext";
-import { useChat } from "../../hooks/UseChat";
+import { useChat } from "../../hooks/useChat";
 import { ChatMessage } from "../../models/ChatMessage";
 
 export function ChatApp() {

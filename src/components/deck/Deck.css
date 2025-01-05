@@ -1,7 +1,7 @@
 .deck {
   position: absolute;
   display: grid;
-  grid-template-columns: repeat(10, 90px);
+  grid-template-columns: repeat(15, 90px);
   grid-template-rows: repeat(2, 120px);
   gap: 10px;
   padding: 10px;
