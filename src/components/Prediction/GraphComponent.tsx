@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {useState} from 'react';
+import {Bar} from 'react-chartjs-2';
+import {Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from 'chart.js';
 import usePredictionData from "../../hooks/usePredictionData.ts";
-import { NotificationAlert } from "../notifications/notificationAlert/NotificationAlert.tsx";
-import { NotificationType } from "../../models/Notification.ts";
+import {NotificationAlert} from "../notifications/notificationAlert/NotificationAlert.tsx";
+import {NotificationType} from "../../models/Notification.ts";
 import GraphForm from "./GraphForm.tsx";
+import {NotificationCard} from "../notifications/notificationCard/NotificationCard.tsx";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const GraphComponent = () => {
-    const { isError, isLoading, predictions } = usePredictionData();
+    const {isError, isLoading, predictions} = usePredictionData();
     const [selectedChart, setSelectedChart] = useState<number | null>(null);
 
     const charts = [
@@ -70,55 +71,64 @@ const GraphComponent = () => {
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-semibold text-gray-700">Optional Game Changes</h2>
                     <p className="text-gray-500 mb-4">Leave empty for default</p>
-                    <GraphForm />
+                    <GraphForm/>
                 </div>
-                <div className="flex flex-col items-center gap-4">
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {charts.map((chart, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setSelectedChart(index)}
-                                className={`px-4 py-2 rounded-lg ${
-                                    selectedChart === index
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-gray-200 text-gray-800'
-                                } hover:bg-blue-500 hover:text-white transition`}
-                            >
-                                {chart.label}
-                            </button>
-                        ))}
-                    </div>
-                    {selectedChart !== null && (
-                        <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-screen-md">
-                            <Bar
-                                data={{
-                                    labels: predictions.slice(-10).map(game =>
-                                        `(${game.prediction_date.slice(0, 9)})`
-                                    ),
-                                    datasets: [
-                                        {
-                                            label: charts[selectedChart].label,
-                                            data: charts[selectedChart].data,
-                                            backgroundColor: charts[selectedChart].backgroundColor,
-                                        },
-                                    ],
-                                }}
-                                options={{
-                                    responsive: true,
-                                    plugins: {
-                                        legend: {
-                                            position: 'top' as const,
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: charts[selectedChart].title,
-                                        },
-                                    },
-                                }}
-                            />
+                {(predictions.length !== 0 ? (
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {charts.map((chart, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setSelectedChart(index)}
+                                    className={`px-4 py-2 rounded-lg ${
+                                        selectedChart === index
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-gray-200 text-gray-800'
+                                    } hover:bg-blue-500 hover:text-white transition`}
+                                >
+                                    {chart.label}
+                                </button>
+                            ))}
                         </div>
-                    )}
-                </div>
+                        {selectedChart !== null && (
+                            <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-screen-md">
+                                <Bar
+                                    data={{
+                                        labels: predictions.slice(-10).map(game =>
+                                            `(${game.prediction_date.slice(0, 9)})`
+                                        ),
+                                        datasets: [
+                                            {
+                                                label: charts[selectedChart].label,
+                                                data: charts[selectedChart].data,
+                                                backgroundColor: charts[selectedChart].backgroundColor,
+                                            },
+                                        ],
+                                    }}
+                                    options={{
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                position: 'top' as const,
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: charts[selectedChart].title,
+                                            },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
+                ) : (
+
+                    <NotificationCard loading={false} notification={{
+                        title: 'No data to display',
+                        description: 'There is currently no data to display try again later.',
+                        type: NotificationType.Info,
+                    }}/>
+                ))}
             </div>
         </div>
     );
