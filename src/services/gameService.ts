@@ -67,7 +67,6 @@ export async function commitTurn(playerId: string, gameId: string, playingField:
                     id: tileSet.id,
                 }
             }
-            return tileSet;
         });
         console.log(sanitizedPlayingField);
 
@@ -96,5 +95,18 @@ export async function getGameIdByPlayerId(playerId: string): Promise<string> {
     catch (error) {
         console.log('Failed to get game id because of: ' + error);
         return '';
+    }
+}
+
+
+export async function getScoreByPlayerId(playerId: string): Promise<number> {
+    try {
+        const response = await axios.get<number>(`/api/players/${playerId}/score`);
+        console.log(response);
+        return response.data;
+    }
+    catch (error) {
+        console.log('Failed to get score because of: ' + error);
+        return 0;
     }
 }

@@ -28,7 +28,7 @@ export function useFieldTiles() {
   )
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
       setLocalFieldTiles(data); // Set the fetched data to local state
     }
   }, [data]);
@@ -218,6 +218,28 @@ export function useFieldTiles() {
       }));
     },
     onSuccess: (updatedFieldTiles) => {
+      const filteredFieldTileSets = updatedFieldTiles.filter(
+        (tileSet) => tileSet.tiles.length > 0
+      );
+
+      queryClient.setQueryData(['fieldTileSets'], filteredFieldTileSets);
+      setLocalFieldTiles(filteredFieldTileSets);
+    },
+  })
+
+
+    const {
+    mutate: mutateRemoveAllFieldTiles,
+    isPending: isRemovingAllFieldTiles,
+    isError: isErrorRemovingAllFieldTiles,
+  } = useMutation({
+    mutationFn: async () => {
+      if (!localFieldTileSets) {
+        throw new Error("Tiles data is unavailable");
+      }
+      return [];
+    },
+    onSuccess: (updatedFieldTiles) => {
       queryClient.setQueryData(['fieldTileSets'], updatedFieldTiles);
       setLocalFieldTiles(updatedFieldTiles);
     },
@@ -291,7 +313,6 @@ export function useFieldTiles() {
       if (!localFieldTileSets) {
         throw new Error("Tiles data is unavailable");
       }
-
       if (gameId) {
         return await getPlayingFieldTiles(gameId);
       }
@@ -326,5 +347,8 @@ export function useFieldTiles() {
     getTileSets: mutateGetTileSets,
     isGettingTileSets,
     isErrorGettingTileSets,
+    removingAllFieldTiles: mutateRemoveAllFieldTiles,
+    isRemovingAllFieldTiles,
+    isErrorRemovingAllFieldTiles,
   }
 }

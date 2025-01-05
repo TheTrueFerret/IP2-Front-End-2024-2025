@@ -51,7 +51,7 @@ export async function getDeckTiles(playerId: string): Promise<Tile[]> {
 
 
 export async function getPlayingFieldTiles(gameId: string): Promise<TileSet[]> {
-  const maxRetries = 5;
+  const maxRetries = 3;
   const delay = 2000;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -64,8 +64,16 @@ export async function getPlayingFieldTiles(gameId: string): Promise<TileSet[]> {
       return response.data
 
 
-    } catch (error) {
+    } catch (error: any) {
       console.log('Failed to get tiles from the PlayingField with id: ' + gameId + ' because of: ' + error)
+
+      if (
+        error.response?.data?.error === "IllegalArgumentException" &&
+        error.response?.data?.message?.includes(`No TileSets found for Game ID: ${gameId}`)
+      ) {
+        console.warn(`No TileSets found for Game ID: ${gameId}. Returning empty array.`);
+        return [] as TileSet[];
+      }
 
       if (attempt === maxRetries - 1) {
         console.error('Max retries reached. Returning empty array.');
