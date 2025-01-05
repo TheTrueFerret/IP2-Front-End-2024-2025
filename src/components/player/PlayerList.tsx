@@ -16,7 +16,7 @@ export function PlayerList({ host, players }: PlayerListProps) {
                     className="rounded-lg shadow-sm p-3 flex items-start justify-start"
                 >
                     <img
-                        src="../../../public/DefaultPlayerImg.png"
+                        src="/DefaultPlayerImg.png"
                         alt=""
                         className="rounded-full w-16 h-16 object-cover"
                     />
@@ -28,7 +28,7 @@ export function PlayerList({ host, players }: PlayerListProps) {
                         className="rounded-lg shadow-sm p-3 flex items-start justify-start"
                     >
                         <img
-                            src="../../../public/DefaultPlayerImg.png"
+                            src="/DefaultPlayerImg.png"
                             alt=""
                             className="rounded-full w-16 h-16 object-cover"
                         />

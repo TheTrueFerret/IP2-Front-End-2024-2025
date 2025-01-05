@@ -1,20 +1,23 @@
-
 .deck {
   position: absolute;
   display: grid;
-  grid-template-columns: repeat(10, 90px);
+  grid-template-columns: repeat(15, 90px);
   grid-template-rows: repeat(2, 120px);
   gap: 10px;
   padding: 10px;
   background-color: black;
   height: 30%;
   width: 70%;
-  
+  overflow: auto;
   left: 39%;
   transform: translateX(-50%);
 
   bottom: 0px;
-
   border-radius: 10px 10px 0px 0px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
+.deck::-webkit-scrollbar {
+  display: none;
+}

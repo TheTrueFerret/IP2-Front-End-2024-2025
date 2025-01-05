@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "../components/BackButton";
 import { LobbyCodeInput } from "../components/LobbyCodeInput";
-import { LoginButton } from "../components/loginButton/LoginButton";
+import { LoginButton } from "../components/LoginButton";
+
 import { SideElements } from "../components/sideElements/SideElements";
 
 

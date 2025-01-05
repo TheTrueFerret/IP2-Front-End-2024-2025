@@ -17,7 +17,7 @@ export function useCurrentPlayerTurn() {
         return getCurrentPlayerTurn(gameId); // Fetch current player turn by gameID
       },
       initialData: null,
-      refetchInterval: 5000, // Poll every 4 seconds
+      refetchInterval: 4000, // Poll every 4 seconds
     }
   )
 

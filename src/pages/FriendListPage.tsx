@@ -1,4 +1,4 @@
-import {LoginButton} from "../components/loginButton/LoginButton";
+import {LoginButton} from "../components/LoginButton";
 import useUsers from "../hooks/useUsers";
 import {FriendList} from "../components/friend/FriendList.tsx";
 import {NotificationType} from "../models/Notification.ts";

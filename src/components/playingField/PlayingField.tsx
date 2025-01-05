@@ -12,7 +12,7 @@ interface PlayingFieldProps {
   disabled: boolean;
 }
 
-export function PlayingField({disabled}: PlayingFieldProps) {
+export function PlayingField({ disabled }: PlayingFieldProps) {
   const { isErrorFieldTiles, isLoadingFieldTiles, fieldTileSets, updateFieldTile, addFieldTile, isTileInField, moveTileSet } = useFieldTiles();
   const { isErrorDeckTiles, isLoadingDeckTiles, removeDeckTile, isTileInDeck } = useDeckTiles();
 
@@ -73,8 +73,8 @@ export function PlayingField({disabled}: PlayingFieldProps) {
   if (!Array.isArray(fieldTileSets) || fieldTileSets.length === 0) {
     return (
       <section className='PlayingField'>
-        {[...Array(7)].map((_, row) =>
-          [...Array(17)].map((_, column) => (
+        {[...Array(11)].map((_, row) =>
+          [...Array(22)].map((_, column) => (
             <EmptyTile
               key={countEmptyTile++}
               column={column + 1}
@@ -92,8 +92,8 @@ export function PlayingField({disabled}: PlayingFieldProps) {
 
   return (
     <section className='PlayingField'>
-      {[...Array(7)].map((_, row) =>
-        [...Array(17)].map((_, column) => (
+      {[...Array(11)].map((_, row) =>
+        [...Array(22)].map((_, column) => (
           <EmptyTile
             key={countEmptyTile++}
             column={column + 1}

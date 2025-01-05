@@ -13,7 +13,10 @@ import { BackButton } from "../components/BackButton";
 import { PlayerTurnList } from "../components/PlayerTurnList";
 import { useGameId } from "../hooks/useGameId";
 import { NotificationPopup } from "../components/notifications/notificationPopup/NotificationPopup";
-import {ChatApp} from "../components/chat/ChatWidget.tsx";
+import { ChatApp } from "../components/chat/ChatWidget.tsx";
+import { leaveGame } from "../services/gameService";
+import { useTime } from "../hooks/useTime.ts";
+import { CountdownTimer } from "../components/CountdownTimer.tsx";
 
 const dragOptions = {
   //enableMouseEvents: true
@@ -25,53 +28,44 @@ export function GamePage() {
   const { playerId } = usePlayerId();
   const { currentPlayerTurn } = useCurrentPlayerTurn();
   const { getGameId } = useGameId();
+  const { initialTime } = useTime();
   const navigate = useNavigate();
-
-  console.log(playerId);
-  console.log(currentPlayerTurn);
 
   useEffect(() => {
     // Calling getGameId once on component mount (to make sure when reloading the page everything stays)
     if (playerId)
-    getGameId(playerId);
+      getGameId(playerId);
   }, [playerId]);
 
-  console.log("Current Player Turn: ", currentPlayerTurn);
   const shouldDisable = currentPlayerTurn?.id !== playerId;
-  console.log("Should Disable: ", shouldDisable);
 
-  const handleExit = () => {
-    setShowNotification(true);
-  };
-
-  const handleCloseNotification = () => {
-    setShowNotification(false);
-  };
-
-  const handleClosePupupNotification = () => {
-    setYourTurnNotification(false);
-  }
+  const handleExit = () => { setShowNotification(true); };
+  const handleCloseNotification = () => { setShowNotification(false); };
+  const handleClosePupupNotification = () => { setYourTurnNotification(false); };
 
   useEffect(() => {
-    if (currentPlayerTurn?.id === playerId) {
+    if (currentPlayerTurn && currentPlayerTurn.id === playerId) {
       setYourTurnNotification(true);
     }
   }, [currentPlayerTurn]);
-  //if (currentPlayerTurn?.id === playerId) {
-  //  setYourTurnNotification(true);
-  //}
 
   const handleExecuteExit = () => {
+    if (playerId) {
+      leaveGame(playerId);
+    }
     navigate('/');
   };
 
   return (
     <div className="relative flex justify-center w-screen h-screen bg-neutral-900">
       <BackButton backAction={handleExit} />
+      <div className='z-10 absolute top-4 right-4'>
+        <CountdownTimer initialTime={initialTime} disabled={shouldDisable} />
+      </div>
       <PlayerTurnList />
       <DndProvider backend={HTML5Backend} options={dragOptions}>
         <PlayingField disabled={shouldDisable} />
-        <Deck/>
+        <Deck />
         <ActionPanel disabled={shouldDisable} />
       </DndProvider>
       {showNotification && (
@@ -90,14 +84,14 @@ export function GamePage() {
       )}
       {yourTurnNotification && (
         <NotificationPopup
-        notification={{
+          notification={{
             title: 'IT\'S YOUR TURN!!!!!',
             description: 'Drag Tiles on the Playing Field or Draw a Tile',
             type: NotificationType.Info,
           }}
-        onClose={handleClosePupupNotification} />
+          onClose={handleClosePupupNotification} />
       )}
-        <ChatApp />
+      <ChatApp />
     </div>
   )
 }
