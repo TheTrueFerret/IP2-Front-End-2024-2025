@@ -42,7 +42,6 @@ export async function postCreateLobby(joinCode: string, userId: string): Promise
     }
 }
 
-
 export async function patchJoinLobby(joinCode: string, userId: string): Promise<Lobby | null> {
     try {
         console.log('joining lobby with joinCode: ' + joinCode + ' and userId: ' + userId)
@@ -54,5 +53,17 @@ export async function patchJoinLobby(joinCode: string, userId: string): Promise<
     } catch (error) {
         console.log('Failed to join lobby because of: ' + error)
         return null
+    }
+}
+
+export async function findLobbyForPlayer(gameUserId: string): Promise<Lobby | string> {
+    try {
+        const response = await axios.patch<Lobby>(`/api/lobby/findLobbyForPlayer/${gameUserId}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && typeof error.response?.data === "string") {
+            return error.response.data; // Return the server's string message
+        }
+        return 'An unexpected error occurred while finding a lobby.';
     }
 }

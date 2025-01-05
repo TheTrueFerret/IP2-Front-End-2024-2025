@@ -1,10 +1,9 @@
 import axios from 'axios'
 
 export function addAccessTokenToAuthHeader(token: string | undefined) {
-    console.log('addAccessTokenToAuthHeader')
+    //console.log('addAccessTokenToAuthHeader')
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-        localStorage.setItem('token', token)
     } else {
         removeAccessTokenFromAuthHeader()
     }

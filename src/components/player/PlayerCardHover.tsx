@@ -23,9 +23,6 @@ export function UserProfileCard({userId, close, add}: { userId: string, close: (
         close();
     };
 
-    console.log(user.avatar);
-    console.log(isFriend);
-
     return (
         <div className="flex flex-row items-start gap-8 bg-gray-500 rounded-lg">
             <div className="w-32 h-32 rounded-full overflow-hidden">
@@ -48,15 +45,18 @@ export function UserProfileCard({userId, close, add}: { userId: string, close: (
                     Close
                 </button>
                 {isFriend ? (
-                    <span className="mt-2 p-2 bg-gray-500 text-white rounded-xl">
-        Already a Friend
-    </span>
+                    <button
+                        onClick={handleAddFriend}
+                        className="mt-2 p-2 bg-red-500 text-white rounded-xl"
+                    >
+                        Remove Friend
+                    </button>
                 ) : (
                     <button
                         onClick={handleAddFriend}
                         className="mt-2 p-2 bg-green-500 text-white rounded-xl"
                     >
-                        Add
+                    Add Friend
                     </button>
                 )}
             </div>

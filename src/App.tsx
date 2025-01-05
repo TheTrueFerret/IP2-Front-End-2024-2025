@@ -16,6 +16,8 @@ import { LobbyCodePage } from './pages/LobbyCodePage.tsx'
 import UserprofilePage from './pages/UserprofilePage.tsx'
 import FriendListPage from "./pages/FriendListPage.tsx";
 import { EndGamePage } from './pages/EndGamePage.tsx'
+import {PredictionPage} from "./pages/PredictionPage.tsx";
+import {FindingLobbyPage} from "./pages/FindingLobbyPage.tsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -41,6 +43,8 @@ function App() {
                             <Route path='/Userprofile/:userId' element={<RouteGuard><UserprofilePage/></RouteGuard>}/>
                             <Route path='/FriendList/:userId' element={<RouteGuard><FriendListPage/></RouteGuard>}/>
                             <Route path='/game-over' element={<RouteGuard><EndGamePage /></RouteGuard>} />
+                            <Route path='/Predictionpage' element={<RouteGuard><PredictionPage/></RouteGuard>}/>
+                            <Route path='/FindingLobby' element={<RouteGuard><FindingLobbyPage /></RouteGuard>} />
                         </Routes>
                     </div>
                 </BrowserRouter>

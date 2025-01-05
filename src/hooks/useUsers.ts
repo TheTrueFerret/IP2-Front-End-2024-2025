@@ -5,7 +5,7 @@ import {
     declineRequest,
     getFriendRequests,
     getUserById,
-    getUserFriends,
+    getUserFriends, removeFromFriendList,
     searchUserByName,
     sendFriendRequest
 } from "../services/userService.ts";
@@ -26,6 +26,7 @@ interface UseUsersReturn {
     friendRequest: (userName: string) => boolean;
     acceptFriendRequest: (friendRequestId: string) => void;
     rejectFriendRequest: (friendRequestId: string) => void;
+    removeFriend: (friendId: string) => void;
 }
 
 const useUsers = (userId?: string): UseUsersReturn => {
@@ -94,6 +95,17 @@ const useUsers = (userId?: string): UseUsersReturn => {
         return false;
     }
 
+    const removeFriend = (friendId: string) => {
+        if (loggedUserId && friendId) {
+            removeFromFriendList(loggedUserId, friendId).catch((error) => {
+                console.error('Failed to send friend request:', error);
+                return false;
+            }).finally(() => {
+                return true;
+            });
+        }
+    }
+
     const acceptFriendRequest = (friendRequestId: string) => {
         acceptRequest(friendRequestId, loggedUserId!);
     }
@@ -115,7 +127,8 @@ const useUsers = (userId?: string): UseUsersReturn => {
         isError: isErrorUser || isErrorFriends || isErrorSearch || isErrorFriendRequests,
         friendRequest,
         friendRequests: friendRequests ?? [],
-        isFriend
+        isFriend,
+        removeFriend
     };
 };
 

@@ -20,6 +20,7 @@ const keycloakConfig = {
 const keycloak: Keycloak = new Keycloak(keycloakConfig)
 
 export default function SecurityContextProvider({children}: IWithChildren) {
+    const [roles, setRoles] = useState<string[]>([])
     const [loggedInUser, setLoggedInUser] = useState<string | undefined>(undefined)
     const [loggedUserId, setLoggedUserId] = useState<string | undefined>(undefined)
     const keycloakRef = useRef<Keycloak | null>(null);
@@ -34,22 +35,23 @@ export default function SecurityContextProvider({children}: IWithChildren) {
 
 
     keycloak.onAuthSuccess = () => {
-        console.log('onAuthSuccess')
+        //console.log('onAuthSuccess')
         addAccessTokenToAuthHeader(keycloak.token)
         setLoggedInUser(keycloak.idTokenParsed?.preferred_username)
         setLoggedUserId(keycloak.idTokenParsed?.sub)
+        setRoles(keycloak.realmAccess?.roles || [])
         if (keycloak.idTokenParsed?.preferred_username && keycloak.idTokenParsed.sub)
             postUser(keycloak.idTokenParsed.sub, keycloak.idTokenParsed?.preferred_username)
         if (isLoading) {
-            console.log("Loading user...")
+            //console.log("Loading user...")
         }
         if (isError) {
-            console.log("Error loading user...")
+            //console.log("Error loading user...")
         }
     }
 
     keycloak.onAuthLogout = () => {
-        console.log('onAuthLogout')
+        //console.log('onAuthLogout')
         removeAccessTokenFromAuthHeader()
     }
 
@@ -65,18 +67,18 @@ export default function SecurityContextProvider({children}: IWithChildren) {
     }
 
     function login() {
-        console.log('login')
+        //console.log('login')
         keycloak.login()
     }
 
     function logout() {
-        console.log('logout')
+        //console.log('logout')
         const logoutOptions = {redirectUri: import.meta.env.VITE_REACT_APP_URL}
         keycloak.logout(logoutOptions)
     }
 
     function isAuthenticated() {
-        console.log('isAuthenticated')
+        //console.log('isAuthenticated')
         if (keycloak.token) return !isExpired(keycloak.token)
         else return false
     }
@@ -89,6 +91,7 @@ export default function SecurityContextProvider({children}: IWithChildren) {
                 loggedUserId,
                 login,
                 logout,
+                roles
             }}
         >
             {children}
