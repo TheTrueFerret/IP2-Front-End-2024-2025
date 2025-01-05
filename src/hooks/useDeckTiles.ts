@@ -15,14 +15,16 @@ export function useDeckTiles() {
   const width: number = 11;
   const height: number = 2;
 
-  const [localDeckTiles, setLocalDeckTiles] = useState<Tile[]>([]);
+  const [localDeckTiles, setLocalDeckTiles] = useState<Tile[] | undefined>(undefined);
 
   const { isLoading, isError, data } = useQuery(
     {
       queryKey: ['deckTiles'],
-      queryFn: () => {
+      queryFn: async () => {
         if (!playerId) return Promise.resolve(null); // no PlayerId Return Nothing
-        return getDeckTiles(playerId);
+        const newDeckTiles = await getDeckTiles(playerId);
+        setHiddenDeckTiles(newDeckTiles);
+        return newDeckTiles;
       },
       enabled: !!playerId, // Only fetch if playerId is Set
       initialData: [] as Tile[], // Initial value
@@ -154,9 +156,12 @@ export function useDeckTiles() {
                 response.gridColumn = column;
                 response.gridRow = row;
                 console.log(response);
-                const updatedDeckTiles = [...localDeckTiles, response];
-                setLocalDeckTiles(updatedDeckTiles);
-                return updatedDeckTiles;
+                const hiddenDeckTiles = getHiddenDeckTiles();
+                if (hiddenDeckTiles) {
+                  const updatedDeckTiles = [...hiddenDeckTiles, response];
+                  setLocalDeckTiles(updatedDeckTiles);
+                  return updatedDeckTiles;
+                }
               }
             }
           }
@@ -179,16 +184,26 @@ export function useDeckTiles() {
       }
 
       if (playerId) {
+        console.log("Getting Deck Tiles for Player: ", playerId);
         return await getDeckTiles(playerId);
       }
       return localDeckTiles;
     },
     onSuccess: (updatedDeckTiles) => {
       queryClient.setQueryData(['deckTiles'], updatedDeckTiles);
+      setHiddenDeckTiles(updatedDeckTiles);
       setLocalDeckTiles(updatedDeckTiles);
     }
-  })
+  });
 
+
+  const setHiddenDeckTiles = (tiles: Tile[]) => {
+    queryClient.setQueryData(['hiddenDeckTiles'], tiles);
+  };
+
+  const getHiddenDeckTiles = () => {
+    return queryClient.getQueryData<Tile[]>(['hiddenDeckTiles']);
+  };
 
   return {
     isLoadingDeckTiles: isLoading,
@@ -212,5 +227,7 @@ export function useDeckTiles() {
     getDeckTiles: mutateGetDeckTiles,
     isGettingDeckTiles,
     isErrorGettingDeckTiles,
+    setHiddenDeckTiles,
+    getHiddenDeckTiles,
   }
 }

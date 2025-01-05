@@ -1,5 +1,5 @@
 import {useParams, useNavigate} from "react-router-dom";
-import {LoginButton} from "../components/loginButton/LoginButton";
+import {LoginButton} from "../components/LoginButton";
 import {PlayerAchievements} from "../components/player/PlayerAchievements";
 import {PlayerInfo} from "../components/player/PlayerInfo";
 import useUsers from "../hooks/useUsers";

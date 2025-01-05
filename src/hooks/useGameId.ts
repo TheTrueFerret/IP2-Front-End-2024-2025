@@ -17,7 +17,7 @@ export function useGameId() {
         },
         enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value
-        refetchInterval: 4000, // Refetch every 4 seconds
+        refetchInterval: 3000, // Refetch every 4 seconds
     });
 
     const {
@@ -71,7 +71,6 @@ export function useGameId() {
     const getCachedGameId = () => {
         return queryClient.getQueryData<string>(['gameId']);
     };
-
 
     const clearGameId = () => {
         queryClient.setQueryData(['gameId'], null);

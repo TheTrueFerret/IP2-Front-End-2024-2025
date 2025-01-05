@@ -1,6 +1,6 @@
 import { BackButton } from "../components/BackButton";
-import { LoginButton } from "../components/loginButton/LoginButton";
-import { MenuList } from "../components/menuList/MenuList";
+import { LoginButton } from "../components/LoginButton";
+import { MenuList } from "../components/MenuList";
 import { SideElements } from "../components/sideElements/SideElements";
 
 

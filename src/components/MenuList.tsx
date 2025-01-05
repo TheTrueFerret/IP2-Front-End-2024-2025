@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MenuItem } from "../../models/MenuItem";
+import { MenuItem } from "../models/MenuItem";
 
 
 interface MenuListProps {
@@ -19,7 +19,7 @@ export function MenuList({ menuItems }: MenuListProps) {
             className="relative group flex items-center space-x-10 hover:scale-105"
           >
             <img
-              src="../../../public/rummikub-icon.svg"
+              src="/rummikub-icon.svg"
               alt="Rummikub"
               className="w-14 h-14 opacity-0 group-hover:opacity-100 transition-all duration-100 scale-95"
             />
@@ -34,7 +34,7 @@ export function MenuList({ menuItems }: MenuListProps) {
             className="relative group flex items-center space-x-10 hover:scale-105"
           >
             <img
-              src="../../../public/rummikub-icon.svg"
+              src="/rummikub-icon.svg"
               alt="Rummikub"
               className="w-14 h-14 opacity-0 group-hover:opacity-100 transition-all duration-100 scale-95"
             />

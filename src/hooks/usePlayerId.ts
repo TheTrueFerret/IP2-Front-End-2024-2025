@@ -36,12 +36,17 @@ export function usePlayerId() {
     },
   });
 
+  const getCachedPlayerId = () => {
+    return queryClient.getQueryData<string>(['playerId']);
+  };
+
   return {
     isLoadingPlayerId: isLoading,
     isErrorPlayerId: isError,
     playerId: data,
     getPlayerId: mutateGetPlayerId,
     isGettingPlayerId,
-    isErrorGettingPlayerId
+    isErrorGettingPlayerId,
+    getCachedPlayerId
   }
 }
