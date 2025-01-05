@@ -58,7 +58,7 @@ export function PlayerTurnList() {
   return (
     <div className='absolute flex flex-row justify-center text-white'>
       {players.map((player) => (
-        <div key={player.id} className='flex flex-col items-center'>
+        <div key={player.id} className='flex flex-col items-center text-xl font-bold'>
           <h3 className={`p-4 ${currentPlayerTurn.id === player.id ? 'text-yellow-400' : ''}`}>{player.username}</h3>
         </div>
       ))}

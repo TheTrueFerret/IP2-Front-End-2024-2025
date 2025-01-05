@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginButton } from "../components/loginButton/LoginButton";
+import { LoginButton } from "../components/LoginButton";
 import { NotificationAlert } from "../components/notifications/notificationAlert/NotificationAlert";
 import { NotificationCard } from "../components/notifications/notificationCard/NotificationCard";
 import { PlayerList } from "../components/player/PlayerList";

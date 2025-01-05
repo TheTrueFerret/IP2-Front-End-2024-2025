@@ -2,6 +2,7 @@ import {User} from "../models/User.ts";
 import axios from "axios";
 import {Friend} from "../models/Friend.ts";
 import {FriendRequest} from "../models/FriendRequest.ts";
+import {Achievement} from "../models/Achievement.ts";
 
 
 export function getUserById(userId: string): Promise<User> {
@@ -64,4 +65,15 @@ export function declineRequest(requestId: string, userId: string): Promise<void>
             console.error('User Service: Error rejecting friend request:', error);
             throw error;
         });
+}
+
+export async function getPlayerAchievements(userId: string | undefined) {
+    const {data} = await axios.get<Achievement[]>(`api/gameuser/achievements/${userId}`)
+    return data;
+}
+
+export async function getAchievements() {
+    console.log("GET ALL ACHIEVEMENTS")
+    const {data} = await axios.get<Achievement[]>(`api/achievements`)
+    return data;
 }

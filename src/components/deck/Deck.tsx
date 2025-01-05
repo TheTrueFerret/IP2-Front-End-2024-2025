@@ -62,7 +62,7 @@ export function Deck() {
   return (
     <div className='deck'>
       {[...Array(2)].map((_, row) =>
-        [...Array(11)].map((_, column) => (
+        [...Array(15)].map((_, column) => (
           <EmptyTile
             key={count++}
             column={column + 1}

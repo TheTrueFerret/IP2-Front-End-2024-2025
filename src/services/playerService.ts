@@ -58,11 +58,9 @@ export async function getPlayerIdByUserId(userId: string,): Promise<string | nul
       }
     }
   }
-
   console.error(`Failed to fetch player ID after ${maxRetries} attempts`);
   return null;
 }
-
 
 
 export async function getCurrentPlayerTurn(gameId: string): Promise<Player | null> {
@@ -72,5 +70,15 @@ export async function getCurrentPlayerTurn(gameId: string): Promise<Player | nul
   } catch (error) {
     console.log('Failed to get the current player turn because of: ' + error);
     return null;
+  }
+}
+
+export async function getTimeByPlayerId(playerId: string): Promise<number> {
+  try {
+    const response = await axios.get<number>(`/api/players/time/${playerId}`);
+    return response.data;
+  } catch (error) {
+    console.log('Failed to get the time because of: ' + error);
+    return 0;
   }
 }
