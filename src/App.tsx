@@ -16,6 +16,7 @@ import { LobbyCodePage } from './pages/LobbyCodePage.tsx'
 import UserprofilePage from './pages/UserprofilePage.tsx'
 import FriendListPage from "./pages/FriendListPage.tsx";
 import ShopPage from "./pages/ShopPage.tsx";
+import useSettings from "./hooks/useSettings.ts";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -23,13 +24,14 @@ const queryClient = new QueryClient();
 
 
 function App() {
+    const { backgroundColor } = useSettings();
     return (
         <QueryClientProvider client={queryClient}>
             <SecurityContextProvider>
                 <BrowserRouter>
                     <ReactQueryDevtools initialIsOpen={false} />
                     <div className='bg-neutral-900  w-screen h-screen'>
-                        <Background color='crimson' />
+                        <Background color={`${backgroundColor}`} />
                         <Routes>
                             <Route path='/' element={<HomePage />} />
                             <Route path='/Game' element={<RouteGuard><GamePage /></RouteGuard>} />
