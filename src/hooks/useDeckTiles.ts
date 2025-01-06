@@ -12,7 +12,7 @@ export function useDeckTiles() {
   const { playerId } = usePlayerId();
   const { getCachedGameId } = useGameId();
 
-  const width: number = 11;
+  const width: number = 15;
   const height: number = 2;
 
   const [localDeckTiles, setLocalDeckTiles] = useState<Tile[]>([]);

@@ -16,14 +16,12 @@ export function FindingLobbyPage() {
 
 
     useEffect(() => {
-        if (!isJoiningOpenLobby && !findingLobbyResponse && !isErrorJoiningOpenLobby) {
-            joinOpenLobby();
-        }
-    }, []);
+        joinOpenLobby();
+    }, [joinOpenLobby]);
 
     useEffect(() => {
-        if (findingLobbyResponse && typeof findingLobbyResponse !== "string") {
-            navigate("/Lobby");
+        if (findingLobbyResponse) {
+            //navigate("/Lobby");
         }
     }, [findingLobbyResponse, navigate]);
 

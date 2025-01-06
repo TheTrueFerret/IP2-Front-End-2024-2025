@@ -1,7 +1,7 @@
 .notification-popup {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 100px;
+    right: 30px;
     padding: 40px;
     border-radius: 8px;
     color: white;
