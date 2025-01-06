@@ -17,7 +17,7 @@ export function useGameId() {
         },
         enabled: !!lobbyId, // Only fetch if lobbyId is set
         initialData: null, // Initial value
-        refetchInterval: 3000, // Refetch every 4 seconds
+        refetchInterval: 3000, // Refetch every 3 seconds
     });
 
     const {

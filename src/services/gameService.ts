@@ -23,7 +23,7 @@ export async function postCreateGame(lobbyId: string, roundTime: number, startTi
     try {
         const response = await axios.post<Game>(`/api/games/start/${lobbyId}`, {
             // lewis said so
-            turnTime: roundTime + 8,
+            turnTime: roundTime,
             startTileAmount: startTileAmount,
             hostUserId: loggedInUserId
             //jokersEnabled:jokersEnabled,

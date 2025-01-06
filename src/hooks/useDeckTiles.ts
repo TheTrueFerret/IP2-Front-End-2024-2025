@@ -15,7 +15,7 @@ export function useDeckTiles() {
   const width: number = 11;
   const height: number = 2;
 
-  const [localDeckTiles, setLocalDeckTiles] = useState<Tile[] | undefined>(undefined);
+  const [localDeckTiles, setLocalDeckTiles] = useState<Tile[]>([]);
 
   const { isLoading, isError, data } = useQuery(
     {
@@ -33,7 +33,7 @@ export function useDeckTiles() {
 
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
       setLocalDeckTiles(data); // Set the fetched data to local state
     }
   }, [data]);

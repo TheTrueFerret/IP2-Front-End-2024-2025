@@ -16,7 +16,7 @@ export function LobbyPage() {
     const { createGame, clearGameId, gameId } = useGameId();
     const { lobby, isErrorLobby, isLoadingLobby } = useLobby();
     const [settings, setSettings] = useState({
-        timeBetweenTurns: 30,
+        timeBetweenTurns: 60,
         //jokersEnabled: false,
         startTileAmount: 14
     });
